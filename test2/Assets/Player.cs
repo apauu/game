@@ -4,7 +4,10 @@ using System.Collections;
 public class Player : MonoBehaviour {
 	
 	private bool isRight = true;
+	private bool isAttack = false;
 
+	public GameObject firePrefab;
+	
 	// Use this for initialization
 	void Start () {
 	
@@ -12,13 +15,42 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//攻撃フラグをAnimatorに設定する
+		//GetComponent<Animator>().SetBool("isAttack",isAttack);
+	}
+
+	void FixedUpdate ()
+	{
+		//  エンターキーが押されたら攻撃フラグを立てる
+		if(Input.GetKeyDown("return")){	
+			print ("getKey return");
+
+			isAttack = true;
+			StartCoroutine("WaitForAttack");
+
+			// 炎オブジェクトを生成して方向フラグをsend
+			GameObject fire = Instantiate (firePrefab, new Vector3 (transform.position.x+1, transform.position.y+1, 1), Quaternion.identity) as GameObject;
+			fire.gameObject.SendMessage("setDirection", isRight);
+		}
+
+
 		//左右キーの入力
 		float h = Input.GetAxis("Horizontal");
 		rigidbody2D.AddForce(Vector2.right * h * 30f);
 		
-		// 炎オブジェクトを生成して方向フラグをsend
-		//GameObject fire = Instantiate (firePrefab, new Vector3 (transform.position.x, transform.position.y - 0.5f, 1), Quaternion.identity) as GameObject;
-		//fire.gameObject.SendMessage("setDirection", isRight);
+		//右を向いていて、左の入力があったとき、もしくは左を向いていて、右の入力があったとき
+		/*if((h > 0 && !isRight) || (h < 0 && isRight))
+		{
+			//右を向いているかどうかを、入力方向をみて決める
+			isRight = (h > 0);
+			//localScale.xを、右を向いているかどうかで更新する
+			transform.localScale = new Vector3((isRight ? 2 : -2), 2, 2);
+		}*/
+	}
 
+	IEnumerator WaitForAttack()
+	{
+		yield return new WaitForSeconds(0.5f);
+		isAttack = false;
 	}
 }
