@@ -1,0 +1,117 @@
+fileFormatVersion: 2
+guid: e8bbabf15749d4741b40da6c1ae5d161
+TextureImporter:
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Image10_left
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 98
+        width: 32
+        height: 45
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Image10_left2
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 98
+        width: 30
+        height: 45
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Image10_left3
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 98
+        width: 30
+        height: 45
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Image10_left4
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 98
+        width: 30
+        height: 45
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Image10_right1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 50
+        width: 30
+        height: 45
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Image10_right2
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 50
+        width: 30
+        height: 45
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Image10_right3
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 50
+        width: 30
+        height: 45
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Image10_right4
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 50
+        width: 30
+        height: 45
+      alignment: 0
+      pivot: {x: .5, y: .5}
+  spritePackingTag: 
+  userData: 
