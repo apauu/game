@@ -5,9 +5,10 @@ public class Chara : MonoBehaviour {
 
 	//publicなグローバル変数にしておくとGUI上で調整できる
 	public float walkForce = 30f;
-	public float flyForce = 50f;
+	public float flyForce = 300f;
 	public float maxWalkSpeed = 3f;
-	public float maxFlySpeed = 5f;
+	private bool jump_flg = false;
+	private bool double_jump_flg = false;
 
 	//右を向いているかどうか（初期値はtrue）
 	private bool facingRight = true;
@@ -24,11 +25,9 @@ public class Chara : MonoBehaviour {
 	void FixedUpdate()
 	{
 		float h = Input.GetAxis("Horizontal");
-		float v = Input.GetAxis("Vertical");
 		
 		//右を向いていて、左の入力があったとき、もしくは左を向いていて、右の入力があったとき
-		if((h > 0 && !facingRight) || (h < 0 && facingRight))
-		{
+		if((h > 0 && !facingRight) || (h < 0 && facingRight)){
 			//右を向いているかどうかを、入力方向をみて決める
 			facingRight = (h > 0);
 			//localScale.xを、右を向いているかどうかで更新する
@@ -36,17 +35,30 @@ public class Chara : MonoBehaviour {
 		}
 
 		//制限速度以下だったら、という条件を追加
-		if(rigidbody2D.velocity.x < maxWalkSpeed)
-		{
+		if(rigidbody2D.velocity.x < maxWalkSpeed){
 			rigidbody2D.AddForce(Vector2.right * h * walkForce);
 		}
-		
-		//制限速度以下だったら、という条件を追加
-		if(v > 0 && rigidbody2D.velocity.y < maxFlySpeed)
-		{
-			rigidbody2D.AddForce(Vector2.up * v * flyForce);
+
+		//ジャンプ
+		if (Input.GetButtonDown ("Jump") || Input.GetButtonDown("Vertical")) {
+			Debug.Log(jump_flg);
+			Debug.Log (double_jump_flg);
+			//ジャンプ1回目
+			if(jump_flg){
+				jump_flg = false;
+				rigidbody2D.AddForce(Vector2.up * flyForce);
+			//ジャンプ2回目
+			} else if(double_jump_flg) {
+				double_jump_flg = false;
+				rigidbody2D.AddForce(Vector2.up * flyForce);
+			}
 		}
-		
+		//Debug.Log (Mathf.Abs (rigidbody2D.velocity.y));
+		if (Mathf.Abs(rigidbody2D.velocity.y) <= 0f) {
+			jump_flg = true;
+			double_jump_flg = true;
+		}
+
 		//制限速度より大きかったら
 		if(Mathf.Abs(rigidbody2D.velocity.x) > maxWalkSpeed)
 		{
@@ -60,5 +72,14 @@ public class Chara : MonoBehaviour {
 		}
 
 		GetComponent<Animator>().SetBool("left",facingRight);
+	}
+
+	void OnCollisionEnter2D (Collision2D collider) {
+		if (collider.gameObject.tag == "enemy") {
+			GameObject.DestroyObject(collider.gameObject);
+			Debug.Log("destoy!!");
+	}
+		// 削除
+		// GameObject.DestroyObject(collider.gameObject);
 	}
 }
