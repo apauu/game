@@ -22,5 +22,6 @@ public class hpbar : MonoBehaviour {
 			width = 0;
 		}
 		transform.localScale = new Vector3(width,transform.localScale.y,transform.localScale.z);
+		transform.position = new Vector3(transform.position.x - damage / 2,transform.position.y,transform.position.z);
 	}
 }
