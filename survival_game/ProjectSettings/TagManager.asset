@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   tags:
-  - ground
+  - Ground
+  - Player_Diffence
+  - Enemy_Diffence
+  - Player_Attack
+  - Enemy_Attack
   - 
   Builtin Layer 0: Default
   Builtin Layer 1: TransparentFX
