@@ -3,6 +3,18 @@ using System.Collections;
 
 public class Player_Move : MonoBehaviour {
 
+	//ジャンプフラグ trueならできる
+	private bool jmpFlg = true;
+	//二段ジャンプフラグ trueならできる
+	private bool doubleJmpFlg = true;
+	//防御フラグ
+	private bool diffenceFlg = true;
+	
+	//防御プレハブ
+	public GameObject diffencePrefab;
+	//防御オブジェクト
+	private GameObject diffenceObj;
+
 	//移動ベクトル
 	private Vector2 vctMove;
 	//前回押した左右移動キー
@@ -19,13 +31,38 @@ public class Player_Move : MonoBehaviour {
 		lastRawKey = 0;
 		fgDash = false;
 		iTween.MoveTo(gameObject,iTween.Hash("path",iTweenPath.GetPath("MovePath"),"time",3,"easetype",iTween.EaseType.easeOutSine));
+		//防御プレハブタグ設定
+		diffencePrefab.gameObject.tag = "Player_Diffence";
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
 		lastKeyTimer += Time.deltaTime;
-
+		//ジャンプ
+		if (Input.GetButtonDown ("Jump")) {
+			print ("jump");
+			if(jmpFlg == true) {
+				jmpFlg = false;
+				Jump.JumpMove(rigidbody2D,10f);
+				
+			} else if (doubleJmpFlg == true) {
+				doubleJmpFlg = false;
+				Jump.JumpMove(rigidbody2D,10f);
+			}
+		}
+		
+		if (Input.GetButtonDown ("Diffence")) {
+			if (diffenceFlg == true) { 
+				
+				diffenceObj = Instantiate(this.diffencePrefab, new Vector2(transform.position.x-2f, transform.position.y)
+				                          , Quaternion.identity) as GameObject;
+				diffenceFlg = false;
+			}
+		} else if(Input.GetButtonUp ("Diffence")) {
+			Destroy(diffenceObj);
+			diffenceFlg = true;
+		}
 		//左右ボタンの入力
 		float h = Input.GetAxisRaw ("Horizontal");
 		if (h != 0) {
@@ -60,5 +97,15 @@ public class Player_Move : MonoBehaviour {
 			lastRawKey = 0;
 			lastKeyTimer = 0;
 		}
+	}
+
+	void OnCollisionEnter2D (Collision2D collider) {
+		if (collider.gameObject.tag == "Ground") {
+			jmpFlg = true;
+			doubleJmpFlg = true;
+		}
+	}
+	
+	void OnTriggerEnter2D (Collider2D collider) {
 	}
 }
