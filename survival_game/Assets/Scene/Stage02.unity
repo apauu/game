@@ -84,14 +84,9 @@ GameObject:
   - 4: {fileID: 657715605}
   - 33: {fileID: 657715604}
   - 23: {fileID: 657715603}
-  - 114: {fileID: 657715602}
   - 61: {fileID: 657715601}
   - 50: {fileID: 657715606}
-  - 114: {fileID: 657715608}
   - 114: {fileID: 657715609}
-  - 114: {fileID: 657715607}
-  - 114: {fileID: 657715611}
-  - 114: {fileID: 657715610}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -110,17 +105,6 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_Size: {x: 1, y: 1}
   m_Center: {x: 0, y: 0}
---- !u!114 &657715602
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 657715600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 058922139b7f2a34ca4c749735765937, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!23 &657715603
 Renderer:
   m_ObjectHideFlags: 0
@@ -175,50 +159,6 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
---- !u!114 &657715607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 657715600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6167e759d71c2d74cbeaa45e6e5c9332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pathName: MovePath2
-  pathColor: {r: 0, g: 1, b: 1, a: 1}
-  nodes:
-  - {x: 5, y: 5, z: 5}
-  - {x: 0, y: 2, z: 1}
-  nodeCount: 2
-  initialized: 1
-  initialName: New Path 2
---- !u!114 &657715608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 657715600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2ef3b15c32eb43108261a87963b8937, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pathName: 4d6f766550617468
-  pathColor:
-    r: 0
-    g: 1
-    b: 1
-    a: 1
-  nodes:
-  - {x: 0, y: 0, z: 0}
-  - {x: 5, y: 5, z: 2}
-  - {x: 5, y: 5, z: 0}
-  - {x: 0, y: 2, z: 0}
-  nodeCount: 4
-  initialized: 1
-  initialName: 4e657720506174682031
 --- !u!114 &657715609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,46 +175,6 @@ MonoBehaviour:
   nodes:
   - {x: 0, y: 0, z: 0}
   - {x: 2, y: 2, z: 2}
-  nodeCount: 2
-  initialized: 1
-  initialName: New Path 1
---- !u!114 &657715610
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 657715600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7ee11c2e5dd8fd4fa72c154918a8446, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 
-  type: 
-  method: 
-  easeType: 0
-  time: 0
-  delay: 0
-  loopType: 0
-  isRunning: 0
-  isPaused: 0
-  _name: 
---- !u!114 &657715611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 657715600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6167e759d71c2d74cbeaa45e6e5c9332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pathName: New Path 1
-  pathColor: {r: 0, g: 1, b: 1, a: 1}
-  nodes:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
   nodeCount: 2
   initialized: 1
   initialName: New Path 1

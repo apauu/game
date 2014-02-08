@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Player_Move : MonoBehaviour {
 
+	//現在向いている方向
+	private bool migiMukiFlg = true;
+
 	//ジャンプフラグ trueならできる
 	private bool jmpFlg = true;
 	//二段ジャンプフラグ trueならできる
@@ -15,29 +18,60 @@ public class Player_Move : MonoBehaviour {
 	//防御オブジェクト
 	private GameObject diffenceObj;
 
-	//移動ベクトル
-	private Vector2 vctMove;
+	//前回のキーを離してからの時間
+	private float lastKeyTimer = 0;
+	//現在押されている左右移動キー
+	private float nowRawKey = 0;
 	//前回押した左右移動キー
-	private float lastSideKey;
-	float lastKeyTimer;     
-	float nowRawKey;
-	float lastRawKey;
-	bool fgDash;
+	private float lastRawKey = 0;
+	//ダッシュ中フラグ
+	private bool fgDash = false;
+
+	//攻撃１フラグ
+	private bool attack1Flg = false;
+	//攻撃２フラグ
+	private bool attack2Flg = false;
+	//攻撃３フラグ
+	private bool attack3Flg = false;
+	//ジャンプ中攻撃１フラグ
+	private bool jumpAttack1Flg = false;
+	//ジャンプ中攻撃２フラグ
+	private bool jumpAttack2Flg = false;
+	//パリィフラグ
+	private bool parryFlg = false;
+	//パリィ攻撃１フラグ
+	private bool parryAttack1Flg = false;
+	//パリィ攻撃２フラグ
+	private bool parryAttack2Flg = false;
+	//回避フラグ
+	private bool avoidFlg = false;
+	//技１フラグ
+	private bool skill1Flg = false;
+	//技２フラグ
+	private bool skill2Flg = false;
+	//必殺技フラグ
+	private bool superSkillFlg = false;
+
+	private int atakkFkg = 8;
 	
+	//体力
+	private int hitPoint= 2;
+
 	// Use this for initialization
 	void Start () {
 		lastKeyTimer = 0;     
 		nowRawKey = 0;
 		lastRawKey = 0;
 		fgDash = false;
-		iTween.MoveTo(gameObject,iTween.Hash("path",iTweenPath.GetPath("MovePath"),"time",3,"easetype",iTween.EaseType.easeOutSine));
 		//防御プレハブタグ設定
 		diffencePrefab.gameObject.tag = "Player_Diffence";
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		atakkFkg = 0x0110;
+		print (atakkFkg);
+
 		lastKeyTimer += Time.deltaTime;
 		//ジャンプ
 		if (Input.GetButtonDown ("Jump")) {
@@ -51,7 +85,7 @@ public class Player_Move : MonoBehaviour {
 				Jump.JumpMove(rigidbody2D,10f);
 			}
 		}
-		
+
 		if (Input.GetButtonDown ("Diffence")) {
 			if (diffenceFlg == true) { 
 				
@@ -63,6 +97,7 @@ public class Player_Move : MonoBehaviour {
 			Destroy(diffenceObj);
 			diffenceFlg = true;
 		}
+
 		//左右ボタンの入力
 		float h = Input.GetAxisRaw ("Horizontal");
 		if (h != 0) {
@@ -74,22 +109,19 @@ public class Player_Move : MonoBehaviour {
 			}
 			if (fgDash) {
 				//ダッシュ移動
-				vctMove.x = Const.PLAYER_DASH_SPEED * h;
+				Side_Move.SideMove(rigidbody2D,Const.PLAYER_DASH_SPEED * h);
 			} else {
 				//歩き移動
 				nowRawKey = h;
 				lastKeyTimer = 0;
-				vctMove.x = Const.PLAYER_SIDE_SPEED * h;
+				Side_Move.SideMove(rigidbody2D,Const.PLAYER_SIDE_SPEED * h);
 			}
 		} else {
 			//左右入力の無い時
 			lastRawKey = nowRawKey;
-			vctMove.x = 0;
+			Side_Move.SideMove(rigidbody2D,0);
 			fgDash = false;
 		}
-
-		//加速度のセット
-		rigidbody2D.velocity = vctMove;
 
 		//ダッシュ用タイマーリセット
 		if (lastKeyTimer > Const.DOUBLE_KEY_TIME) {
@@ -100,6 +132,7 @@ public class Player_Move : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D (Collision2D collider) {
+		//接地判定
 		if (collider.gameObject.tag == "Ground") {
 			jmpFlg = true;
 			doubleJmpFlg = true;
