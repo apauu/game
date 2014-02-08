@@ -51,8 +51,6 @@ public class Player_Move : MonoBehaviour {
 	private bool skill2Flg = false;
 	//必殺技フラグ
 	private bool superSkillFlg = false;
-
-	private int atakkFkg = 8;
 	
 	//体力
 	private int hitPoint= 2;
@@ -69,8 +67,6 @@ public class Player_Move : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		atakkFkg = 0x0110;
-		print (atakkFkg);
 
 		lastKeyTimer += Time.deltaTime;
 		//ジャンプ
