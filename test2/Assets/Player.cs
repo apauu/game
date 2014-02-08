@@ -13,7 +13,7 @@ public class Player : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-	
+
 	}
 	
 	// Update is called once per frame
@@ -26,7 +26,7 @@ public class Player : MonoBehaviour {
 	{
 		//  エンターキーが押されたら攻撃フラグを立てる
 		if(Input.GetKeyDown("return")){	
-			print ("getKey return");
+			print (Const.AAA);
 
 			isAttack = true;
 			StartCoroutine("WaitForAttack");
