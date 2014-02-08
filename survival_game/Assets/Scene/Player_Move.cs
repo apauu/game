@@ -50,7 +50,7 @@ public class Player_Move : MonoBehaviour {
 			vctMove.x = 0;
 			fgDash = false;
 		}
-
+		
 		//加速度のセット
 		rigidbody2D.velocity = vctMove;
 
