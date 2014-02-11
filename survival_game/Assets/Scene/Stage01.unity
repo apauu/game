@@ -584,4 +584,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a88c7d5c2eed1f4c89c0b330092bd27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  migiMukiFlg: 1
+  jmpFlg: 1
+  doubleJmpFlg: 1
+  diffenceFlg: 1
   diffencePrefab: {fileID: 100000, guid: d5e6ba47d93a92740b10427c53c73543, type: 2}
+  diffenceObj: {fileID: 0}
+  lastKeyTimer: 0
+  nowRawKey: 0
+  lastRawKey: 0
+  fgDash: 0
+  attack1Flg: 0
+  attack2Flg: 0
+  attack3Flg: 0
+  jumpAttack1Flg: 0
+  jumpAttack2Flg: 0
+  parryFlg: 0
+  parryAttack1Flg: 0
+  parryAttack2Flg: 0
+  avoidFlg: 0
+  skill1Flg: 0
+  skill2Flg: 0
+  superSkillFlg: 0
+  hitPoint: 2

@@ -1,5 +1,5 @@
 ﻿
-public class Const {
+public class Player_Const {
 	/// <summary>
 	/// プレイヤー定数
 	/// 歩行スピード
