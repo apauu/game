@@ -15,7 +15,7 @@ public class Player : Character_Base {
 	// Use this for initialization
 	void Start () {
 		//防御プレハブタグ設定
-		defensePrefab.gameObject.tag = "Player_Diffence";
+		defensePrefab.gameObject.tag = Tag_Const.PLAYER_DIFFENCE;
 	}
 	
 	// Update is called once per frame
@@ -23,7 +23,6 @@ public class Player : Character_Base {
 
 		//防御
 		if (Input.GetButtonDown ("Defense")) {
-			print ("Player Defense");
 			if (defenseFlg == true) {
 				this.Defense();
 				defenseFlg = false;
@@ -36,16 +35,12 @@ public class Player : Character_Base {
 		
 		//回避
 		if (Input.GetButtonDown ("Avoid")) {
-			print ("Player Avoid");
-			avoidFlg = true;
-			//Avoid.Avoid(rigidbody2D, rightDirectionFlg);
+			Avoid(1f);
 		}
 
 		//パリィ
 		if (Input.GetButtonDown ("Parry")) {
-			print ("Player Parry");
-			parryFlg = true;
-			//Parry.Parry(rigidbody2D, rightDirectionFlg);
+			Parry(1f);
 		}
 
 		//攻撃
@@ -107,7 +102,7 @@ public class Player : Character_Base {
 					//通常攻撃１
 					this.InitAttackFlg();
 					attack1Flg = true;
-					//Attack.Attack1(rigidbody2D, rightDirectionFlg, destroyTime);
+					Attack1(5f);
 				}
 			}
 		} else {
@@ -133,12 +128,12 @@ public class Player : Character_Base {
 			print ("Player Jump");
 			if(jmpFlg == true) {
 				jmpFlg = false;
-				Jump.JumpMove(rigidbody2D,10f);
+				Jump.JumpMove(rigidbody2D, Player_Const.JUMP_SPEED);
 				
 			} else if (doubleJmpFlg == true) {
 				//2段ジャンプ
 				doubleJmpFlg = false;
-				Jump.JumpMove(rigidbody2D,10f);
+				Jump.JumpMove(rigidbody2D,Player_Const.JUMP_SPEED);
 			}
 		}
 
@@ -154,7 +149,7 @@ public class Player : Character_Base {
 			}
 			if (dashFlg) {
 				//ダッシュ移動
-				Side_Move.SideMove(rigidbody2D,Player_Const.PLAYER_DASH_SPEED * sideButton);
+				Side_Move.SideMove(rigidbody2D,Player_Const.DASH_SPEED * sideButton);
 				if (sideButton > 0) {
 					rightDirectionFlg = true;	//右向きフラグ
 				} else if (sideButton < 0) {
@@ -164,7 +159,7 @@ public class Player : Character_Base {
 				//歩き移動
 				walkFlg = true;
 				nowRawKey = sideButton;
-				Side_Move.SideMove(rigidbody2D,Player_Const.PLAYER_SIDE_SPEED * sideButton);
+				Side_Move.SideMove(rigidbody2D,Player_Const.SIDE_SPEED * sideButton);
 				if (sideButton > 0) {
 					rightDirectionFlg = true;	//右向きフラグ
 				} else if (sideButton < 0) {
@@ -190,6 +185,19 @@ public class Player : Character_Base {
 			lastRawKey = 0;
 			//タイマー初期化
 			lastKeyTimer = 0;
+		}
+	}
+	void OnCollisionEnter2D (Collision2D collision) {
+		//接地判定
+		if (collision.gameObject.tag == Tag_Const.GROUND) {
+			onGroundFlg = true;
+			jmpFlg = true;
+			doubleJmpFlg = true;
+		}
+
+		if (collision.gameObject.tag == Tag_Const.Enemy) {
+			GameObject gui = GameObject.Find ("GUI Text");
+			if (gui != null) gui.guiText.text = "Hit !";
 		}
 	}
 

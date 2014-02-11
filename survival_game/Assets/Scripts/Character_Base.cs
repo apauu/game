@@ -41,6 +41,8 @@ public class Character_Base : MonoBehaviour {
 	protected bool superSkillFlg = false;
 	//パリィ成功フラグ
 	protected bool parrySuccessFlg = false;
+	//無敵フラグ
+	protected bool mutekiFlg = false;
 
 	//ジャンプフラグ trueならできる
 	protected bool jmpFlg = true;
@@ -52,25 +54,34 @@ public class Character_Base : MonoBehaviour {
 	public GameObject defensePrefab;
 	//防御オブジェクト
 	protected GameObject defenseObj;
+	//パリィプレハブ
+	public GameObject parryPrefab;
+	//パリィオブジェクト
+	protected GameObject parryObj;
+	//攻撃プレハブ
+	public GameObject attack1Prefab;
+	//攻撃オブジェクト
+	protected GameObject attack1Obj;
 
-	void OnCollisionEnter2D (Collision2D collider) {
+	void OnCollisionEnter2D (Collision2D collision) {
 		//接地判定
-		if (collider.gameObject.tag == "Ground") {
+		if (collision.gameObject.tag == Tag_Const.GROUND) {
 			onGroundFlg = true;
 			jmpFlg = true;
 			doubleJmpFlg = true;
 		}
 	}
 	
-	void OnCollisionExit2D (Collision2D collider) {
+	void OnCollisionExit2D (Collision2D collision) {
 		//接地判定
-		if (collider.gameObject.tag == "Ground") {
+		if (collision.gameObject.tag == Tag_Const.GROUND) {
 			onGroundFlg = false;
 		}
 	}
 
 	//防御
 	protected void Defense () {
+		print ("Player Defense");
 		float h = 0;
 
 		if (rightDirectionFlg) {
@@ -78,12 +89,63 @@ public class Character_Base : MonoBehaviour {
 		} else {
 			h = -1;
 		}
-		//盾オブジェクト呼び出し
 		//盾オブジェクト生成
 		defenseObj = Instantiate(this.defensePrefab, new Vector2(transform.position.x + (2f * h), transform.position.y)
 		                          , Quaternion.identity) as GameObject;
 	}
+
+	//回避
+	protected IEnumerator Avoid (float time) {
+		print ("Player Avoid");
+		avoidFlg = true;
+		mutekiFlg = true;
+		yield return new WaitForSeconds(time);
+		avoidFlg = false;
+		mutekiFlg = false;
+	}
 	
+	//パリィ
+	protected void Parry (float destroyTime) {
+		print ("Player Parry");
+		parryFlg = true;
+
+		float h = 0;
+		
+		if (rightDirectionFlg) {
+			h = 1;
+		} else {
+			h = -1;
+		}
+		//パリィオブジェクト生成
+		parryObj = Instantiate(this.parryPrefab, new Vector2(transform.position.x + (2f * h), transform.position.y)
+		                         , Quaternion.identity) as GameObject;
+		
+		//消滅時間のセット
+		parryObj.gameObject.SendMessage("setDestroyTime", destroyTime);
+	}
+	
+	//攻撃１
+	protected void Attack1 (float destroyTime) {
+		print ("Player Attack1");
+		attack1Flg = true;
+		
+		float h = 0;
+		
+		if (rightDirectionFlg) {
+			h = 1;
+		} else {
+			h = -1;
+		}
+		//攻撃生成
+		attack1Obj = Instantiate(this.attack1Prefab, new Vector2(transform.position.x + (2f * h), transform.position.y)
+		                         , Quaternion.identity) as GameObject;
+
+		//攻撃方向のセット
+		attack1Obj.gameObject.SendMessage("setDirection", rightDirectionFlg);
+		//消滅時間のセット
+		attack1Obj.gameObject.SendMessage("setDestroyTime", destroyTime);
+	}
+
 	//攻撃関係のフラグを全て初期化する
 	protected void InitAttackFlg () {
 		attack1Flg = false;

@@ -579,7 +579,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: .0500000007
   m_GravityScale: 2
-  m_FixedAngle: 0
+  m_FixedAngle: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -788,3 +788,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defensePrefab: {fileID: 100000, guid: d5e6ba47d93a92740b10427c53c73543, type: 2}
+  parryPrefab: {fileID: 100000, guid: c618c861a0b0af648bb64e34740fed30, type: 2}
+  attack1Prefab: {fileID: 100000, guid: 55418912924c5ab4e944381748b4ca7d, type: 2}
