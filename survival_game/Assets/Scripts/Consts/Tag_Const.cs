@@ -34,67 +34,72 @@ public class Tag_Const {
 	public const string GAMECONTROLLER = "GameController";
 	/// <summary>
 	/// タグ_定数
-	/// Ground
+	/// 地面
 	/// </summary>
 	public const string GROUND = "Ground";
 	/// <summary>
 	/// タグ_定数
-	/// Player_Diffence
+	/// プレイヤー防御
 	/// </summary>
 	public const string PLAYER_DIFFENCE = "Player_Diffence";
 	/// <summary>
-	/// タグ_定数
+	/// エネミー防御
 	/// Enemy_Diffence
 	/// </summary>
 	public const string ENEMY_DIFFENCE = "Enemy_Diffence";
 	/// <summary>
-	/// タグ_定数
+	/// プレイヤー攻撃
 	/// Player_Attack
 	/// </summary>
 	public const string PLAYER_ATTACK = "Player_Attack";
 	/// <summary>
-	/// タグ_定数
+	/// エネミー攻撃
 	/// Enemy_Attack
 	/// </summary>
 	public const string ENEMY_ATTACK = "Enemy_Attack";
 	/// <summary>
-	/// タグ_定数
+	/// プレイヤー遠距離攻撃
 	/// Player_Long_Attack
 	/// </summary>
 	public const string PLAYER_LONG_ATTACK = "Player_Long_Attack";
 	/// <summary>
 	/// タグ_定数
-	/// Enemy_Long_Attack
+	/// エネミー遠距離攻撃
 	/// </summary>
 	public const string ENEMY_LONG_ATTACK = "Enemy_Long_Attack";
 	/// <summary>
 	/// タグ_定数
-	/// PLAYER_DIFFENCE_BREAK_ATTACK
+	/// プレイヤーのガードブレイク攻撃
 	/// </summary>
 	public const string PLAYER_DIFFENCE_BREAK_ATTACK = "Player_Diffence_Break_Attack";
 	/// <summary>
 	/// タグ_定数
-	/// Enemy_Diffence_Break_Attack
+	/// エネミーのガードブレイク攻撃
 	/// </summary>
 	public const string ENEMY_DIFFENCE_BREAK_ATTACK = "Enemy_Diffence_Break_Attack";
 	/// <summary>
 	/// タグ_定数
-	/// Player_Parry
+	/// プレイヤーパリィ
 	/// </summary>
 	public const string PLAYER_PARRY = "Player_Parry";
 	/// <summary>
 	/// タグ_定数
-	/// Enemy_Parry
+	/// エネミーパリィ
 	/// </summary>
 	public const string ENEMY_PARRY = "Enemy_Parry";
 	/// <summary>
 	/// タグ_定数
-	/// WALL
+	/// 壁
 	/// </summary>
 	public const string WALL = "Wall";
 	/// <summary>
 	/// タグ_定数
-	/// Enemy
+	/// プレイヤー
+	/// </summary>
+	public const string PLAYER = "Player";
+	/// <summary>
+	/// タグ_定数
+	/// エネミー
 	/// </summary>
 	public const string Enemy = "Enemy";
 }

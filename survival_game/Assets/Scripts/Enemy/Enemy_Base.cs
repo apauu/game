@@ -15,7 +15,7 @@ public class Enemy_Base : MonoBehaviour {
 	private bool noticeFlg = false;
 	//プレイヤーオブジェクト
 	private GameObject player;
-
+	
 	//オブジェクト初期位置
 	private Vector3 firstPosition;
 	//プレイヤーとのx距離
@@ -26,7 +26,7 @@ public class Enemy_Base : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//playerタグを検索してplayerオブジェクトを取得する
-		player = GameObject.FindGameObjectWithTag ("Player");
+		player = GameObject.FindGameObjectWithTag (Tag_Const.PLAYER);
 		firstPosition = this.transform.position;
 
 	}
@@ -66,16 +66,20 @@ public class Enemy_Base : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter2D (Collision2D collider) {
+	void OnCollisionEnter2D (Collision2D collision) {
 		//接地判定
-		if (collider.gameObject.tag == "Ground") {
-			jmpFlg = true;
-		} else if (collider.gameObject.tag == "Wall"){
-			jmpFlg = false;
-			Jump.JumpMove(rigidbody2D,10f);
+		if (collision.gameObject.tag == Tag_Const.GROUND) {
+			if (collision.contacts != null && collision.contacts.Length > 0) {
+				Vector2 contactPoint = collision.contacts[0].point;
+				float angle = Vector2.Angle(new Vector2(0,-1),contactPoint - 
+					                            new Vector2(this.transform.position.x,this.transform.position.y));
+				if(Mathf.Abs(angle) >= 80f && Mathf.Abs(angle) < 100f){
+					jmpFlg = false;
+					Jump.JumpMove(rigidbody2D,10f);
+				} else {
+					jmpFlg = true;
+				}
+			}
 		}
-		
-
 	}
-
 }
