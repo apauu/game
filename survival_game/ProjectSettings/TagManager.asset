@@ -9,7 +9,13 @@ TagManager:
   - Player_Attack
   - Enemy_Attack
   - Enemy
-  - 
+  - Wall
+  - Player_Long_Attack
+  - Enemy_Long_Attack
+  - Player_Parry
+  - Enemy_Parry
+  - Player_Diffence_Break_Attack
+  - Enemy_Diffence_Break_Attack
   - 
   Builtin Layer 0: Default
   Builtin Layer 1: TransparentFX
