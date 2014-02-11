@@ -8,6 +8,8 @@ TagManager:
   - Enemy_Diffence
   - Player_Attack
   - Enemy_Attack
+  - Enemy
+  - 
   - 
   Builtin Layer 0: Default
   Builtin Layer 1: TransparentFX
