@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Diffence : MonoBehaviour {
+public class Diffence_Object : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
