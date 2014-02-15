@@ -101,5 +101,5 @@ public class Tag_Const {
 	/// タグ_定数
 	/// エネミー
 	/// </summary>
-	public const string Enemy = "Enemy";
+	public const string ENEMY = "Enemy";
 }

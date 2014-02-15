@@ -6,6 +6,7 @@ public class Attack1_Object : MonoBehaviour {
 	public bool is_right_local = true;
 	public float spd = 0.3f;
 	public float destroyTime = 1f;
+	public float damagePoint = 1f;
 
 	// Use this for initialization
 	void Start () {
@@ -25,11 +26,21 @@ public class Attack1_Object : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D (Collider2D collider) {
-		if (gameObject.tag==Tag_Const.PLAYER_ATTACK) {
-			if(collider.gameObject.tag == Tag_Const.Enemy){
+		//プレイヤー
+		if (this.gameObject.tag==Tag_Const.PLAYER_ATTACK) {
+			if(collider.gameObject.tag == Tag_Const.ENEMY){
 				print ("Hit!!");
 				//ダメージメソッド呼び出し
-				//collider.SendMessage("", );
+				collider.gameObject.SendMessage("onDamage", damagePoint);
+			}
+
+			
+		//エネミー
+		} else if (this.gameObject.tag==Tag_Const.ENEMY_ATTACK) {
+			if(collider.gameObject.tag == Tag_Const.PLAYER){
+				print ("Hit!!");
+				//ダメージメソッド呼び出し
+				collider.gameObject.SendMessage("onDamage", damagePoint);
 			}
 		}
 	}

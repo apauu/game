@@ -6,11 +6,11 @@ public class Character_Base : MonoBehaviour {
 	//現在向いている方向:右向きならtrue
 	protected bool rightDirectionFlg = true;
 	//体力
-	protected float hitPoint;
+	protected float hitPoint = 1f;
 	//接地状態フラグ
 	protected bool onGroundFlg = false;
 	//何もしていないフラグ
-	protected bool neutralFlg = false;
+	protected bool neutralFlg = true;
 	//歩き中フラグ
 	protected bool walkFlg = false;
 	//ダッシュ中フラグ
@@ -60,8 +60,8 @@ public class Character_Base : MonoBehaviour {
 	protected GameObject parryObj;
 	//攻撃１プレハブ
 	public GameObject attack1Prefab;
-	//攻撃１オブジェクト
-	protected GameObject attack1Obj;
+	//攻撃オブジェクト
+	protected GameObject attackObj;
 	
 	//被ダメージ攻撃タグ
 	protected string attackedTag;
@@ -95,7 +95,7 @@ public class Character_Base : MonoBehaviour {
 			attackedTag = Tag_Const.ENEMY_ATTACK;
 			attackedLongTag = Tag_Const.ENEMY_LONG_ATTACK;
 			attackedBreakTag = Tag_Const.ENEMY_DIFFENCE_BREAK_ATTACK;
-		} else if (this.gameObject.tag == Tag_Const.Enemy) {
+		} else if (this.gameObject.tag == Tag_Const.ENEMY) {
 			attackedTag = Tag_Const.PLAYER_ATTACK;
 			attackedLongTag = Tag_Const.PLAYER_LONG_ATTACK;
 			attackedBreakTag = Tag_Const.PLAYER_DIFFENCE_BREAK_ATTACK;
@@ -119,7 +119,7 @@ public class Character_Base : MonoBehaviour {
 	protected void onAttaked(Collision2D collision) {
 		if (collision.gameObject.tag == attackedTag) {
 			print ("Get Damage!");
-			onDamage(1);
+			onDamage(1f);
 		}
 	}
 	
@@ -137,7 +137,7 @@ public class Character_Base : MonoBehaviour {
 
 	//防御
 	protected void Defense () {
-		print ("Player Defense");
+		print ("Defense!!");
 		float h = 0;
 
 		if (rightDirectionFlg) {
@@ -152,7 +152,7 @@ public class Character_Base : MonoBehaviour {
 
 	//回避
 	protected IEnumerator Avoid (float time) {
-		print ("Player Avoid");
+		print ("Avoid!!");
 		avoidFlg = true;
 		mutekiFlg = true;
 		yield return new WaitForSeconds(time);
@@ -162,7 +162,7 @@ public class Character_Base : MonoBehaviour {
 	
 	//パリィ
 	protected void Parry (float destroyTime) {
-		print ("Player Parry");
+		print ("Parry!!");
 		parryFlg = true;
 
 		float h = 0;
@@ -179,10 +179,10 @@ public class Character_Base : MonoBehaviour {
 		//消滅時間のセット
 		parryObj.gameObject.SendMessage("setDestroyTime", destroyTime);
 	}
-	
-	//攻撃１
-	protected void Attack1 (float destroyTime) {
-		print ("Player Attack1");
+
+	//攻撃
+	protected void Attack (float destroyTime, GameObject prefab) {
+		print ("Attack!!");
 		attack1Flg = true;
 		
 		float h = 0;
@@ -193,13 +193,13 @@ public class Character_Base : MonoBehaviour {
 			h = -1;
 		}
 		//攻撃生成
-		attack1Obj = Instantiate(this.attack1Prefab, new Vector2(transform.position.x + (2f * h), transform.position.y)
+		attackObj = Instantiate(prefab, new Vector2(transform.position.x , transform.position.y)
 		                         , Quaternion.identity) as GameObject;
 
 		//攻撃方向のセット
-		attack1Obj.gameObject.SendMessage("setDirection", rightDirectionFlg);
+		attackObj.gameObject.SendMessage("setDirection", rightDirectionFlg);
 		//消滅時間のセット
-		attack1Obj.gameObject.SendMessage("setDestroyTime", destroyTime);
+		attackObj.gameObject.SendMessage("setDestroyTime", destroyTime);
 	}
 
 	//攻撃関係のフラグを全て初期化する

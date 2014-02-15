@@ -9,6 +9,7 @@ public class Diffence_Object : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter2D (Collider2D collider) {
+		//プレイヤー
 		if (gameObject.tag==Tag_Const.PLAYER_DIFFENCE) {
 			if(collider.gameObject.tag == Tag_Const.ENEMY_ATTACK) {
 				print ("Defense!!");
@@ -17,7 +18,10 @@ public class Diffence_Object : MonoBehaviour {
 				print ("defense is destroyed");
 				Destroy(this.gameObject);
 			}
-		} else {
+
+			
+		//エネミー
+		} else if (gameObject.tag==Tag_Const.ENEMY_DIFFENCE) {
 			if(collider.gameObject.tag == Tag_Const.PLAYER_ATTACK){
 				print ("Defense!!");
 				Destroy(collider.gameObject);

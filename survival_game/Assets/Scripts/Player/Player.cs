@@ -11,17 +11,22 @@ public class Player : Character_Base {
 	private float nowRawKey = 0;
 	//前回押した左右移動キー
 	private float lastRawKey = 0;
-	
+
+	//攻撃２プレハブ
+	public GameObject attack2Prefab;
+
 	// Use this for initialization
 	void Start () {
 		//初期HP
-		hitPoint = 2;
+		hitPoint = 2f;
 		//防御プレハブタグ設定
 		defensePrefab.gameObject.tag = Tag_Const.PLAYER_DIFFENCE;
 		//パリィプレハブタグ設定
-		defensePrefab.gameObject.tag = Tag_Const.PLAYER_PARRY;
+		parryPrefab.gameObject.tag = Tag_Const.PLAYER_PARRY;
 		//攻撃プレハブタグ設定
-		defensePrefab.gameObject.tag = Tag_Const.PLAYER_ATTACK;
+		attack1Prefab.gameObject.tag = Tag_Const.PLAYER_ATTACK;
+		//攻撃プレハブタグ設定
+		attack2Prefab.gameObject.tag = Tag_Const.PLAYER_ATTACK;
 	}
 	
 	// Update is called once per frame
@@ -65,12 +70,12 @@ public class Player : Character_Base {
 					|| attack1Flg
 					|| attack2Flg
 					|| attack3Flg
-					|| skill2Flg)) {
+			   		|| skill2Flg)) {
 				//技攻撃１
 				print ("Player Fire3");
 				this.InitAttackFlg();
 				skill1Flg = true;
-				//Attack.Skill1(rigidbody2D, rightDirectionFlg, destroyTime);
+				Attack2(6f);
 			} else if ((Input.GetButtonDown ("Fire3"))
 					&&(neutralFlg
 					|| attack1Flg
@@ -208,7 +213,7 @@ public class Player : Character_Base {
 		print ("----------------OnGround!--------------");
 		base.OnCollisionEnter2D (collision);
 
-		if (collision.gameObject.tag == Tag_Const.Enemy) {
+		if (collision.gameObject.tag == Tag_Const.ENEMY) {
 			GameObject gui = GameObject.Find ("GUI Text");
 			if (gui != null) gui.guiText.text = "Hit !";
 		}
@@ -220,5 +225,17 @@ public class Player : Character_Base {
 	}
 
 	void OnTriggerEnter2D (Collider2D collider) {
+	}
+	
+	//攻撃１
+	void Attack1 (float destroyTime) {
+		base.Attack (destroyTime, attack1Prefab);
+	}
+
+	//攻撃２
+	void Attack2 (float destroyTime) {
+		for (int i = 0 ; i < 5; i++) {
+			base.Attack (destroyTime, attack2Prefab);
+		}
 	}
 }
