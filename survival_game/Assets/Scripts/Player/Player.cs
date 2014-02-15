@@ -14,8 +14,14 @@ public class Player : Character_Base {
 	
 	// Use this for initialization
 	void Start () {
+		//初期HP
+		hitPoint = 2;
 		//防御プレハブタグ設定
 		defensePrefab.gameObject.tag = Tag_Const.PLAYER_DIFFENCE;
+		//パリィプレハブタグ設定
+		defensePrefab.gameObject.tag = Tag_Const.PLAYER_PARRY;
+		//攻撃プレハブタグ設定
+		defensePrefab.gameObject.tag = Tag_Const.PLAYER_ATTACK;
 	}
 	
 	// Update is called once per frame
@@ -108,7 +114,7 @@ public class Player : Character_Base {
 		} else {
 			//空中攻撃
 			if (Input.GetButtonDown ("Fire1")) {
-				print ("Player Fire1");
+				print ("Player Air Fire1");
 				if (jumpAttack1Flg) {
 					//ジャンプ攻撃２
 					this.InitAttackFlg();

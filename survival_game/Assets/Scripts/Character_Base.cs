@@ -6,7 +6,7 @@ public class Character_Base : MonoBehaviour {
 	//現在向いている方向:右向きならtrue
 	protected bool rightDirectionFlg = true;
 	//体力
-	protected int hitPoint;
+	protected float hitPoint;
 	//接地状態フラグ
 	protected bool onGroundFlg = false;
 	//何もしていないフラグ
@@ -58,13 +58,56 @@ public class Character_Base : MonoBehaviour {
 	public GameObject parryPrefab;
 	//パリィオブジェクト
 	protected GameObject parryObj;
-	//攻撃プレハブ
+	//攻撃１プレハブ
 	public GameObject attack1Prefab;
-	//攻撃オブジェクト
+	//攻撃１オブジェクト
 	protected GameObject attack1Obj;
+	
+	//被ダメージ攻撃タグ
+	protected string attackedTag;
+	//被ダメージ遠距離攻撃タグ
+	protected string attackedLongTag;
+	//被ダメージ防御破壊攻撃タグ
+	protected string attackedBreakTag;
+
+	protected void Start () {
+		//接触判定を取るオブジェクトタグを初期化
+		setTagAttaked ();
+	}
 
 	void OnCollisionEnter2D (Collision2D collision) {
 		//接地判定
+		setFlgOnGround (collision);
+		//ダメージ判定
+		onAttaked (collision);
+	}
+
+	void OnCollisionExit2D (Collision2D collision) {
+		//接地判定
+		if (collision.gameObject.tag == Tag_Const.GROUND) {
+			onGroundFlg = false;
+		}
+	}
+
+	//接触判定を取るオブジェクトタグを初期化
+	protected void setTagAttaked() {
+		if (this.gameObject.tag == Tag_Const.PLAYER) {
+			attackedTag = Tag_Const.ENEMY_ATTACK;
+			attackedLongTag = Tag_Const.ENEMY_LONG_ATTACK;
+			attackedBreakTag = Tag_Const.ENEMY_DIFFENCE_BREAK_ATTACK;
+		} else if (this.gameObject.tag == Tag_Const.Enemy) {
+			attackedTag = Tag_Const.PLAYER_ATTACK;
+			attackedLongTag = Tag_Const.PLAYER_LONG_ATTACK;
+			attackedBreakTag = Tag_Const.PLAYER_DIFFENCE_BREAK_ATTACK;
+		}
+		print ("init attaked Tags");
+		print ("attakedTag : " + attackedTag);
+		print ("attakedLongTag : " + attackedLongTag);
+		print ("attakedBreakTag : " + attackedBreakTag);
+	}
+
+	//接地判定
+	protected void setFlgOnGround(Collision2D collision) {
 		if (collision.gameObject.tag == Tag_Const.GROUND) {
 			onGroundFlg = true;
 			jmpFlg = true;
@@ -72,10 +115,23 @@ public class Character_Base : MonoBehaviour {
 		}
 	}
 	
-	void OnCollisionExit2D (Collision2D collision) {
-		//接地判定
-		if (collision.gameObject.tag == Tag_Const.GROUND) {
-			onGroundFlg = false;
+	//ダメージ判定
+	protected void onAttaked(Collision2D collision) {
+		if (collision.gameObject.tag == attackedTag) {
+			print ("Get Damage!");
+			onDamage(1);
+		}
+	}
+	
+	//被ダメージ処理
+	protected void onDamage(float damagePoint) {
+		print ("Get " + damagePoint + " Damage!!");
+		hitPoint -= damagePoint;
+		
+		//HPが0以下ならキャラクターを破壊
+		if (hitPoint <= 0) {
+			print ("You Dead");
+			Destroy (this.gameObject);
 		}
 	}
 

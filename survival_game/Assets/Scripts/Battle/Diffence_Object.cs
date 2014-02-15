@@ -9,15 +9,22 @@ public class Diffence_Object : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter2D (Collider2D collider) {
-		if (gameObject.tag=="Player_Diffence") {
-			if(collider.gameObject.tag == "Enemy_Attack"){
+		if (gameObject.tag==Tag_Const.PLAYER_DIFFENCE) {
+			if(collider.gameObject.tag == Tag_Const.ENEMY_ATTACK) {
+				print ("Defense!!");
 				Destroy(collider.gameObject);
+			} else if (collider.gameObject.tag == Tag_Const.ENEMY_DIFFENCE_BREAK_ATTACK) {
+				print ("defense is destroyed");
+				Destroy(this.gameObject);
 			}
 		} else {
-			if(collider.gameObject.tag == "Player_Attack"){
+			if(collider.gameObject.tag == Tag_Const.PLAYER_ATTACK){
+				print ("Defense!!");
 				Destroy(collider.gameObject);
+			} else if (collider.gameObject.tag == Tag_Const.PLAYER_DIFFENCE_BREAK_ATTACK) {
+				print ("defense is destroyed");
+				Destroy(this.gameObject);
 			}
 		}
-		print ("diffence!!");
 	}
 }
