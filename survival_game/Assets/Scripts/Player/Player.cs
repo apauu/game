@@ -128,20 +128,20 @@ public class Player : Character_Base {
 				}
 			}
 		}
-
-		//ジャンプ
-		if (Input.GetButtonDown ("Jump")) {
-			print ("Player Jump");
-			if(jmpFlg == true) {
-				jmpFlg = false;
-				Jump.JumpMove(rigidbody2D, Player_Const.JUMP_SPEED);
-				
-			} else if (doubleJmpFlg == true) {
-				//2段ジャンプ
-				doubleJmpFlg = false;
-				Jump.JumpMove(rigidbody2D,Player_Const.JUMP_SPEED);
-			}
+		
+		//左右入力の無い時
+		lastKeyTimer += Time.deltaTime;
+		//ダッシュキー待機時間終了時
+		if (lastKeyTimer > Player_Const.DOUBLE_KEY_TIME) {
+			//最終横方向キー初期化
+			lastRawKey = 0;
+			//タイマー初期化
+			lastKeyTimer = 0;
 		}
+	}
+	
+	// FixedUpdate is called once per frame
+	void FixedUpdate () {
 
 		//左右ボタンの入力
 		sideButton = Input.GetAxisRaw ("Horizontal");
@@ -177,34 +177,46 @@ public class Player : Character_Base {
 			if(Input.GetButtonUp ("Horizontal")) {
 				lastRawKey = nowRawKey;
 				lastKeyTimer = 0;
+				walkFlg = false;
+				dashFlg = false;
 			}
-			//左右入力の無い時
-			lastKeyTimer += Time.deltaTime;
-			walkFlg = false;
-			dashFlg = false;
-			Side_Move.SideMove(rigidbody2D, 0);
-		}
 
-		//ダッシュキー待機時間終了時
-		if (lastKeyTimer > Player_Const.DOUBLE_KEY_TIME) {
-			//最終横方向キー初期化
-			lastRawKey = 0;
-			//タイマー初期化
-			lastKeyTimer = 0;
+			//空中以外はx,y軸停止
+			if (onGroundFlg) {
+				Side_Move.SideMove(rigidbody2D, 0, 0);
+			}
+		}
+		
+		//ジャンプ
+		if (Input.GetButtonDown ("Jump")) {
+			print ("Player Jump");
+			if(jmpFlg == true) {
+				jmpFlg = false;
+				onGroundFlg = false;
+				Jump.JumpMove(rigidbody2D, Player_Const.JUMP_SPEED);
+				
+			} else if (doubleJmpFlg == true) {
+				//2段ジャンプ
+				doubleJmpFlg = false;
+				onGroundFlg = false;
+				Jump.JumpMove(rigidbody2D,Player_Const.JUMP_SPEED);
+			}
 		}
 	}
+
 	void OnCollisionEnter2D (Collision2D collision) {
-		//接地判定
-		if (collision.gameObject.tag == Tag_Const.GROUND) {
-			onGroundFlg = true;
-			jmpFlg = true;
-			doubleJmpFlg = true;
-		}
+		print ("----------------OnGround!--------------");
+		base.OnCollisionEnter2D (collision);
 
 		if (collision.gameObject.tag == Tag_Const.Enemy) {
 			GameObject gui = GameObject.Find ("GUI Text");
 			if (gui != null) gui.guiText.text = "Hit !";
 		}
+	}
+
+	void OnCollisionExit2D (Collision2D collision) {
+		print ("----------------ExitGround!--------------");
+		base.OnCollisionExit2D (collision);
 	}
 
 	void OnTriggerEnter2D (Collider2D collider) {

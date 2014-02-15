@@ -75,14 +75,14 @@ public class Character_Base : MonoBehaviour {
 		setTagAttaked ();
 	}
 
-	void OnCollisionEnter2D (Collision2D collision) {
+	protected void OnCollisionEnter2D (Collision2D collision) {
 		//接地判定
 		setFlgOnGround (collision);
 		//ダメージ判定
 		onAttaked (collision);
 	}
 
-	void OnCollisionExit2D (Collision2D collision) {
+	protected void OnCollisionExit2D (Collision2D collision) {
 		//接地判定
 		if (collision.gameObject.tag == Tag_Const.GROUND) {
 			onGroundFlg = false;
