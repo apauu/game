@@ -184,7 +184,7 @@ public class Character_Base : MonoBehaviour {
 	protected void Attack (float destroyTime, GameObject prefab) {
 		print ("Attack!!");
 		attack1Flg = true;
-		
+		print (prefab.tag + " aaaa");
 		float h = 0;
 		
 		if (rightDirectionFlg) {

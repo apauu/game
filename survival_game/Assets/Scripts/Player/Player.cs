@@ -105,7 +105,7 @@ public class Player : Character_Base {
 					attack3Flg = true;
 					//Attack.Attack3(rigidbody2D, rightDirectionFlg, destroyTime);
 				} else if (attack1Flg) {
-					//通常攻撃３
+					//通常攻撃２
 					this.InitAttackFlg();
 					attack2Flg = true;
 					//Attack.Attack2(rigidbody2D, rightDirectionFlg, destroyTime);

@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿/// <summary>
+/// 敵オブジェクトの基本となるクラス
+/// 各敵クラスは本クラスを継承して利用すること
+/// </summary>
+
+using UnityEngine;
 using System.Collections;
 
 public class Enemy_Base : Character_Base {
@@ -11,6 +16,8 @@ public class Enemy_Base : Character_Base {
 	private bool playerDirectionFlg = true;
 	//itweenフラグ true = 動かしていい　動いてる間はfalse
 	private bool iTweenFlg = false;
+	//AI起動フラグ true = 攻撃,防御,パリィなどを行う
+	private bool startUpAIFlg = false;
 	//プレイヤーオブジェクト
 	private GameObject player;
 	
@@ -20,17 +27,32 @@ public class Enemy_Base : Character_Base {
 	private float distanceX;
 	//プレイヤーとのy距離
 	private float distanceY;
-	//ランダム移動用カウント
-	private float waitCount = 0;
+
+	/*------------------------キャラクター固有設定----------------------------*/
+	/*--------------- Startメソッド内で必ず初期化を行うこと -------------------*/
+	/*--------------- 倍率系は距離判定や移動処理にすべて適応される -------------------*/
+	//プレイヤーに気づくx距離の倍率　キャラ固有　baseは１
+	private float noticeDistanceXMag;
+	//プレイヤーに気づくy距離の倍率　キャラ固有　baseは１
+	private float noticeDistanceYMag;
+	//キャラクターの移動速度倍率　キャラ固有　baseは１
+	private float enemySideSpeedMag;
+	/*------------------------キャラクター固有設定----------------------------*/
 
 	// Use this for initialization
 	void Start () {
+		//baseの初期化処理を実行
 		base.Start ();
+
+		//キャラクター固有設定を実行
+		setCharacteristic ();
+
 		//playerタグを検索してplayerオブジェクトを取得する
 		player = GameObject.FindGameObjectWithTag (Tag_Const.PLAYER);
 		firstPosition = this.transform.position;
 		rightDirectionFlg = false;
 
+		//移動TweenのHashTable
 		Hashtable table = new Hashtable();
 		table.Add ("x", 5);
 		table.Add ("loopType", iTween.LoopType.pingPong);
@@ -38,10 +60,14 @@ public class Enemy_Base : Character_Base {
 		table.Add ("speed", 2.0f);
 		table.Add ("easeType", iTween.EaseType.easeInOutExpo);
 		table.Add ("onstart", "StartHandler");		// トゥイーン開始時にStartHandler()を呼ぶ
-		
+
+		//うろうろ動く
 		iTween.MoveBy(gameObject, table);
 	}
 
+	/// <summary>
+	/// iTweenの開始時にコールバックされる
+	/// </summary>
 	private void StartHandler()
 	{		
 		//向きをセット
@@ -112,10 +138,38 @@ public class Enemy_Base : Character_Base {
 					iTween.Pause(gameObject,"move");
 				}
 
-			//キャラクターが右にいたら
-			transform.localScale = new Vector3((playerDirectionFlg ? 1 : -1), 1, 1);
+				//プレイヤーとの距離が閾値以下になっていたら攻撃などのアクションを行う
+				if(Mathf.Abs(nowDistanceX) < 2f) {
+					startUpAIFlg = true;
+				//攻撃できる位置にいない場合は近づく
+				} else {
+					startUpAIFlg = false;
+				}
+			}
+		}
+	}
 
-			Side_Move.SideMove(rigidbody2D,Enemy_Const.ENEMY_SIDE_SPEED * ((playerDirectionFlg) ? -1 : 1));
+	//物理演算利用系のUpdate処理はこちらへ
+	private void FixedUpdate () {
+		//停止しないとき　メイン処理
+		if (!stopFlg) { 
+			//プレイヤーに気付いているとき
+			if (noticeFlg) {
+					//プレイヤーがいる方向を向く
+					transform.localScale = new Vector3 ((playerDirectionFlg ? 1 : -1), 1, 1);
+
+					//AIが起動している場合
+					if (startUpAIFlg) {
+					enemyAI();
+					//AIが起動していない場合
+					} else {
+							//プレイヤーに近づく
+							//速度＝基本速度＊固有速度倍率＊プレイヤーの位置(1 or -1)
+							Side_Move.SideMove (rigidbody2D,
+	                   Enemy_Const.ENEMY_SIDE_SPEED *
+									enemySideSpeedMag * 
+									((playerDirectionFlg) ? -1 : 1));
+					}
 			}
 		//停止させるとき　初期ポジションに戻す
 		} else {
@@ -129,15 +183,40 @@ public class Enemy_Base : Character_Base {
 		}
 	}
 
-	//プレイヤーに気づくかどうか判定する
+	/// <summary>
+	/// プレイヤーに気づくかどうか判定する
+	/// </summary>
+	/// <param name="nowDistanceX">プレイヤーとの距離：x</param>
+	/// <param name="nowDistanceY">プレイヤーとの距離：y</param>
 	private void setNoticeFlg(float nowDistanceX,float nowDistanceY) {
 		//プレイヤーとのX・Y距離が閾値以内だったら
-		if(Mathf.Abs(nowDistanceX) < Enemy_Const.NOTICE_DISTANCE_X &&
-		    Mathf.Abs(nowDistanceY) < Enemy_Const.NOTICE_DISTANCE_Y) {
+		if(Mathf.Abs(nowDistanceX) < Enemy_Const.NOTICE_DISTANCE_X * noticeDistanceXMag &&
+		   Mathf.Abs(nowDistanceY) < Enemy_Const.NOTICE_DISTANCE_Y * noticeDistanceYMag) {
 			noticeFlg = true;
 		}
 	}
 
+	/// <summary>
+	/// AIメソッド　実装は継承先で？
+	/// </summary>
+	private void enemyAI(){
+		//prefabタグ設定
+		attack1Prefab.tag = Tag_Const.ENEMY_ATTACK;
+		print ("AIAttack!!!!!");
+		print (attack1Prefab.tag + "bbbbb");
+		if(!attack1Flg) { 
+			//通常攻撃１
+			this.InitAttackFlg();
+			attack1Flg = true;
+			base.Attack (2f, attack1Prefab);
+			StartCoroutine (setWaitForSeconds(2.0f));
+		}
+	}
+
+	/// <summary>
+	/// オブジェクトに衝突した瞬間に呼ばれるコールバック関数
+	/// </summary>
+	/// <param name="collision">Collision.</param>
 	private void OnCollisionEnter2D (Collision2D collision) {
 		//接地判定
 		setFlgOnGround (collision);
@@ -157,5 +236,21 @@ public class Enemy_Base : Character_Base {
 				}
 			}
 		}
+	}
+
+	private IEnumerator setWaitForSeconds(float time)
+	{
+		yield return new WaitForSeconds(time);
+		print(time);
+		attack1Flg = false;
+	}
+
+	/// <summary>
+	/// キャラクター固有のステータスを初期化する
+	/// </summary>
+	private void setCharacteristic() {
+		noticeDistanceXMag = 1f;
+		noticeDistanceYMag = 1f;
+		enemySideSpeedMag = 1f;
 	}
 }
