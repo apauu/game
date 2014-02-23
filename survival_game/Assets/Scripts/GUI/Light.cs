@@ -12,7 +12,7 @@ public class Light : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.position = new Vector3(player.transform.position.x,player.transform.position.y+5f, transform.position.z);
+		transform.position = new Vector3(player.transform.position.x,player.transform.position.y+8f, transform.position.z);
 		
 	}
 }
