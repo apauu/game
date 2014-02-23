@@ -30,17 +30,21 @@ public class Attack1_Object : MonoBehaviour {
 		if (this.gameObject.tag==Tag_Const.PLAYER_ATTACK) {
 			if(collider.gameObject.tag == Tag_Const.ENEMY){
 				print ("Hit!!");
-				//ダメージメソッド呼び出し
-				collider.gameObject.SendMessage("onDamage", damagePoint);
-			}
 
+				GameObject gui = GameObject.Find ("GUI Text");
+				if (gui != null) gui.guiText.text = "Hit !";
+
+				//ダメージメソッド呼び出し
+				collider.gameObject.SendMessage("OnDamage", damagePoint);
+			}
 			
 		//エネミー
 		} else if (this.gameObject.tag==Tag_Const.ENEMY_ATTACK) {
 			if(collider.gameObject.tag == Tag_Const.PLAYER){
 				print ("Hit!!");
+
 				//ダメージメソッド呼び出し
-				collider.gameObject.SendMessage("onDamage", damagePoint);
+				collider.gameObject.SendMessage("OnDamage", damagePoint);
 			}
 		}
 	}

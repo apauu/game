@@ -208,7 +208,7 @@ public class Enemy_Base : Character_Base {
 			//通常攻撃１
 			this.InitAttackFlg();
 			attack1Flg = true;
-			base.Attack (2f, attack1Prefab);
+			base.Attack (2f, attack1Prefab, 0f);
 			StartCoroutine (setWaitForSeconds(2.0f));
 		}
 	}
@@ -219,18 +219,16 @@ public class Enemy_Base : Character_Base {
 	/// <param name="collision">Collision.</param>
 	private void OnCollisionEnter2D (Collision2D collision) {
 		//接地判定
-		setFlgOnGround (collision);
-		//ダメージ判定
-		onAttaked (collision);
+		SetFlgOnGround (collision);
 		//接地判定
 		if (collision.gameObject.tag == Tag_Const.GROUND) {
 			if (collision.contacts != null && collision.contacts.Length > 0) {
 				Vector2 contactPoint = collision.contacts[0].point;
 				float angle = Vector2.Angle(new Vector2(0,-1),contactPoint - 
 					                            new Vector2(this.transform.position.x,this.transform.position.y));
-				print (angle + " angle");
+				//print (angle + " angle");
 				if(Mathf.Abs(angle) >= 80f && Mathf.Abs(angle) < 100f){
-					print ("jumpenemy");
+					print ("jump enemy");
 					jmpFlg = false;
 					Jump.JumpMove(rigidbody2D,10f);
 				} else {

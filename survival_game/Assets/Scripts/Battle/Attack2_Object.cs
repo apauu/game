@@ -66,7 +66,7 @@ public class Attack2_Object : MonoBehaviour {
 			if(collider.gameObject.tag == Tag_Const.ENEMY){
 				print ("Hit!!");
 				//ダメージメソッド呼び出し
-				collider.gameObject.SendMessage("onDamage", damagePoint);
+				collider.gameObject.SendMessage("OnDamage", damagePoint);
 			}
 			
 			
@@ -75,7 +75,7 @@ public class Attack2_Object : MonoBehaviour {
 			if(collider.gameObject.tag == Tag_Const.PLAYER){
 				print ("Hit!!");
 				//ダメージメソッド呼び出し
-				collider.gameObject.SendMessage("onDamage", damagePoint);
+				collider.gameObject.SendMessage("OnDamage", damagePoint);
 			}
 		}
 	}
