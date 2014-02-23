@@ -131,7 +131,9 @@ public class Character_Base : MonoBehaviour {
 		//HPが0以下ならキャラクターを破壊
 		if (hitPoint <= 0) {
 			print ("You Dead");
-			Destroy (this.gameObject);
+			/* Destroyで削除すると他からオブジェクト参照している場合エラー発生するので活動停止で画面から消す　*/
+			/* Update関数なども呼ばれなくなる　オブジェクト検索もできなくなる模様 */
+			gameObject.SetActiveRecursively(false);
 		}
 	}
 
@@ -146,8 +148,16 @@ public class Character_Base : MonoBehaviour {
 			h = -1;
 		}
 		//盾オブジェクト生成
-		defenseObj = Instantiate(this.defensePrefab, new Vector2(transform.position.x + (2f * h), transform.position.y)
+		defenseObj = Instantiate(this.defensePrefab, new Vector2(transform.position.x + (1f * h), transform.position.y)
 		                          , Quaternion.identity) as GameObject;
+
+		//キャラクターのTagを判定して防御オブジェクトにTagをセット
+		if (gameObject.tag.Equals(Tag_Const.PLAYER)) {
+			defenseObj.tag = Tag_Const.PLAYER_DIFFENCE;
+		} else {
+			defenseObj.tag = Tag_Const.ENEMY_DIFFENCE;
+		}
+
 	}
 
 	//回避
@@ -173,18 +183,28 @@ public class Character_Base : MonoBehaviour {
 			h = -1;
 		}
 		//パリィオブジェクト生成
-		parryObj = Instantiate(this.parryPrefab, new Vector2(transform.position.x + (2f * h), transform.position.y)
+		parryObj = Instantiate(this.parryPrefab, new Vector2(transform.position.x + (1f * h), transform.position.y)
 		                         , Quaternion.identity) as GameObject;
-		
+
+		//キャラクターのTagを判定してパリィオブジェクトにTagをセット
+		if (gameObject.tag.Equals(Tag_Const.PLAYER)) {
+			parryObj.tag = Tag_Const.PLAYER_PARRY;
+		} else {
+			parryObj.tag = Tag_Const.ENEMY_PARRY;
+		}
+
 		//消滅時間のセット
 		parryObj.gameObject.SendMessage("setDestroyTime", destroyTime);
 	}
 
-	//攻撃
+	/// <summary>
+	/// 攻撃
+	/// </summary>
+	/// <param name="destroyTime">攻撃判定の出ている時間</param>
+	/// <param name="prefab">攻撃Prefab</param>
 	protected void Attack (float destroyTime, GameObject prefab) {
 		print ("Attack!!");
 		attack1Flg = true;
-		print (prefab.tag + " aaaa");
 		float h = 0;
 		
 		if (rightDirectionFlg) {
@@ -196,6 +216,13 @@ public class Character_Base : MonoBehaviour {
 		attackObj = Instantiate(prefab, new Vector2(transform.position.x , transform.position.y)
 		                         , Quaternion.identity) as GameObject;
 
+		//キャラクターのTagを判定して攻撃オブジェクトにTagをセット
+		//本当は遠距離攻撃かどうかの判定も必要！あとで実装！
+		if (gameObject.tag.Equals(Tag_Const.PLAYER)) { 
+			attackObj.tag = Tag_Const.PLAYER_ATTACK;
+		} else {
+			attackObj.tag = Tag_Const.ENEMY_ATTACK;
+		}
 		//攻撃方向のセット
 		attackObj.gameObject.SendMessage("setDirection", rightDirectionFlg);
 		//消滅時間のセット

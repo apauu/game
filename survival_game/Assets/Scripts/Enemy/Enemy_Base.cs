@@ -72,7 +72,7 @@ public class Enemy_Base : Character_Base {
 	{		
 		//向きをセット
 		transform.localScale = new Vector3((rightDirectionFlg ? 1 : -1), 1, 1);
-		//向きのフラグを反転
+		//rightDirectionFlg更新
 		rightDirectionFlg = rightDirectionFlg ? false : true;
 	}
 	
@@ -139,7 +139,7 @@ public class Enemy_Base : Character_Base {
 				}
 
 				//プレイヤーとの距離が閾値以下になっていたら攻撃などのアクションを行う
-				if(Mathf.Abs(nowDistanceX) < 2f) {
+				if(Mathf.Abs(nowDistanceX) < 5f) {
 					startUpAIFlg = true;
 				//攻撃できる位置にいない場合は近づく
 				} else {
@@ -155,27 +155,31 @@ public class Enemy_Base : Character_Base {
 		if (!stopFlg) { 
 			//プレイヤーに気付いているとき
 			if (noticeFlg) {
-					//プレイヤーがいる方向を向く
-					transform.localScale = new Vector3 ((playerDirectionFlg ? 1 : -1), 1, 1);
+				//プレイヤーがいる方向を向く
+				transform.localScale = new Vector3 ((playerDirectionFlg ? 1 : -1), 1, 1);
+				//rightDirectionFlg更新
+				rightDirectionFlg = (playerDirectionFlg ? false : true);
 
-					//AIが起動している場合
-					if (startUpAIFlg) {
-					enemyAI();
-					//AIが起動していない場合
-					} else {
-							//プレイヤーに近づく
-							//速度＝基本速度＊固有速度倍率＊プレイヤーの位置(1 or -1)
-							Side_Move.SideMove (rigidbody2D,
-	                   Enemy_Const.ENEMY_SIDE_SPEED *
-									enemySideSpeedMag * 
-									((playerDirectionFlg) ? -1 : 1));
-					}
+				//AIが起動している場合
+				if (startUpAIFlg) {
+				enemyAI();
+				//AIが起動していない場合
+				} else {
+						//プレイヤーに近づく
+						//速度＝基本速度＊固有速度倍率＊プレイヤーの位置(1 or -1)
+						Side_Move.SideMove (rigidbody2D,
+	               				Enemy_Const.ENEMY_SIDE_SPEED *
+								enemySideSpeedMag * 
+								((playerDirectionFlg) ? -1 : 1));
+				}
 			}
 		//停止させるとき　初期ポジションに戻す
 		} else {
 			float distance = this.transform.position.x - firstPosition.x;
 			if(Mathf.Abs(distance) > 0.1) {
 				transform.localScale = new Vector3(((distance <= 0) ? -1 : 1), 1, 1);
+				//rightDirectionFlg更新
+				rightDirectionFlg = ((distance <= 0) ? true : false);
 				Side_Move.SideMove(rigidbody2D,Enemy_Const.ENEMY_SIDE_SPEED * ((distance <= 0) ? 1 : -1));
 			} else {
 				iTweenFlg = true;
@@ -200,10 +204,6 @@ public class Enemy_Base : Character_Base {
 	/// AIメソッド　実装は継承先で？
 	/// </summary>
 	private void enemyAI(){
-		//prefabタグ設定
-		attack1Prefab.tag = Tag_Const.ENEMY_ATTACK;
-		print ("AIAttack!!!!!");
-		print (attack1Prefab.tag + "bbbbb");
 		if(!attack1Flg) { 
 			//通常攻撃１
 			this.InitAttackFlg();
@@ -228,7 +228,9 @@ public class Enemy_Base : Character_Base {
 				Vector2 contactPoint = collision.contacts[0].point;
 				float angle = Vector2.Angle(new Vector2(0,-1),contactPoint - 
 					                            new Vector2(this.transform.position.x,this.transform.position.y));
+				print (angle + " angle");
 				if(Mathf.Abs(angle) >= 80f && Mathf.Abs(angle) < 100f){
+					print ("jumpenemy");
 					jmpFlg = false;
 					Jump.JumpMove(rigidbody2D,10f);
 				} else {
@@ -241,7 +243,6 @@ public class Enemy_Base : Character_Base {
 	private IEnumerator setWaitForSeconds(float time)
 	{
 		yield return new WaitForSeconds(time);
-		print(time);
 		attack1Flg = false;
 	}
 
