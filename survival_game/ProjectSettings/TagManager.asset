@@ -16,6 +16,7 @@ TagManager:
   - Enemy_Parry
   - Player_Diffence_Break_Attack
   - Enemy_Diffence_Break_Attack
+  - GUIText
   - 
   Builtin Layer 0: Default
   Builtin Layer 1: TransparentFX

@@ -32,6 +32,11 @@ public class Player_Const {
 	public const float ATTACKED_STIFF = 0.5f;
 	/// <summary>
 	/// プレイヤー定数
+	/// 被弾無敵時間
+	/// </summary>
+	public const float ATTACKED_MUTEKI = 1f;
+	/// <summary>
+	/// プレイヤー定数
 	/// 防御前硬直時間
 	/// </summary>
 	public const float DEFFENCE_STIFF = 0.5f;
@@ -55,6 +60,11 @@ public class Player_Const {
 	/// パリィ判定終了時間
 	/// </summary>
 	public const float PARRY_DESTROY = 0.5f;
+	/// <summary>
+	/// プレイヤー定数
+	/// パリィ成功時ひるませ時間
+	/// </summary>
+	public const float PARRY_WINCE = 0.5f;
 	/// <summary>
 	/// プレイヤー定数
 	/// 攻撃１硬直時間

@@ -2,12 +2,14 @@
 using System.Collections;
 
 public class Parry_Object : MonoBehaviour {
-	
+
+	//パリィ時間
 	public float destroyTime = 1f;
+	//成功時ひるませ時間
+	public float winceTime = 0.5f;
 
 	// Use this for initialization
 	void Start () {
-		print (gameObject.tag);
 	}
 	
 	// Update is called once per frame
@@ -16,28 +18,50 @@ public class Parry_Object : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D (Collider2D collider) {
-		if (gameObject.tag==Tag_Const.PLAYER_PARRY) {
-			if(collider.gameObject.tag == Tag_Const.ENEMY_ATTACK){
-				print ("Parry!!");
-				Destroy(collider.gameObject);
-				//敵ひるみメソッド呼び出し
-			} else if (collider.gameObject.tag == Tag_Const.ENEMY_LONG_ATTACK){
+		if (this.gameObject.tag == Tag_Const.PLAYER_PARRY) {
+			if (collider.gameObject.tag == Tag_Const.ENEMY_ATTACK) {
+			print ("Parry!!");
+			Destroy(collider.gameObject);
+
+			//ひるみメソッド呼び出し
+			GameObject parent = collider.gameObject.transform.parent.gameObject;
+			collider.gameObject.SendMessage("Wince", winceTime);
+			} else {
 				print ("failed parry");
 			}
 		} else {
-			if(collider.gameObject.tag == Tag_Const.PLAYER_ATTACK){
+			if (collider.gameObject.tag == Tag_Const.PLAYER_ATTACK) {
 				print ("Parry!!");
 				Destroy(collider.gameObject);
-				//プレイヤーひるみメソッド呼び出し
-			} else if (collider.gameObject.tag == Tag_Const.PLAYER_LONG_ATTACK){
+				
+				//ひるみメソッド呼び出し
+				GameObject parent = collider.gameObject.transform.parent.gameObject;
+				collider.gameObject.SendMessage("Wince", winceTime);
+			} else {
 				print ("failed parry");
 			}
 		}
 	}
 	
-	//消滅までの時間を受け取る
-	void setDestroyTime(float time)
+	/// <summary>
+	/// パラメータ初期化
+	/// </summary>
+	/// <param name="destroyTime">DestroyTime.</param>
+	/// <param name="winceTime">WinceTime.</param>
+	void Init(float destroyTime, float winceTime) {
+		SetDestroyTime(destroyTime);
+		SetWinceTime (winceTime);
+	}
+	
+	//消滅までの時間をセット
+	void SetDestroyTime(float time)
 	{
 		destroyTime = time;
+	}
+
+	//成功時に敵をひるませる時間をセット
+	void SetWinceTime(float time)
+	{
+		winceTime = time;
 	}
 }

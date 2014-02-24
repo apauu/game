@@ -5,7 +5,6 @@ public class Diffence_Object : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		print (gameObject.tag);
 	}
 	
 	void OnTriggerEnter2D (Collider2D collider) {
@@ -18,7 +17,6 @@ public class Diffence_Object : MonoBehaviour {
 				print ("defense is destroyed");
 				Destroy(this.gameObject);
 			}
-
 			
 		//エネミー
 		} else if (gameObject.tag==Tag_Const.ENEMY_DIFFENCE) {

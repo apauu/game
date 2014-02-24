@@ -19,6 +19,8 @@ public class Player : Character_Base {
 	void Start () {
 		//初期HP
 		hitPoint = Player_Const.HIT_POINT;
+		//被弾時無敵時間
+		mutekiTime = Player_Const.ATTACKED_MUTEKI;
 		//防御プレハブタグ設定
 		defensePrefab.gameObject.tag = Tag_Const.PLAYER_DIFFENCE;
 		//パリィプレハブタグ設定

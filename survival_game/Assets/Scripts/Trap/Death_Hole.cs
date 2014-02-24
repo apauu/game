@@ -20,7 +20,7 @@ public class Death_Hole : MonoBehaviour {
 		if (collision.gameObject.tag.Equals(Tag_Const.PLAYER) || collision.gameObject.tag.Equals(Tag_Const.ENEMY)) {
 			if (collision.contacts != null && collision.contacts.Length > 0) {
 				//ダメージメソッド呼び出し
-				collision.gameObject.SendMessage("onDamage", DAMAGEPOINT);
+				collision.gameObject.SendMessage("OnDamage", DAMAGEPOINT);
 			}
 		}
 	}

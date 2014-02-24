@@ -48,6 +48,8 @@ public class Character_Base : MonoBehaviour {
 	/// 硬直中フラグ	true：硬直	false：別動作可能
 	/// </summary>
 	protected bool stiffFlg = false;
+	// デフォルトの被弾時無敵時間
+	protected float mutekiTime = 0f;
 
 	//ジャンプフラグ trueならできる
 	protected bool jmpFlg = true;
@@ -143,11 +145,7 @@ public class Character_Base : MonoBehaviour {
 	/// <param name="stiffTime">被弾硬直時間</param>
 	public void OnAttaked(Collision2D collision, float damagePoint, float stiffTime) {
 		if (collision.gameObject.tag == attackedTag) {
-			print ("Get Damage!");
 			OnDamage(damagePoint);
-			
-			//硬直時間
-			StartCoroutine(WaitForStiffTime (stiffTime));
 		}
 	}
 
@@ -157,15 +155,23 @@ public class Character_Base : MonoBehaviour {
 	/// </summary>
 	/// <param name="damagePoint">ダメージ値</param>
 	protected void OnDamage(float damagePoint) {
-		print ("Get " + damagePoint + " Damage!!");
-		hitPoint -= damagePoint;
-		
-		//HPが0以下ならキャラクターを破壊
-		if (hitPoint <= 0) {
-			print ("You Dead");
-			/* Destroyで削除すると他からオブジェクト参照している場合エラー発生するので活動停止で画面から消す　*/
-			/* Update関数なども呼ばれなくなる　オブジェクト検索もできなくなる模様 */
-			gameObject.SetActiveRecursively(false);
+		if (!mutekiFlg) {
+			print ("Get " + damagePoint + " Damage!!");
+			hitPoint -= damagePoint;
+
+			GameObject gui = GameObject.FindGameObjectWithTag ("GUIText");
+			if (gui != null) gui.SendMessage("ShowMessage", damagePoint.ToString () + "!");
+
+			//HPが0以下ならキャラクターを破壊
+			if (hitPoint <= 0) {
+				print ("You Dead");
+				/* Destroyで削除すると他からオブジェクト参照している場合エラー発生するので活動停止で画面から消す　*/
+				/* Update関数なども呼ばれなくなる　オブジェクト検索もできなくなる模様 */
+				gameObject.SetActiveRecursively(false);
+			} else {
+				//無敵時間
+				StartCoroutine(WaitForStiffTime (mutekiTime));
+			}
 		}
 	}
 
@@ -176,19 +182,26 @@ public class Character_Base : MonoBehaviour {
 	/// <param name="damagePoint">ダメージ値</param>
 	/// <param name="stiffTime">被弾硬直時間</param>
 	protected void OnDamage(float damagePoint, float stiffTime) {
-		print ("Get " + damagePoint + " Damage!!");
-		hitPoint -= damagePoint;
-		
-		//HPが0以下ならキャラクターを破壊
-		if (hitPoint <= 0) {
-			print ("You Dead");
-			/* Destroyで削除すると他からオブジェクト参照している場合エラー発生するので活動停止で画面から消す　*/
-			/* Update関数なども呼ばれなくなる　オブジェクト検索もできなくなる模様 */
-			gameObject.SetActiveRecursively(false);
+		if (!mutekiFlg) {
+			print ("Get " + damagePoint + " Damage!!");
+			hitPoint -= damagePoint;
+			
+			GameObject gui = GameObject.FindGameObjectWithTag ("GUIText");
+			if (gui != null) gui.SendMessage("ShowMessage", damagePoint.ToString () + "!");
+			
+			//HPが0以下ならキャラクターを破壊
+			if (hitPoint <= 0) {
+				print ("You Dead");
+				/* Destroyで削除すると他からオブジェクト参照している場合エラー発生するので活動停止で画面から消す　*/
+				/* Update関数なども呼ばれなくなる　オブジェクト検索もできなくなる模様 */
+				gameObject.SetActiveRecursively(false);
+			} else {
+				//硬直時間
+				StartCoroutine(WaitForStiffTime (stiffTime));
+				//無敵時間
+				StartCoroutine(WaitForStiffTime (mutekiTime));
+			}
 		}
-		
-		//硬直時間
-		StartCoroutine(WaitForStiffTime (stiffTime));
 	}
 	
 	/// <summary>
@@ -337,6 +350,15 @@ public class Character_Base : MonoBehaviour {
 			stiffFlg = true;
 			yield return new WaitForSeconds (time);
 			stiffFlg = false;
+		}
+	}
+
+	//無敵時間設定フラグ
+	protected IEnumerator WaitForMutekiTime (float time) {
+		if (!mutekiFlg) {
+			mutekiFlg = true;
+			yield return new WaitForSeconds (time);
+			mutekiFlg = false;
 		}
 	}
 }
