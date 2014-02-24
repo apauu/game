@@ -81,13 +81,13 @@ public class Attack2_Object : MonoBehaviour {
 	}
 	
 	//方向を受け取る
-	void setDirection(bool isRight)
+	void SetDirection(bool isRight)
 	{
 		is_right_local = isRight;
 	}
 	
 	//消滅までの時間を受け取る
-	void setDestroyTime(float time)
+	void SetDestroyTime(float time)
 	{
 		destroyTime = time;
 	}

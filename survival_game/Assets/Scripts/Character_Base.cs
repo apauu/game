@@ -290,7 +290,7 @@ public class Character_Base : MonoBehaviour {
 		}
 
 		//消滅時間のセット
-		parryObj.gameObject.SendMessage("setDestroyTime", destroyTime);
+		parryObj.gameObject.SendMessage("SetDestroyTime", destroyTime);
 		
 		//硬直時間
 		StartCoroutine(WaitForStiffTime (stiffTime));
@@ -324,9 +324,9 @@ public class Character_Base : MonoBehaviour {
 			attackObj.tag = Tag_Const.ENEMY_ATTACK;
 		}
 		//攻撃方向のセット
-		attackObj.gameObject.SendMessage("setDirection", rightDirectionFlg);
+		attackObj.gameObject.SendMessage("SetDirection", rightDirectionFlg);
 		//消滅時間のセット
-		attackObj.gameObject.SendMessage("setDestroyTime", destroyTime);
+		attackObj.gameObject.SendMessage("SetDestroyTime", destroyTime);
 
 		//硬直時間
 		StartCoroutine(WaitForStiffTime (stiffTime));
