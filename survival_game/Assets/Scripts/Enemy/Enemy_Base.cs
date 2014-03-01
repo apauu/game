@@ -226,7 +226,6 @@ public class Enemy_Base : Character_Base {
 				Vector2 contactPoint = collision.contacts[0].point;
 				float angle = Vector2.Angle(new Vector2(0,-1),contactPoint - 
 					                            new Vector2(this.transform.position.x,this.transform.position.y));
-				//print (angle + " angle");
 				if(Mathf.Abs(angle) >= 80f && Mathf.Abs(angle) < 100f){
 					print ("jump enemy");
 					jmpFlg = false;

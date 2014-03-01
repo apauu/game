@@ -12,19 +12,27 @@ using System.Collections;
 public class Roll_Trap : MonoBehaviour {
 
 	//回転床が回転を始めるまでの時間
-	private float delayTime = 0.5f;
+	private const float DELAY_TIME = 0.5f;
+	//回転床が回転する時間
+	private const float ANIMATE_TIME = 0.5f;
+	//回転床が消えたり出現したりする時間
+	private const float REPEAT_TIME = 5.0f;
 	//移動TweenのHashTable
 	private Hashtable table;
 	//回転床起動フラグ true = 回転できます
 	private bool rollFlg = true;
+	//回転床出現フラグ true = 出現中
+	private bool appearFlg = true;
 
 	// Use this for initialization
 	void Start () {
+		InvokeRepeating ("repeat",DELAY_TIME,REPEAT_TIME);
+
 		//移動TweenのHashTable
 		table = new Hashtable();
-		table.Add ("z", 1080);
-		table.Add ("delay", .5);
-		table.Add ("time", 2.0f);
+		table.Add ("z", 180);
+		table.Add ("delay", DELAY_TIME);
+		table.Add ("time", ANIMATE_TIME);
 		table.Add ("easeType", iTween.EaseType.easeInOutExpo);
 		table.Add ("oncomplete", "EndHandler");		// トゥイーン開始時にEndHandler()を呼ぶ
 	}
@@ -41,7 +49,6 @@ public class Roll_Trap : MonoBehaviour {
 					Vector2 contactPoint = collision.contacts[0].point;
 					float angle = Vector2.Angle(new Vector2(0,-1),contactPoint - 
 					                            new Vector2(collision.transform.position.x,collision.transform.position.y));
-					print (angle + " angle");
 					//上から床を踏んだ場合
 					if(Mathf.Abs(angle) < 20f){
 						rollFloorTween();
@@ -53,13 +60,27 @@ public class Roll_Trap : MonoBehaviour {
 
 	void OnCollisionStay2D (Collision2D collision) {
 		if (!rollFlg) {
-			collision.gameObject.transform.Translate(new Vector3(-10,5,0));
+			//collision.gameObject.rigidbody2D.AddForce(new Vector2(-10000f,5000f));
 		}
 	}
 
+	void OnCollisionExit2D (Collision2D collision) {
+		print ("exit");
+	}
+
 	void rollFloorTween(){
-		rollFlg = false;
+		Invoke ("setRollFlg",DELAY_TIME);
 		iTween.RotateAdd(gameObject, table);
+	}
+
+	void repeat(){
+		renderer.enabled = appearFlg;
+		collider2D.isTrigger = !appearFlg;
+		appearFlg = appearFlg ? false : true;
+	}
+
+	void setRollFlg() {
+		rollFlg = false;
 	}
 
 	/// <summary>
