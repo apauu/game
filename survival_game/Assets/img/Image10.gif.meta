@@ -54,5 +54,32 @@ TextureImporter:
         height: 44
       alignment: 0
       pivot: {x: .5, y: .5}
+    - name: Image10_1
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 98
+        width: 30
+        height: 44
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Image10_2
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 98
+        width: 30
+        height: 44
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Image10_3
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 98
+        width: 30
+        height: 44
+      alignment: 0
+      pivot: {x: .5, y: .5}
   spritePackingTag: 
   userData: 
