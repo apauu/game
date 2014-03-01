@@ -208,7 +208,7 @@ public class Enemy_Base : Character_Base {
 			//通常攻撃１
 			this.InitAttackFlg();
 			attack1Flg = true;
-			base.Attack (2f, attack1Prefab, 0f);
+			base.Attack (attack1Prefab, 2f, 0f, 0f);
 			StartCoroutine (setWaitForSeconds(2.0f));
 		}
 	}

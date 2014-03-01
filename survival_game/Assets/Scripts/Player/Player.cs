@@ -33,7 +33,8 @@ public class Player : Character_Base {
 	
 	// Update is called once per frame
 	void Update () {
-
+		
+		print ("update!!");
 		// 硬直中以外の動作
 		if(!stiffFlg && defenseFlg) {
 
@@ -42,7 +43,7 @@ public class Player : Character_Base {
 				//防御
 				if (Input.GetButtonDown ("Defense")) {
 					if (defenseFlg == true) {
-						StartCoroutine(this.Defense(Player_Const.DEFFENCE_STIFF));
+						StartCoroutine(this.Defense(Player_Const.DEFFENCE_BEFORE));
 						defenseFlg = false;
 					}
 				} else if(Input.GetButtonUp ("Defense")) {
@@ -82,7 +83,7 @@ public class Player : Character_Base {
 					print ("Player Fire3");
 					this.InitAttackFlg();
 					skill1Flg = true;
-					Attack2(Player_Const.SKILL1_DESTROY, Player_Const.SKILL1_STIFF);
+					Attack2(Player_Const.SKILL1_DESTROY, 0, Player_Const.SKILL1_STIFF);
 				} else if ((Input.GetButtonDown ("Fire3"))
 						&&(neutralFlg
 						|| attack1Flg
@@ -120,7 +121,7 @@ public class Player : Character_Base {
 						//通常攻撃１
 						this.InitAttackFlg();
 						attack1Flg = true;
-						Attack1(Player_Const.ATTACK1_DESTROY, Player_Const.ATTACK1_STIFF);
+						Attack1(Player_Const.ATTACK1_DESTROY, Player_Const.ATTACK1_BEFORE, Player_Const.ATTACK1_STIFF);
 					}
 				}
 			} else {
@@ -140,6 +141,7 @@ public class Player : Character_Base {
 					}
 				}
 			}
+
 			//左右入力の無い時
 			lastKeyTimer += Time.deltaTime;
 			//ダッシュキー待機時間終了時
@@ -164,67 +166,72 @@ public class Player : Character_Base {
 			//移動系の処理は防御中、パリィ中、攻撃中、回避中（これで全部か？）にできないようにする
 			//とりあえず防御時は動けないように
 			if (defenseFlg) { 
-				//左右ボタンの入力
-				sideButton = Input.GetAxisRaw ("Horizontal");
-				if (sideButton != 0) {
-					if (sideButton == lastRawKey
-					    && onGroundFlg) {
-						//ダッシュON
-						lastRawKey = 0;
-						walkFlg = false;
-						dashFlg = true;
-					}
-					if (dashFlg) {
-						//ダッシュ移動
-						Side_Move.SideMove(rigidbody2D,Player_Const.DASH_SPEED * sideButton);
-						if (sideButton > 0) {
-							rightDirectionFlg = true;	//右向きフラグ
-						} else if (sideButton < 0) {
-							rightDirectionFlg = false;	//左向きフラ
-						}
-					} else {
-						//歩き移動
-						walkFlg = true;
-						nowRawKey = sideButton;
-						Side_Move.SideMove(rigidbody2D,Player_Const.SIDE_SPEED * sideButton);
-						if (sideButton > 0) {
-							rightDirectionFlg = true;	//右向きフラグ
-						} else if (sideButton < 0) {
-							rightDirectionFlg = false;	//左向きフラ
-						}
-					}
-				} else {
-					//左右ボタンを離した時
-					if(Input.GetButtonUp ("Horizontal")) {
-						lastRawKey = nowRawKey;
-						lastKeyTimer = 0;
-						walkFlg = false;
-						dashFlg = false;
-					}
 
-					//空中以外はx,y軸停止
-					if (onGroundFlg) {
+				//地上動作
+				if (onGroundFlg) {
+					//左右ボタンの入力
+					sideButton = Input.GetAxisRaw ("Horizontal");
+					if (sideButton != 0) {
+						if (sideButton == lastRawKey) {
+							//ダッシュON
+							lastRawKey = 0;
+							walkFlg = false;
+							dashFlg = true;
+							print ("Dash!");
+						}
+						nowRawKey = sideButton;
+
+						SideMove();
+
+					} else {
+						//左右ボタンを離した時
+						if(Input.GetButtonUp ("Horizontal")) {
+							lastRawKey = nowRawKey;
+							lastKeyTimer = 0;
+							walkFlg = false;
+							dashFlg = false;
+						}
+
+						//地上、入力無しの場合、x,y軸停止
 						Side_Move.SideMove(rigidbody2D, 0, 0);
 					}
-				}
-				
-				//ジャンプ
-				if (Input.GetButtonDown ("Jump")) {
-					print ("Player Jump");
-					if(jmpFlg == true) {
-						jmpFlg = false;
-						onGroundFlg = false;
-						Jump.JumpMove(rigidbody2D, Player_Const.JUMP_SPEED);
-						
-					} else if (doubleJmpFlg == true) {
-						//2段ジャンプ
-						doubleJmpFlg = false;
-						onGroundFlg = false;
-						Jump.JumpMove(rigidbody2D,Player_Const.JUMP_SPEED);
+
+					//ジャンプ
+					if (Input.GetButtonDown ("Jump")) {
+						print ("Player Jump");
+						if(jmpFlg == true) {
+							jmpFlg = false;
+							onGroundFlg = false;
+							Jump.JumpMove(rigidbody2D, Player_Const.JUMP_SPEED);
+						}
+					}
+
+				} else {
+					//空中動作
+					//硬直中の場合
+					lastRawKey = 0;
+					lastKeyTimer = 0;
+					
+					//左右ボタンの入力
+					sideButton = Input.GetAxisRaw ("Horizontal");
+
+					if (sideButton != 0) {
+						SideMove();
+					}
+
+					//2段ジャンプ
+					if (Input.GetButtonDown ("Jump")) {
+						print ("Player Jump");
+						if (doubleJmpFlg == true) {
+							doubleJmpFlg = false;
+							onGroundFlg = false;
+							Jump.JumpMove(rigidbody2D,Player_Const.JUMP_SPEED);
+						}
 					}
 				}
 			}
 		} else {
+
 			//硬直中の場合
 			lastRawKey = 0;
 			lastKeyTimer = 0;
@@ -254,14 +261,36 @@ public class Player : Character_Base {
 	}
 	
 	//攻撃１
-	void Attack1 (float destroyTime, float stiffTime) {
-		base.Attack (destroyTime, attack1Prefab, stiffTime);
+	private void Attack1 (float destroyTime,float beforeActionTime, float stiffTime) {
+		base.Attack (attack1Prefab, destroyTime, beforeActionTime, stiffTime);
 	}
 
 	//攻撃２
-	void Attack2 (float destroyTime, float stiffTime) {
+	private void Attack2 (float destroyTime,float beforeActionTime,  float stiffTime) {
 		for (int i = 0 ; i < 5; i++) {
-			base.Attack (destroyTime, attack2Prefab, stiffTime);
+			base.Attack (attack2Prefab, destroyTime, beforeActionTime, stiffTime);
+		}
+	}
+
+	//横移動
+	private void SideMove() {
+		if (dashFlg) {
+			//ダッシュ移動
+			Side_Move.SideMove(rigidbody2D,Player_Const.DASH_SPEED * sideButton);
+			if (sideButton > 0) {
+				rightDirectionFlg = true;	//右向きフラグ
+			} else if (sideButton < 0) {
+				rightDirectionFlg = false;	//左向きフラ
+			}
+
+		} else {
+			//歩き移動
+			Side_Move.SideMove(rigidbody2D,Player_Const.SIDE_SPEED * sideButton);
+			if (sideButton > 0) {
+				rightDirectionFlg = true;	//右向きフラグ
+			} else if (sideButton < 0) {
+				rightDirectionFlg = false;	//左向きフラ
+			}
 		}
 	}
 }

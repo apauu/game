@@ -39,7 +39,7 @@ public class Player_Const {
 	/// プレイヤー定数
 	/// 防御前硬直時間
 	/// </summary>
-	public const float DEFFENCE_STIFF = 0.5f;
+	public const float DEFFENCE_BEFORE = 0.5f;
 	/// <summary>
 	/// プレイヤー定数
 	/// 回避硬直時間
@@ -57,7 +57,7 @@ public class Player_Const {
 	public const float PARRY_STIFF = 1f;
 	/// <summary>
 	/// プレイヤー定数
-	/// パリィ判定終了時間
+	/// パリィ判定時間
 	/// </summary>
 	public const float PARRY_DESTROY = 0.5f;
 	/// <summary>
@@ -67,14 +67,19 @@ public class Player_Const {
 	public const float PARRY_WINCE = 0.5f;
 	/// <summary>
 	/// プレイヤー定数
+	/// 攻撃１前硬直時間
+	/// </summary>
+	public const float ATTACK1_BEFORE = 0.1f;
+	/// <summary>
+	/// プレイヤー定数
 	/// 攻撃１硬直時間
 	/// </summary>
 	public const float ATTACK1_STIFF = 0.5f;
 	/// <summary>
 	/// プレイヤー定数
-	/// 攻撃１判定終了時間
+	/// 攻撃１判定時間
 	/// </summary>
-	public const float ATTACK1_DESTROY = 0.5f;
+	public const float ATTACK1_DESTROY = 0.2f;
 	/// <summary>
 	/// プレイヤー定数
 	/// スキル１硬直時間
@@ -82,7 +87,7 @@ public class Player_Const {
 	public const float SKILL1_STIFF = 0.5f;
 	/// <summary>
 	/// プレイヤー定数
-	/// スキル１判定終了時間
+	/// スキル１判定時間
 	/// </summary>
 	public const float SKILL1_DESTROY = 5f;
 }

@@ -105,7 +105,7 @@ public class Character_Base : MonoBehaviour {
 				float angle = Vector2.Angle(new Vector2(0,-1),contactPoint - 
 				                            new Vector2(this.transform.position.x,this.transform.position.y));
 				// 横（壁）に接触した場合は処理を終了
-				if(Mathf.Abs(angle) >= 80f && Mathf.Abs(angle) < 100f){
+				if(Mathf.Abs(angle) >= 45f && Mathf.Abs(angle) <= 180f){
 
 					return;
 				} 
@@ -299,10 +299,11 @@ public class Character_Base : MonoBehaviour {
 	/// <summary>
 	/// 攻撃
 	/// </summary>
-	/// <param name="destroyTime">判定の出ている時間</param>
 	/// <param name="prefab">攻撃Prefab</param>
+	/// <param name="destroyTime">判定の出ている時間</param>
+	/// <param name="beforeActionTime">行動前硬直</param>
 	/// <param name="stiffTime">硬直時間</param>
-	protected void Attack (float destroyTime, GameObject prefab, float stiffTime) {
+	protected void Attack (GameObject prefab, float destroyTime, float beforeActionTime, float stiffTime) {
 		print ("Attack!!");
 		attack1Flg = true;
 		float h = 0;
@@ -312,8 +313,15 @@ public class Character_Base : MonoBehaviour {
 		} else {
 			h = -1;
 		}
+
+		//硬直発生
+		//stiffFlg = true;
+		//動作前硬直
+		//yield return WaitForSeconds (beforeActionTime);
+		//stiffFlg = false;
+
 		//攻撃生成
-		attackObj = Instantiate(prefab, new Vector2(transform.position.x , transform.position.y)
+		attackObj = Instantiate(prefab, new Vector2(transform.position.x + 1 , transform.position.y)
 		                         , Quaternion.identity) as GameObject;
 
 		//キャラクターのTagを判定して攻撃オブジェクトにTagをセット
@@ -323,10 +331,12 @@ public class Character_Base : MonoBehaviour {
 		} else {
 			attackObj.tag = Tag_Const.ENEMY_ATTACK;
 		}
+
 		//攻撃方向のセット
 		attackObj.gameObject.SendMessage("SetDirection", rightDirectionFlg);
 		//消滅時間のセット
 		attackObj.gameObject.SendMessage("SetDestroyTime", destroyTime);
+		print ("After!!");
 
 		//硬直時間
 		StartCoroutine(WaitForStiffTime (stiffTime));
