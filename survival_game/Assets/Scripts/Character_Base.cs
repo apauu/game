@@ -339,7 +339,7 @@ public class Character_Base : MonoBehaviour {
 		print ("After!!");
 
 		//硬直時間
-		StartCoroutine(WaitForStiffTime (stiffTime));
+		//StartCoroutine(WaitForStiffTime (stiffTime));
 	}
 
 	//攻撃関係のフラグを全て初期化する

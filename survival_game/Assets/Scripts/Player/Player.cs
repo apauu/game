@@ -121,7 +121,6 @@ public class Player : Character_Base {
 						//通常攻撃１
 						this.InitAttackFlg();
 						attack1Flg = true;
-						Attack1(Player_Const.ATTACK1_DESTROY, Player_Const.ATTACK1_BEFORE, Player_Const.ATTACK1_STIFF);
 					}
 				}
 			} else {
@@ -261,8 +260,8 @@ public class Player : Character_Base {
 	}
 	
 	//攻撃１
-	private void Attack1 (float destroyTime,float beforeActionTime, float stiffTime) {
-		base.Attack (attack1Prefab, destroyTime, beforeActionTime, stiffTime);
+	void Attack1 () {
+		base.Attack (attack1Prefab, Player_Const.ATTACK1_DESTROY, Player_Const.ATTACK1_BEFORE, Player_Const.ATTACK1_STIFF);
 	}
 
 	//攻撃２
