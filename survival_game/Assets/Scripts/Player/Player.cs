@@ -33,8 +33,6 @@ public class Player : Character_Base {
 	
 	// Update is called once per frame
 	void Update () {
-		
-		print ("update!!");
 		// 硬直中以外の動作
 		if(!stiffFlg && defenseFlg) {
 
@@ -279,7 +277,7 @@ public class Player : Character_Base {
 			if (sideButton > 0) {
 				rightDirectionFlg = true;	//右向きフラグ
 			} else if (sideButton < 0) {
-				rightDirectionFlg = false;	//左向きフラ
+				rightDirectionFlg = false;	//左向きフラグ
 			}
 
 		} else {
@@ -288,8 +286,34 @@ public class Player : Character_Base {
 			if (sideButton > 0) {
 				rightDirectionFlg = true;	//右向きフラグ
 			} else if (sideButton < 0) {
-				rightDirectionFlg = false;	//左向きフラ
+				rightDirectionFlg = false;	//左向きフラグ
 			}
 		}
+	}
+
+	/// <summary>
+	/// エレベーターから呼び出される
+	/// <param name="enterFlg">エレベーターに入るときtrue　出るときfalse</param>
+	/// </summary>
+	protected void EventElevator(bool enterFlg) {
+		print ("elevator" + onGroundFlg);
+		//イベント発生していいなら
+		if(!enterFlg || CheckEventAwake()) {
+			//移動TweenのHashTable
+			Hashtable table = new Hashtable();
+			table.Add ("z", 1 * (enterFlg? 1:-1));
+			table.Add ("delay", .1);
+			table.Add ("time", 2.0f);
+			iTween.MoveBy(gameObject, table);
+
+		}
+	}
+
+	/// <summary>
+	/// プレイヤーがイベントを起こせるかどうかチェックする
+	/// </summary>
+	private bool CheckEventAwake() {
+		return !(!onGroundFlg || attack1Flg || attack2Flg || attack3Flg || jumpAttack1Flg || jumpAttack2Flg ||
+		         parryFlg || parryAttack1Flg || parryAttack2Flg || avoidFlg || skill1Flg || skill2Flg || superSkillFlg);
 	}
 }
