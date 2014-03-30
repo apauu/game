@@ -89,7 +89,7 @@ public class MainMenu : MonoBehaviour {
 		}
 	}
 
-	int GetStageNo () {
+	string GetStageNo () {
 		if (stageNo.ToString ().Length == 1) {
 			return "0" + stageNo.ToString ();
 		}
