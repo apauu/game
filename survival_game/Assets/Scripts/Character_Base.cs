@@ -247,13 +247,14 @@ public class Character_Base : MonoBehaviour {
 	/// </summary>
 	/// <param name="avoidTime">無敵時間</param>
 	/// <param name="stiffTime">硬直時間</param>
-	protected IEnumerator Avoid (float avoidTime, float stiffTime) {
+	protected IEnumerator Avoid (float avoidTime, float stiffTime, float side) {
 		print ("Avoid!!");
 		avoidFlg = true;
 		mutekiFlg = true;
 		
 		//硬直時間
 		StartCoroutine(WaitForStiffTime (stiffTime));
+
 
 		//無敵時間
 		yield return new WaitForSeconds (avoidTime);

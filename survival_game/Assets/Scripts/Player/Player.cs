@@ -57,7 +57,11 @@ public class Player : Character_Base {
 			}
 			//回避
 			if (Input.GetButtonDown ("Avoid")) {
-				StartCoroutine(this.Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF));
+				float side = rightDirectionFlg ? 1 : -1;
+				if(Input.GetButton("Horizontal")) {
+					side = Input.GetAxisRaw ("Horizontal");
+				}
+				StartCoroutine(this.Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF, side));
 			}
 
 			//攻撃
@@ -289,6 +293,8 @@ public class Player : Character_Base {
 				rightDirectionFlg = false;	//左向きフラグ
 			}
 		}
+
+		this.transform.localScale = new Vector3 ((rightDirectionFlg ? -1 : 1), 1, 1);
 	}
 
 	/// <summary>
