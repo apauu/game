@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Character_Base : MonoBehaviour {
 	
@@ -228,7 +229,8 @@ public class Character_Base : MonoBehaviour {
 		//盾オブジェクト生成
 		defenseObj = Instantiate(this.defensePrefab, new Vector2(transform.position.x + (1f * h), transform.position.y)
 		                          , Quaternion.identity) as GameObject;
-
+		//親を設定
+		defenseObj.transform.parent = this.transform;
 		//キャラクターのTagを判定して防御オブジェクトにTagをセット
 		if (gameObject.tag.Equals(Tag_Const.PLAYER)) {
 			defenseObj.tag = Tag_Const.PLAYER_DIFFENCE;
@@ -253,14 +255,20 @@ public class Character_Base : MonoBehaviour {
 		mutekiFlg = true;
 		
 		//硬直時間
-		StartCoroutine(WaitForStiffTime (stiffTime));
+		//StartCoroutine(WaitForStiffTime (stiffTime));
 
-
+		//移動TweenのHashTable
+		Hashtable table = new Hashtable();
+		table.Add ("x", 15f * side);
+		//無敵時間より少し短い時間で移動する
+		table.Add ("time", avoidTime-0.03f);
+		table.Add ("easetype", iTween.EaseType.easeInOutSine);
+		iTween.MoveBy(gameObject, table);
 		//無敵時間
 		yield return new WaitForSeconds (avoidTime);
-
 		avoidFlg = false;
 		mutekiFlg = false;
+
 	}
 	
 	/// <summary>
@@ -280,15 +288,19 @@ public class Character_Base : MonoBehaviour {
 			h = -1;
 		}
 		//パリィオブジェクト生成
+
 		parryObj = Instantiate(this.parryPrefab, new Vector2(transform.position.x + (1f * h), transform.position.y)
 		                         , Quaternion.identity) as GameObject;
-
+		//親を設定
+		parryObj.transform.parent = this.transform;
 		//キャラクターのTagを判定してパリィオブジェクトにTagをセット
 		if (gameObject.tag.Equals(Tag_Const.PLAYER)) {
 			parryObj.tag = Tag_Const.PLAYER_PARRY;
 		} else {
 			parryObj.tag = Tag_Const.ENEMY_PARRY;
 		}
+
+
 
 		//消滅時間のセット
 		parryObj.gameObject.SendMessage("SetDestroyTime", destroyTime);
@@ -322,9 +334,10 @@ public class Character_Base : MonoBehaviour {
 		//stiffFlg = false;
 
 		//攻撃生成
-		attackObj = Instantiate(prefab, new Vector2(transform.position.x + 1 , transform.position.y)
+		attackObj = Instantiate(prefab, new Vector2(transform.position.x + 1 * h , transform.position.y)
 		                         , Quaternion.identity) as GameObject;
-
+		//親を設定
+		attackObj.transform.parent = this.transform;
 		//キャラクターのTagを判定して攻撃オブジェクトにTagをセット
 		//本当は遠距離攻撃かどうかの判定も必要！あとで実装！
 		if (gameObject.tag.Equals(Tag_Const.PLAYER)) { 
@@ -342,6 +355,26 @@ public class Character_Base : MonoBehaviour {
 		//硬直時間
 		//StartCoroutine(WaitForStiffTime (stiffTime));
 	}
+
+	/// <summary>
+	/// パリィ成功処理
+	/// </summary>
+	protected void SuccessParry(){
+		print ("SuccessParry!!");
+		this.parrySuccessFlg = true;
+		//パリィ可能時間
+		StartCoroutine(WaitForStiffTime (Player_Const.PARRY_ATTACK));
+	}
+
+	/// <summary>
+	/// 被パリィののけぞり処理
+	/// </summary>
+	/// <param name="winceTime">のけぞり時間</param>
+	protected void Wince(float winceTime){
+		print ("Wince!!");
+
+	}
+
 
 	//攻撃関係のフラグを全て初期化する
 	protected void InitAttackFlg () {

@@ -20,12 +20,14 @@ public class Parry_Object : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D collider) {
 		if (this.gameObject.tag == Tag_Const.PLAYER_PARRY) {
 			if (collider.gameObject.tag == Tag_Const.ENEMY_ATTACK) {
-			print ("Parry!!");
-			Destroy(collider.gameObject);
+				print ("Parry!!");
+				Destroy(collider.gameObject);
 
-			//ひるみメソッド呼び出し
-			GameObject parent = collider.gameObject.transform.parent.gameObject;
-			collider.gameObject.SendMessage("Wince", winceTime);
+				//パリィ成功メソッド呼び出し
+				this.gameObject.transform.parent.SendMessage("SuccessParry");
+				//ひるみメソッド呼び出し
+				GameObject parent = collider.gameObject.transform.parent.gameObject;
+				parent.SendMessage("Wince", winceTime);
 			} else {
 				print ("failed parry");
 			}
@@ -36,7 +38,7 @@ public class Parry_Object : MonoBehaviour {
 				
 				//ひるみメソッド呼び出し
 				GameObject parent = collider.gameObject.transform.parent.gameObject;
-				collider.gameObject.SendMessage("Wince", winceTime);
+				parent.SendMessage("Wince", winceTime);
 			} else {
 				print ("failed parry");
 			}

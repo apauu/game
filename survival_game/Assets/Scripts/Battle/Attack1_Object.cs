@@ -32,9 +32,9 @@ public class Attack1_Object : MonoBehaviour {
 		if (this.gameObject.tag == Tag_Const.PLAYER_ATTACK) {
 			if (collider.gameObject.tag == Tag_Const.ENEMY) {
 				print ("Hit!!");
-
 				//ダメージメソッド呼び出し
 				collider.gameObject.SendMessage ("OnDamage", damagePoint);
+				Destroy(this.gameObject);
 			}
 		} else {
 			if (collider.gameObject.tag == Tag_Const.PLAYER) {
@@ -42,6 +42,7 @@ public class Attack1_Object : MonoBehaviour {
 				
 				//ダメージメソッド呼び出し
 				collider.gameObject.SendMessage ("OnDamage", damagePoint);
+				Destroy(this.gameObject);
 			}
 		}
 	}

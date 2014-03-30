@@ -67,6 +67,7 @@ public class Attack2_Object : MonoBehaviour {
 				print ("Hit!!");
 				//ダメージメソッド呼び出し
 				collider.gameObject.SendMessage("OnDamage", damagePoint);
+				Destroy(this.gameObject);
 			}
 			
 			
@@ -76,6 +77,7 @@ public class Attack2_Object : MonoBehaviour {
 				print ("Hit!!");
 				//ダメージメソッド呼び出し
 				collider.gameObject.SendMessage("OnDamage", damagePoint);
+				Destroy(this.gameObject);
 			}
 		}
 	}

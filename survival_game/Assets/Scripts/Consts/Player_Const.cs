@@ -67,6 +67,11 @@ public class Player_Const {
 	public const float PARRY_WINCE = 0.5f;
 	/// <summary>
 	/// プレイヤー定数
+	/// パリィ成功時攻撃可能時間
+	/// </summary>
+	public const float PARRY_ATTACK = 0.45f;
+	/// <summary>
+	/// プレイヤー定数
 	/// 攻撃１前硬直時間
 	/// </summary>
 	public const float ATTACK1_BEFORE = 0.1f;
