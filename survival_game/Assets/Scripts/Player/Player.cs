@@ -198,7 +198,7 @@
 							}
 
 							//地上、入力無しの場合、x,y軸停止
-							Side_Move.SideMove(rigidbody2D, 0, 0);
+							//Side_Move.SideMove(rigidbody2D, 0, 0);
 						}
 
 						//ジャンプ
@@ -227,11 +227,11 @@
 
 						//2段ジャンプ
 						if (Input.GetButtonDown ("Jump")) {
-							print ("Player Jump");
 							if (doubleJmpFlg == true) {
 								doubleJmpFlg = false;
 								onGroundFlg = false;
 								Jump.JumpMove(rigidbody2D,Player_Const.JUMP_SPEED);
+								print ("Player Jump");
 							}
 						}
 					}
@@ -248,7 +248,7 @@
 				
 				//空中以外はx,y軸停止
 				if (onGroundFlg) {
-					Side_Move.SideMove(rigidbody2D, 0, 0);
+					//Side_Move.SideMove(rigidbody2D, 0, 0);
 				}
 			}
 		}
@@ -280,23 +280,26 @@
 
 		//横移動
 		private void SideMove() {
+			//歩きスピード
+			float speed = Player_Const.SIDE_SPEED;
 			if (dashFlg) {
-				//ダッシュ移動
-				Side_Move.SideMove(rigidbody2D,Player_Const.DASH_SPEED * sideButton);
-				if (sideButton > 0) {
-					rightDirectionFlg = true;	//右向きフラグ
-				} else if (sideButton < 0) {
-					rightDirectionFlg = false;	//左向きフラグ
-				}
+				//ダッシュスピード
+				speed = Player_Const.DASH_SPEED;
+			}
 
-			} else {
-				//歩き移動
-				Side_Move.SideMove(rigidbody2D,Player_Const.SIDE_SPEED * sideButton);
-				if (sideButton > 0) {
-					rightDirectionFlg = true;	//右向きフラグ
-				} else if (sideButton < 0) {
-					rightDirectionFlg = false;	//左向きフラグ
-				}
+			//歩き移動
+			//transform使用に変更
+			//Side_Move.SideMove(rigidbody2D,Player_Const.SIDE_SPEED * sideButton);
+			Vector3 temp;
+			temp.x = transform.position.x + speed * sideButton * 0.05f;
+			temp.y = transform.position.y;
+			temp.z = transform.position.z;
+			transform.position = temp;
+
+			if (sideButton > 0) {
+				rightDirectionFlg = true;	//右向きフラグ
+			} else if (sideButton < 0) {
+				rightDirectionFlg = false;	//左向きフラグ
 			}
 
 			this.transform.localScale = new Vector3 ((rightDirectionFlg ? -1 : 1), 1, 1);
