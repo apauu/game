@@ -52,12 +52,12 @@ public class Character_Base : MonoBehaviour {
 	// デフォルトの被弾時無敵時間
 	protected float mutekiTime = 0f;
 
-	//ジャンプフラグ trueならできる
-	protected bool jmpFlg = true;
-	//二段ジャンプフラグ trueならできる
-	protected bool doubleJmpFlg = true;
-	//防御フラグ
-	protected bool defenseFlg = true;
+	//ジャンプフラグ falseならできる
+	protected bool jmpFlg = false;
+	//二段ジャンプフラグ falseならできる
+	protected bool doubleJmpFlg = false;
+	//防御フラグ falseならできる
+	protected bool defenseFlg = false;
 	//防御プレハブ
 	public GameObject defensePrefab;
 	//防御オブジェクト
@@ -209,37 +209,36 @@ public class Character_Base : MonoBehaviour {
 	/// 防御
 	/// </summary>
 	/// <param name="stiffTime">前硬直時間</param>
-	protected IEnumerator Defense (float stiffTime) {
+	protected void Defense (float stiffTime) {
 		print ("Defense!!");
-		
+		defenseFlg = true;
 		//硬直時間
 		StartCoroutine(WaitForStiffTime (stiffTime));
 
-		//発動待機時間
-		yield return new WaitForSeconds (stiffTime);
+		float h = rightDirectionFlg ? 1 : -1;
 
-		float h = 0;
-
-		if (rightDirectionFlg) {
-			h = 1;
-		} else {
-			h = -1;
+		if(this.defenseFlg) {
+			//盾オブジェクト生成
+			defenseObj = Instantiate(this.defensePrefab, new Vector2(transform.position.x + (1f * h), transform.position.y)
+			                         , Quaternion.identity) as GameObject;
+			//親を設定
+			defenseObj.transform.parent = this.transform;
+			//キャラクターのTagを判定して防御オブジェクトにTagをセット
+			if (gameObject.tag.Equals(Tag_Const.PLAYER)) {
+				defenseObj.tag = Tag_Const.PLAYER_DIFFENCE;
+			} else {
+				defenseObj.tag = Tag_Const.ENEMY_DIFFENCE;
+			}
 		}
+	}
 
-		//盾オブジェクト生成
-		defenseObj = Instantiate(this.defensePrefab, new Vector2(transform.position.x + (1f * h), transform.position.y)
-		                          , Quaternion.identity) as GameObject;
-		//親を設定
-		defenseObj.transform.parent = this.transform;
-		//キャラクターのTagを判定して防御オブジェクトにTagをセット
-		if (gameObject.tag.Equals(Tag_Const.PLAYER)) {
-			defenseObj.tag = Tag_Const.PLAYER_DIFFENCE;
-		} else {
-			defenseObj.tag = Tag_Const.ENEMY_DIFFENCE;
-		}
-
-		//発動までにボタンを離していたら破壊
-		if (defenseFlg) {
+	/// <summary>
+	/// 防御終了
+	/// </summary>
+	protected void DefenseEnd () {
+		print ("DefenseEnd!!");
+		defenseFlg = false;
+		if(this.defenseObj != null) {
 			Destroy(this.defenseObj);
 		}
 	}
@@ -253,10 +252,6 @@ public class Character_Base : MonoBehaviour {
 		print ("Avoid!!");
 		avoidFlg = true;
 		mutekiFlg = true;
-		
-		//硬直時間
-		//StartCoroutine(WaitForStiffTime (stiffTime));
-
 		//移動TweenのHashTable
 		Hashtable table = new Hashtable();
 		table.Add ("x", 15f * side);
@@ -300,8 +295,6 @@ public class Character_Base : MonoBehaviour {
 			parryObj.tag = Tag_Const.ENEMY_PARRY;
 		}
 
-
-
 		//消滅時間のセット
 		parryObj.gameObject.SendMessage("SetDestroyTime", destroyTime);
 		
@@ -326,13 +319,9 @@ public class Character_Base : MonoBehaviour {
 		} else {
 			h = -1;
 		}
-
-		//硬直発生
-		//stiffFlg = true;
-		//動作前硬直
-		//yield return WaitForSeconds (beforeActionTime);
-		//stiffFlg = false;
-
+		//硬直時間
+		StopCoroutine("WaitForStiffTime");
+		StartCoroutine(WaitForStiffTime (stiffTime));
 		//攻撃生成
 		attackObj = Instantiate(prefab, new Vector2(transform.position.x + 1 * h , transform.position.y)
 		                         , Quaternion.identity) as GameObject;
@@ -352,8 +341,7 @@ public class Character_Base : MonoBehaviour {
 		attackObj.gameObject.SendMessage("SetDestroyTime", destroyTime);
 		print ("After!!");
 
-		//硬直時間
-		//StartCoroutine(WaitForStiffTime (stiffTime));
+
 	}
 
 	/// <summary>
@@ -363,7 +351,10 @@ public class Character_Base : MonoBehaviour {
 		print ("SuccessParry!!");
 		this.parrySuccessFlg = true;
 		//パリィ可能時間
-		StartCoroutine(WaitForStiffTime (Player_Const.PARRY_ATTACK));
+		
+		DateTime now = DateTime.Now;
+		this.parrySuccessFlg = false;
+		print ((DateTime.Now - now).TotalMilliseconds.ToString());
 	}
 
 	/// <summary>
@@ -375,6 +366,22 @@ public class Character_Base : MonoBehaviour {
 
 	}
 
+	/// <summary>
+	/// 横移動
+	/// </summary>
+	/// <param name="speed">移動速度</param>
+	/// <param name="direction">進む方向　右　＝　true</param>
+	protected void SideMove(float speed,bool direction){
+		Vector3 temp;
+		temp.x = this.transform.position.x + speed * (direction ? 1 : -1);
+		temp.y = this.transform.position.y;
+		temp.z = this.transform.position.z;
+		this.transform.position = temp;
+
+		this.rightDirectionFlg = direction;
+		
+		this.transform.localScale = new Vector3 ((rightDirectionFlg ? -1 : 1), 1, 1);
+	}
 
 	//攻撃関係のフラグを全て初期化する
 	protected void InitAttackFlg () {
@@ -390,11 +397,9 @@ public class Character_Base : MonoBehaviour {
 
 	//硬直時間設定フラグ
 	protected IEnumerator WaitForStiffTime (float time) {
-		if (!stiffFlg) {
-			stiffFlg = true;
-			yield return new WaitForSeconds (time);
-			stiffFlg = false;
-		}
+		stiffFlg = true;
+		yield return new WaitForSeconds (time);
+		stiffFlg = false;
 	}
 
 	//無敵時間設定フラグ

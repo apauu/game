@@ -21,5 +21,49 @@ public class Enemy_Const{
 	/// エネミー定数
 	/// ベースとなる歩行スピード
 	/// </summary>
-	public const float ENEMY_SIDE_SPEED = 5f;
+	public const float ENEMY_SIDE_SPEED = 0.1f;
+
+	/*------------- Saito Const -----------------*/
+	/// <summary>
+	/// SAITO定数
+	/// HP
+	/// </summary>
+	public const float SAITO_HP = 3f;
+	/// <summary>
+	/// SAITO定数
+	/// 発見倍率
+	/// </summary>
+	public const float SAITO_NOTICE_DISTANCE_MAG = 1f;
+	/// <summary>
+	/// SAITO定数
+	/// 速度倍率
+	/// </summary>
+	public const float SAITO_SPEED_MAG = 1f;
+	/// <summary>
+	/// SAITO定数
+	/// 近づく距離
+	/// </summary>
+	public const float SAITO_APPROACH_DISTANCE = 5f;
+	/// <summary>
+	/// SAITO定数
+	/// 攻撃する距離
+	/// </summary>
+	public const float SAITO_ATTACK_DISTANCE = 0.5f;
+	/// <summary>
+	/// SAITO定数
+	/// 攻撃１前硬直時間
+	/// </summary>
+	public const float SAITO_ATTACK1_BEFORE = 0.1f;
+	/// <summary>
+	/// SAITO定数
+	/// 攻撃１硬直時間
+	/// </summary>
+	public const float SAITO_ATTACK1_STIFF = 1.5f;
+	/// <summary>
+	/// SAITO定数
+	/// 攻撃１判定時間
+	/// </summary>
+	public const float SAITO_ATTACK1_DESTROY = 0.2f;
+
+	/*------------- Saito Const -----------------*/
 }

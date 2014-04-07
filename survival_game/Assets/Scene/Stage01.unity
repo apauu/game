@@ -754,8 +754,8 @@ GameObject:
   - 4: {fileID: 904799616}
   - 212: {fileID: 904799620}
   - 50: {fileID: 904799619}
-  - 114: {fileID: 904799618}
   - 58: {fileID: 904799617}
+  - 114: {fileID: 904799618}
   m_Layer: 9
   m_Name: zako1
   m_TagString: Enemy
@@ -790,13 +790,12 @@ CircleCollider2D:
 --- !u!114 &904799618
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400000, guid: 90d687eb4c4aa6845ad923d3fe8e4c25,
-    type: 2}
-  m_PrefabInternal: {fileID: 1213670436}
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 904799615}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c2bf0d005196574fa66f790704a4328, type: 3}
+  m_Script: {fileID: 11500000, guid: 52887bb0b26ebf842a039a8022382422, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   defensePrefab: {fileID: 100000, guid: d5e6ba47d93a92740b10427c53c73543, type: 2}
@@ -1153,7 +1152,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1039367860}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.83201623, y: 8.04452896, z: -5}
+  m_LocalPosition: {x: -3.83201623, y: 8.04452896, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1297,7 +1296,8 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 11400000, guid: 90d687eb4c4aa6845ad923d3fe8e4c25, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 90d687eb4c4aa6845ad923d3fe8e4c25, type: 2}
   m_RootGameObject: {fileID: 904799615}
   m_IsPrefabParent: 0
@@ -1870,7 +1870,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: 49dcec340e0ed6c43bc3dacca094649b, type: 2}
   m_IsTrigger: 0
-  m_Radius: .600000024
+  m_Radius: .5
   m_Center: {x: 0, y: 0}
 --- !u!50 &2100079025
 Rigidbody2D:
