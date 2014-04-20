@@ -2404,6 +2404,20 @@ StateMachine:
   - {x: -96, y: -12, z: 0}
   m_OrderedTransitions:
     data:
+      first: {fileID: 0}
+      second: []
+    data:
+      first: {fileID: 110213675}
+      second:
+      - {fileID: 110183244}
+      - {fileID: 110143251}
+      - {fileID: 110121411}
+      - {fileID: 110163481}
+      - {fileID: 110162171}
+      - {fileID: 110158986}
+      - {fileID: 110182481}
+      - {fileID: 110113346}
+    data:
       first: {fileID: 110222907}
       second:
       - {fileID: 110170902}
@@ -2501,45 +2515,13 @@ StateMachine:
       - {fileID: 110170575}
       - {fileID: 110156594}
     data:
-      first: {fileID: 110213675}
-      second:
-      - {fileID: 110183244}
-      - {fileID: 110143251}
-      - {fileID: 110121411}
-      - {fileID: 110163481}
-      - {fileID: 110162171}
-      - {fileID: 110158986}
-      - {fileID: 110182481}
-      - {fileID: 110113346}
-    data:
       first: {fileID: 110249141}
       second:
       - {fileID: 110138009}
     data:
-      first: {fileID: 0}
-      second: []
-    data:
       first: {fileID: 110227093}
       second:
       - {fileID: 110156601}
-    data:
-      first: {fileID: 0}
-      second: []
-    data:
-      first: {fileID: 0}
-      second: []
-    data:
-      first: {fileID: 0}
-      second: []
-    data:
-      first: {fileID: 0}
-      second: []
-    data:
-      first: {fileID: 0}
-      second: []
-    data:
-      first: {fileID: 0}
-      second: []
   m_MotionSetCount: 1
   m_AnyStatePosition: {x: -276, y: -72, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
@@ -2777,10 +2759,6 @@ StateMachine:
   - {x: 134, y: -173, z: 0}
   m_OrderedTransitions:
     data:
-      first: {fileID: 110271379}
-      second:
-      - {fileID: 110193886}
-    data:
       first: {fileID: 110227451}
       second:
       - {fileID: 110122058}
@@ -2796,17 +2774,21 @@ StateMachine:
       - {fileID: 110168832}
       - {fileID: 110161990}
     data:
-      first: {fileID: 110295463}
-      second:
-      - {fileID: 110138382}
-      - {fileID: 110127451}
-      - {fileID: 110171379}
-    data:
       first: {fileID: 110258677}
       second:
       - {fileID: 110158677}
       - {fileID: 110195463}
       - {fileID: 110158149}
+    data:
+      first: {fileID: 110271379}
+      second:
+      - {fileID: 110193886}
+    data:
+      first: {fileID: 110295463}
+      second:
+      - {fileID: 110138382}
+      - {fileID: 110127451}
+      - {fileID: 110171379}
   m_MotionSetCount: 2
   m_AnyStatePosition: {x: -276, y: -72, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
