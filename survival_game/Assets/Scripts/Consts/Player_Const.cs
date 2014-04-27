@@ -4,7 +4,7 @@ public class Player_Const {
 	/// プレイヤー定数
 	/// 歩行スピード
 	/// </summary>
-	public const float SIDE_SPEED = 5f;
+	public const float SIDE_SPEED = 2f;
 	/// <summary>
 	/// プレイヤー定数
 	/// ダッシュ用待機時間
@@ -14,7 +14,7 @@ public class Player_Const {
 	/// プレイヤー定数
 	/// ダッシュスピード
 	/// </summary>
-	public const float DASH_SPEED = 15f;
+	public const float DASH_SPEED = 5f;
 	/// <summary>
 	/// プレイヤー定数
 	/// ジャンプ初速
