@@ -28,7 +28,7 @@ public class Enemy_Const{
 	/// SAITO定数
 	/// HP
 	/// </summary>
-	public const float SAITO_HP = 3f;
+	public const float SAITO_HP = 1f;
 	/// <summary>
 	/// SAITO定数
 	/// 発見倍率
@@ -66,4 +66,53 @@ public class Enemy_Const{
 	public const float SAITO_ATTACK1_DESTROY = 0.2f;
 
 	/*------------- Saito Const -----------------*/
+
+	/*------------- Yukari Const -----------------*/
+	/// <summary>
+	/// YUKARI定数
+	/// HP
+	/// </summary>
+	public const float YUKARI_HP = 10f;
+	/// <summary>
+	/// YUKARI定数
+	/// 発見倍率
+	/// </summary>
+	public const float YUKARI_NOTICE_DISTANCE_MAG = 3f;
+	/// <summary>
+	/// SAITO定数
+	/// 速度倍率
+	/// </summary>
+	public const float YUKARI_SPEED_MAG = 2f;
+	/// <summary>
+	/// YUKARI定数
+	/// 近づく距離
+	/// </summary>
+	public const float YUKARI_APPROACH_DISTANCE = 5f;
+	/// <summary>
+	/// YUKARI定数
+	/// 攻撃する距離
+	/// </summary>
+	public const float YUKARI_ATTACK_DISTANCE = 0.5f;
+	/// <summary>
+	/// YUKARI定数
+	/// 攻撃１前硬直時間
+	/// </summary>
+	public const float YUKARI_ATTACK1_BEFORE = 0.1f;
+	/// <summary>
+	/// YUKARI定数
+	/// 攻撃１硬直時間
+	/// </summary>
+	public const float YUKARI_ATTACK1_STIFF = 1.5f;
+	/// <summary>
+	/// YUKARI定数
+	/// 攻撃１判定時間
+	/// </summary>
+	public const float YUKARI_ATTACK1_DESTROY = 0.2f;
+	/// <summary>
+	/// YUKARI定数
+	/// 召喚硬直時間
+	/// </summary>
+	public const float YUKARI_SUMMON_STIFF = 2.0f;
+	
+	/*------------- Yukari Const -----------------*/
 }

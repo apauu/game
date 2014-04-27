@@ -51,7 +51,14 @@ public class Enemy_Base : Character_Base {
 		setCharacteristic ();
 
 		//playerタグを検索してplayerオブジェクトを取得する
-		this.player = GameObject.FindGameObjectWithTag (Tag_Const.PLAYER);
+		//playerがいない場合は自分を削除する
+		if((GameObject.FindGameObjectWithTag (Tag_Const.PLAYER) == null))
+		{
+			Destroy(this.gameObject);
+		}
+		else {
+			this.player = GameObject.FindGameObjectWithTag (Tag_Const.PLAYER);
+		}
 		this.firstPosition = this.transform.position;
 		this.rightDirectionFlg = false;
 		
@@ -79,7 +86,6 @@ public class Enemy_Base : Character_Base {
 
 		//停止しないとき　メイン処理
 		if (!this.stopFlg) {
-
 			//プレイヤーとの現在のx距離
 			this.nowDistanceX = this.transform.position.x - playerPosition.x;
 			//プレイヤーとの現在のy距離
@@ -94,7 +100,6 @@ public class Enemy_Base : Character_Base {
 			}
 			//気づいてないとき
 			if(!this.noticeFlg) {
-
 				//プレイヤーに気づくか判定
 				//右向きの時
 				if (this.rightDirectionFlg) {
@@ -176,6 +181,14 @@ public class Enemy_Base : Character_Base {
 			}
 		}
 	}
+
+	/// <summary>
+	/// プレイヤーに気付いたことにする
+	/// </summary>
+	public void NoticePlayer(){
+		this.noticeFlg = true;
+	}
+
 
 	/// <summary>
 	/// キャラクター固有のステータスを初期化する
