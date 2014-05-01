@@ -3,6 +3,8 @@ using System.Collections;
 using System;
 
 public class Player : Character_Base {
+	
+	protected Animator animator;
 
 	//前回のキーを離してからの時間
 	private float lastKeyTimer = 0;
@@ -19,6 +21,7 @@ public class Player : Character_Base {
 	// Use this for initialization
 	void Start () {
 		base.Start ();
+		animator = GetComponent<Animator>();
 		//初期HP
 		hitPoint = Player_Const.HIT_POINT;
 		//被弾時無敵時間
@@ -263,6 +266,7 @@ public class Player : Character_Base {
 	
 	//攻撃１
 	void Attack1 () {
+		animator.SetBool("attack1Flg", true );
 		base.Attack (attack1Prefab, Player_Const.ATTACK1_DESTROY, Player_Const.ATTACK1_BEFORE, Player_Const.ATTACK1_STIFF);
 	}
 
@@ -311,16 +315,123 @@ public class Player : Character_Base {
 		}
 	}
 
-	private void Left(object sender, string message) {
-		print ("LeftLEft");
-	}
-
-
 	/// <summary>
 	/// プレイヤーがイベントを起こせるかどうかチェックする
 	/// </summary>
 	private bool CheckEventAwake() {
 		return !(!onGroundFlg || attack1Flg || attack2Flg || attack3Flg || jumpAttack1Flg || jumpAttack2Flg ||
 		         parryFlg || parryAttack1Flg || parryAttack2Flg || avoidFlg || skill1Flg || skill2Flg || superSkillFlg);
+	}
+	
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetDamageFlgFalse() {
+		animator.SetBool("damageFlg", false );
+	}
+
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetWalkFlgFalse() {
+		animator.SetBool("walkFlg", false );
+	}
+	
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetDashFlgFalse() {
+		animator.SetBool("dashFlg", false );
+	}
+	
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetAirFlgFalse() {
+		animator.SetBool("airFlg", false );
+	}
+	
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetParryFlgFalse() {
+		animator.SetBool("parryFlg", false );
+	}
+	
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetDefenceFlgFalse() {
+		animator.SetBool("defenceFlg", false );
+	}
+	
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetAvoidFlgFalse() {
+		animator.SetBool("avoidFlg", false );
+	}
+	
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetSkill1FlgFalse() {
+		animator.SetBool("skill1Flg", false );
+	}
+	
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetSuperSkillFlgFalse() {
+		animator.SetBool("superSkillFlg", false );
+	}
+	
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetAttack1FlgFalse() {
+		animator.SetBool("attack1Flg", false );
+	}
+	
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetAttack2FlgFalse() {
+		animator.SetBool("attack2Flg", false );
+	}
+	
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetAttack3FlgFalse() {
+		animator.SetBool("attack3Flg", false );
+	}
+	
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetAirAttack1FlgFalse() {
+		animator.SetBool("airAttack1Flg", false );
+	}
+	
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetAirAttack2FlgFalse() {
+		animator.SetBool("airAttack2Flg", false );
+	}
+	
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetParryAttack1FlgFalse() {
+		animator.SetBool("parryAttack1Flg", false );
+	}
+	
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetParryAttack2FlgFalse() {
+		animator.SetBool("parryAttack2Flg", false );
 	}
 }
