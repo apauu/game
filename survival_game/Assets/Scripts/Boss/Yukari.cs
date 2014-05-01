@@ -65,21 +65,21 @@ public class Yukari : Enemy_Base {
 					getAwayFlg = true;
 					this.GetAway();
 				}
-//				//攻撃する
-//				else if(3 <= a) {
-//					getAttackFlg = true;
-//					this.GetAttack();
-//				}
-//				//攻撃する2
-//				else if(5 <= a) {
-//					getAttackFlg2 = true;
-//					this.GetAttack();
-//				}
-//				//攻撃する3
-//				else if(7 <= a) {
-//					getAttackFlg3 = true;
-//					this.GetAttack();
-//				}
+				//攻撃する
+				else if(3 <= a) {
+					getAttackFlg = true;
+					this.GetAttack();
+				}
+				//攻撃する2
+				else if(5 <= a) {
+					getAttackFlg2 = true;
+					this.GetAttack();
+				}
+				//攻撃する3
+				else if(7 <= a) {
+					getAttackFlg3 = true;
+					this.GetAttack();
+				}
 				//雑魚を召喚する
 				else if(8 <= a) {
 					getAttackFlg3 = true;
