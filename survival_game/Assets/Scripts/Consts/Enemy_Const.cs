@@ -21,7 +21,12 @@ public class Enemy_Const{
 	/// エネミー定数
 	/// ベースとなる歩行スピード
 	/// </summary>
-	public const float ENEMY_SIDE_SPEED = 0.1f;
+	public const float ENEMY_SIDE_SPEED = 1f;
+	/// <summary>
+	/// エネミー定数
+	/// ベースとなるジャンプスピード
+	/// </summary>
+	public const float ENEMY_JUMP_SPEED = 10f;
 
 	/*------------- Saito Const -----------------*/
 	/// <summary>

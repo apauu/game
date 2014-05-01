@@ -78,44 +78,110 @@ public class Character_Base : MonoBehaviour {
 	//被ダメージ防御破壊攻撃タグ
 	protected string attackedBreakTag;
 
+	//球体判定
+	protected CircleCollider2D CircleCollider = new CircleCollider2D();
+
+	//重力計算用
+	private float vi = 0,vf,t;
+
+	private float jumpSpeed = 0;
+
 	protected void Start () {
+		//
+		this.rigidbody2D.isKinematic = true;
+
+		//球体判定を取得
+		this.CircleCollider = this.gameObject.GetComponent<CircleCollider2D>();
+
+		if(this.CircleCollider == null) {
+			print ("Collider is null");
+		}
 		//接触判定を取るオブジェクトタグを初期化	
 		SetTagAttaked ();
 	}
 
-	protected void OnCollisionEnter2D (Collision2D collision) {
-		//接地判定
-		SetFlgOnGround (collision);
+	protected void Update(){
+		SetFlgOnGround ();
 	}
 
-	protected void OnCollisionExit2D (Collision2D collision) {
-		//接地判定
-		if (collision.gameObject.tag == Tag_Const.GROUND) {
-			onGroundFlg = false;
+	protected void FixedUpdate() {
+
+		if(!jumpSpeed.Equals(0)) 
+		{
+			vi = jumpSpeed;
+			jumpSpeed = 0;
 		}
+		t = Time.deltaTime;
+		vf= vi + Physics_Const.GRAVITY_ACCELERATION * t;            //最終速度＝初速度＋加速度×時間
+		float deltaY = 0.5f*(vi+vf)*t;    //変位＝１／２（初速度＋最終速度）×時間
+		//移動量が正の場合
+		if(deltaY >= 0f) {
+			//上にあるものの距離を取得
+			float upDirection = RayCastDistance(Vector2.up);
+			if(!float.IsNegativeInfinity(upDirection) && Mathf.Abs(deltaY) >= upDirection) {
+				deltaY = upDirection;
+				vi = 0;
+			}
+		}
+		else {
+			//下にあるものの距離を取得
+			float downDirection = RayCastDistance(-Vector2.up);
+			if(!float.IsNegativeInfinity(downDirection) && Mathf.Abs(deltaY) >= downDirection) {
+				deltaY = -downDirection;
+				vi = 0;
+			}
+		}
+		vi = vf;
+		this.transform.Translate (new Vector3(0,deltaY,0));
+	}
+
+
+	/// <summary>
+	/// 上下左右にあるGroundオブジェクトとの距離を調べる
+	/// </summary>
+	/// <returns>The cast distance.</returns>
+	/// <param name="direction">Direction.</param>
+	protected float RayCastDistance(Vector2 direction) {
+		float distance = float.NegativeInfinity;
+
+		RaycastHit2D hit = new RaycastHit2D();
+		LayerMask mask = -1 - 1 << gameObject.layer;
+		//１M以内にあるものを検索
+		hit = Physics2D.Raycast (new Vector2(transform.position.x,transform.position.y),direction,float.PositiveInfinity,mask);
+		if(hit != null && hit.collider != null){
+			if(hit.collider.gameObject.tag.Equals(Tag_Const.GROUND)){
+				distance = hit.fraction;
+			}
+		}
+		return distance - this.CircleCollider.radius;
 	}
 	
 	/// <summary>
 	/// 接地判定
 	/// </summary>
 	/// <param name="collision">接触オブジェクト</param>
-	protected void SetFlgOnGround(Collision2D collision) {
-		if (collision.gameObject.tag == Tag_Const.GROUND) {
-			if (collision.contacts != null && collision.contacts.Length > 0) {
-				Vector2 contactPoint = collision.contacts[0].point;
-				float angle = Vector2.Angle(new Vector2(0,-1),contactPoint - 
-				                            new Vector2(this.transform.position.x,this.transform.position.y));
-				// 横（壁）に接触した場合は処理を終了
-				if(Mathf.Abs(angle) >= 45f && Mathf.Abs(angle) <= 180f){
+	protected void SetFlgOnGround() {
+		RaycastHit2D hit = new RaycastHit2D();
+		LayerMask mask = -1 - 1 << gameObject.layer;
 
-					return;
-				} 
+		if(this.CircleCollider != null) {
+			hit = Physics2D.Raycast (new Vector2(transform.position.x,transform.position.y),-Vector2.up,this.CircleCollider.radius,mask);
+			if(hit != null && hit.collider != null){
+				if(hit.collider.gameObject.tag.Equals(Tag_Const.GROUND)){
+					onGroundFlg = true;
+					jmpFlg = true;
+					doubleJmpFlg = true;
+					vi = 0;
+				}
+				else
+				{
+					onGroundFlg = false;
+				}
 			}
-			
-			//接地処理
-			onGroundFlg = true;
-			jmpFlg = true;
-			doubleJmpFlg = true;
+			else
+			{
+				onGroundFlg = false;
+			}
 		}
 	}
 	
@@ -372,15 +438,36 @@ public class Character_Base : MonoBehaviour {
 	/// <param name="speed">移動速度</param>
 	/// <param name="direction">進む方向　右　＝　true</param>
 	protected void SideMove(float speed,bool direction){
-		Vector3 temp;
-		temp.x = this.transform.position.x + speed * (direction ? 1 : -1);
-		temp.y = this.transform.position.y;
-		temp.z = this.transform.position.z;
-		this.transform.position = temp;
 
+		float deltaX = speed * t *(direction ? 1 : -1);
+
+		if(deltaX >= 0) {
+			//右にあるものの距離を取得
+			float rightDirection = RayCastDistance(Vector2.right);
+			if(!float.IsNegativeInfinity(rightDirection) && Mathf.Abs(deltaX) >= rightDirection) {
+				deltaX = rightDirection;
+			}
+		}
+		else {
+			//左にあるものの距離を取得
+			float leftDirection = RayCastDistance(-Vector2.right);
+			if(!float.IsNegativeInfinity(leftDirection) && Mathf.Abs(deltaX) >= leftDirection) {
+				deltaX = leftDirection;
+			}
+		}
 		this.rightDirectionFlg = direction;
-		
+		this.transform.Translate (new Vector3(deltaX,0,0));
 		this.transform.localScale = new Vector3 ((rightDirectionFlg ? -1 : 1), 1, 1);
+	}
+
+	/// <summary>
+	/// Jumps the move.
+	/// </summary>
+	/// <param name="speed">Speed.</param>
+	protected void JumpMove(float speed) {
+		print ("jump");
+		//ジャンプ速度を設定
+		jumpSpeed = speed;
 	}
 
 	//攻撃関係のフラグを全て初期化する

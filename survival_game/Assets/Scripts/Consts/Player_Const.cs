@@ -9,12 +9,12 @@ public class Player_Const {
 	/// プレイヤー定数
 	/// ダッシュ用待機時間
 	/// </summary>
-	public const float DOUBLE_KEY_TIME = 2f;
+	public const float DOUBLE_KEY_TIME = 5f;
 	/// <summary>
 	/// プレイヤー定数
 	/// ダッシュスピード
 	/// </summary>
-	public const float DASH_SPEED = 5f;
+	public const float DASH_SPEED = 10f;
 	/// <summary>
 	/// プレイヤー定数
 	/// ジャンプ初速

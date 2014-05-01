@@ -18,6 +18,7 @@ public class Player : Character_Base {
 
 	// Use this for initialization
 	void Start () {
+		base.Start ();
 		//初期HP
 		hitPoint = Player_Const.HIT_POINT;
 		//被弾時無敵時間
@@ -36,6 +37,7 @@ public class Player : Character_Base {
 	/// 移動以外のアクション攻撃　パリィ　回避　防御
 	/// </summary>
 	void Update () {
+		base.Update ();
 		// 硬直中以外の動作
 		if(!stiffFlg) {
 			//ジャンプ中、回避中、防御中はできない
@@ -163,7 +165,7 @@ public class Player : Character_Base {
 	
 	// FixedUpdate is called once per frame
 	void FixedUpdate () {
-		
+		base.FixedUpdate ();
 		// 硬直中以外の動作
 		if(!stiffFlg) {
 			//移動系の処理は防御中、パリィ中、攻撃中、回避中（これで全部か？）にできないようにする
@@ -184,7 +186,7 @@ public class Player : Character_Base {
 						}
 						nowRawKey = sideButton;
 
-						SideMove();
+						this.SideMove();
 
 					} else {
 						//左右ボタンを離した時
@@ -194,19 +196,14 @@ public class Player : Character_Base {
 							walkFlg = false;
 							dashFlg = false;
 						}
-
-						//地上、入力無しの場合、x,y軸停止
-						//Side_Move.SideMove(rigidbody2D, 0, 0);
 					}
 
 					//ジャンプ
 					if (Input.GetButtonDown ("Jump")) {
-						print (this.avoidFlg.ToString());
 						print ("Player Jump");
 						if(jmpFlg == true) {
 							jmpFlg = false;
-							onGroundFlg = false;
-							Jump.JumpMove(rigidbody2D, Player_Const.JUMP_SPEED);
+							this.JumpMove(Player_Const.JUMP_SPEED);
 						}
 					}
 
@@ -220,15 +217,15 @@ public class Player : Character_Base {
 					sideButton = Input.GetAxisRaw ("Horizontal");
 
 					if (sideButton != 0) {
-						SideMove();
+						this.SideMove();
 					}
 
 					//2段ジャンプ
 					if (Input.GetButtonDown ("Jump")) {
 						if (doubleJmpFlg == true) {
 							doubleJmpFlg = false;
-							onGroundFlg = false;
-							Jump.JumpMove(rigidbody2D,Player_Const.JUMP_SPEED);
+							//Jump.JumpMove(rigidbody2D,Player_Const.JUMP_SPEED);
+							this.JumpMove(Player_Const.JUMP_SPEED);
 							print ("Player Jump");
 						}
 					}
@@ -251,15 +248,15 @@ public class Player : Character_Base {
 		}
 	}
 
-	void OnCollisionEnter2D (Collision2D collision) {
-		print ("----------------OnGround!--------------");
-		base.OnCollisionEnter2D (collision);
-	}
-
-	void OnCollisionExit2D (Collision2D collision) {
-		print ("----------------ExitGround!--------------");
-		base.OnCollisionExit2D (collision);
-	}
+//	void OnCollisionEnter2D (Collision2D collision) {
+//		print ("----------------OnGround!--------------");
+//		base.OnCollisionEnter2D (collision);
+//	}
+//
+//	void OnCollisionExit2D (Collision2D collision) {
+//		print ("----------------ExitGround!--------------");
+//		base.OnCollisionExit2D (collision);
+//	}
 
 	void OnTriggerEnter2D (Collider2D collider) {
 	}
@@ -285,22 +282,15 @@ public class Player : Character_Base {
 			speed = Player_Const.DASH_SPEED;
 		}
 
-		//歩き移動
-		//transform使用に変更
-		//Side_Move.SideMove(rigidbody2D,Player_Const.SIDE_SPEED * sideButton);
-		Vector3 temp;
-		temp.x = transform.position.x + speed * sideButton * 0.05f;
-		temp.y = transform.position.y;
-		temp.z = transform.position.z;
-		transform.position = temp;
-
 		if (sideButton > 0) {
 			rightDirectionFlg = true;	//右向きフラグ
 		} else if (sideButton < 0) {
 			rightDirectionFlg = false;	//左向きフラグ
 		}
 
-		this.transform.localScale = new Vector3 ((rightDirectionFlg ? -1 : 1), 1, 1);
+		this.SideMove(speed ,rightDirectionFlg);
+
+		//this.transform.localScale = new Vector3 ((rightDirectionFlg ? -1 : 1), 1, 1);
 	}
 
 	/// <summary>

@@ -66,6 +66,7 @@ public class Enemy_Base : Character_Base {
 
 	// Update is called once per frame
 	protected void Update () {
+		base.Update ();
 		Vector2 playerPosition = new Vector2(this.player.transform.position.x,this.player.transform.position.y); 
 		//プレイヤーとのｘ距離を計算
 		this.distanceX = Mathf.Abs (this.firstPosition.x-playerPosition.x);
@@ -120,6 +121,25 @@ public class Enemy_Base : Character_Base {
 
 	//物理演算利用系のUpdate処理はこちらへ
 	protected void FixedUpdate () {
+		base.FixedUpdate ();
+
+		//右向きなら右にGroundオブジェクトまでの距離を取得
+		if(rightDirectionFlg) {
+			//右にあるものの距離を取得
+			float rightDirection = RayCastDistance(Vector2.right);
+			if(!float.IsNegativeInfinity(rightDirection) && 1f >= rightDirection) {
+				this.JumpMove(Enemy_Const.ENEMY_JUMP_SPEED);
+			}
+		}
+		else {
+			//左にあるものの距離を取得
+			float leftDirection = RayCastDistance(-Vector2.right);
+			if(!float.IsNegativeInfinity(leftDirection) && 1f >= leftDirection) {
+				this.JumpMove(Enemy_Const.ENEMY_JUMP_SPEED);
+			}
+		}
+
+
 		//停止しないとき　メイン処理
 		if (!this.stopFlg) { 
 			//プレイヤーに気付いているとき
@@ -135,7 +155,7 @@ public class Enemy_Base : Character_Base {
 				this.transform.localScale = new Vector3(((distance <= 0) ? -1 : 1), 1, 1);
 				//rightDirectionFlg更新
 				this.rightDirectionFlg = ((distance <= 0) ? true : false);
-				Side_Move.SideMove(rigidbody2D,Enemy_Const.ENEMY_SIDE_SPEED * ((distance <= 0) ? 1 : -1));
+				this.SideMove(Enemy_Const.ENEMY_SIDE_SPEED * this.enemySideSpeedMag, rightDirectionFlg);
 			}
 		}
 	}
@@ -156,30 +176,6 @@ public class Enemy_Base : Character_Base {
 	/// プレイヤーに気付いたあとの処理はここ
 	/// </summary>
 	protected virtual void enemyAI(){
-	}
-
-	/// <summary>
-	/// オブジェクトに衝突した瞬間に呼ばれるコールバック関数
-	/// </summary>
-	/// <param name="collision">Collision.</param>
-	protected void OnCollisionEnter2D (Collision2D collision) {
-		//接地判定
-		this.SetFlgOnGround (collision);
-		//接地判定
-		if (collision.gameObject.tag == Tag_Const.GROUND) {
-			if (collision.contacts != null && collision.contacts.Length > 0) {
-				Vector2 contactPoint = collision.contacts[0].point;
-				float angle = Vector2.Angle(new Vector2(0,-1),contactPoint - 
-					                            new Vector2(this.transform.position.x,this.transform.position.y));
-				if(Mathf.Abs(angle) >= 80f && Mathf.Abs(angle) < 100f){
-					print ("jump enemy");
-					this.jmpFlg = false;
-					Jump.JumpMove(rigidbody2D,10f);
-				} else {
-					this.jmpFlg = true;
-				}
-			}
-		}
 	}
 
 	/// <summary>
