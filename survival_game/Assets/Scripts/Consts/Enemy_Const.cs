@@ -21,7 +21,7 @@ public class Enemy_Const{
 	/// エネミー定数
 	/// ベースとなる歩行スピード
 	/// </summary>
-	public const float ENEMY_SIDE_SPEED = 1f;
+	public const float ENEMY_SIDE_SPEED = 2f;
 	/// <summary>
 	/// エネミー定数
 	/// ベースとなるジャンプスピード

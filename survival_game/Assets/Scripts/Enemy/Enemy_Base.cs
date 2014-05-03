@@ -68,10 +68,23 @@ public class Enemy_Base : Character_Base {
 	protected void Update () {
 		base.Update ();
 		Vector2 playerPosition = new Vector2(this.player.transform.position.x,this.player.transform.position.y); 
-		//プレイヤーとのｘ距離を計算
+		//プレイヤーと初期地点のｘ距離を計算
 		this.distanceX = Mathf.Abs (this.firstPosition.x-playerPosition.x);
-		//プレイヤーとのｙ距離を計算
+		//プレイヤーと初期地点のｙ距離を計算
 		this.distanceY = Mathf.Abs (this.firstPosition.y-playerPosition.y);
+		
+		//プレイヤーとの現在のx距離
+		this.nowDistanceX = this.transform.position.x - playerPosition.x;
+		//プレイヤーとの現在のy距離
+		this.nowDistanceY = this.transform.position.y - playerPosition.y;
+		//プレイヤーがどちら側にいるか判定
+		//右にいるとき
+		if ((this.nowDistanceX) < 0) { 
+			this.playerDirectionFlg = false;
+			//左にいるとき
+		} else {
+			this.playerDirectionFlg = true;
+		}
 
 		//プレイヤーが初期位置から閾値以上離れている時
 		if (this.distanceX > Enemy_Const.IMMOBILE_DISTANCE ||
@@ -80,42 +93,18 @@ public class Enemy_Base : Character_Base {
 			this.stopFlg = true;
 			//気づいていない
 			this.noticeFlg = false;
-		} else {
-			//停止しない
-			this.stopFlg = false;
+		}
+		else if (this.stopFlg) {
+			//気づいているとき
+			if(this.noticeFlg) {
+				//停止をやめる
+				this.stopFlg = false;
+			}
 		}
 
-		//停止しないとき　メイン処理
-		if (!this.stopFlg) {
-			//プレイヤーとの現在のx距離
-			this.nowDistanceX = this.transform.position.x - playerPosition.x;
-			//プレイヤーとの現在のy距離
-			this.nowDistanceY = this.transform.position.y - playerPosition.y;
-			//プレイヤーがどちら側にいるか判定
-			//右にいるとき
-			if ((this.nowDistanceX) < 0) { 
-				this.playerDirectionFlg = false;
-			//左にいるとき
-			} else {
-				this.playerDirectionFlg = true;
-			}
-			//気づいてないとき
-			if(!this.noticeFlg) {
-				//プレイヤーに気づくか判定
-				//右向きの時
-				if (this.rightDirectionFlg) {
-					//プレイヤーが右にいる時
-					if(this.playerDirectionFlg) {
-						setNoticeFlg();
-					}
-				//左向きの時
-				} else {
-					//プレイヤーが左にいる時
-					if(!this.playerDirectionFlg) {
-						setNoticeFlg();
-					}
-				}
-			}
+		//気づいてないとき
+		if(!this.noticeFlg) {
+				setNoticeFlg();
 		}
 	}
 
@@ -164,11 +153,17 @@ public class Enemy_Base : Character_Base {
 	/// プレイヤーに気づくかどうか判定する
 	/// </summary>
 	protected void setNoticeFlg() {
-		//プレイヤーとのX・Y距離が閾値以内だったら
-		if(Mathf.Abs(this.nowDistanceX) < Enemy_Const.NOTICE_DISTANCE_X * this.noticeDistanceXMag &&
-		   Mathf.Abs(this.nowDistanceY) < Enemy_Const.NOTICE_DISTANCE_Y * this.noticeDistanceYMag) {
-			print ("EnemyNotice!!");
-			this.noticeFlg = true;
+		//プレイヤーに気づくか判定
+		//プレイヤーが右にいるかつエネミーが右向きの時
+		//プレイヤーが左にいるかつエネミーが左向きの時
+		if ((this.rightDirectionFlg && !this.playerDirectionFlg) ||
+		    (!this.rightDirectionFlg && this.playerDirectionFlg)) {
+			//プレイヤーとのX・Y距離が閾値以内だったら
+			if(Mathf.Abs(this.nowDistanceX) < Enemy_Const.NOTICE_DISTANCE_X * this.noticeDistanceXMag &&
+			   Mathf.Abs(this.nowDistanceY) < Enemy_Const.NOTICE_DISTANCE_Y * this.noticeDistanceYMag) {
+				print ("EnemyNotice!!");
+				this.noticeFlg = true;
+			}
 		}
 	}
 
