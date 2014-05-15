@@ -16,6 +16,14 @@ public class Death_Hole : MonoBehaviour {
 	}
 
 	void OnCollisionStay2D (Collision2D collision) {
+		SetDamage (collision);
+	}
+
+	void OnCollisionEnter2D(Collision2D collision) {
+		SetDamage (collision);
+	}
+
+	private void SetDamage(Collision2D collision) {
 		//衝突してきたオブジェクトがPlayer or Enemyの場合ダメージを与える
 		if (collision.gameObject.tag.Equals(Tag_Const.PLAYER) || collision.gameObject.tag.Equals(Tag_Const.ENEMY)) {
 			if (collision.contacts != null && collision.contacts.Length > 0) {

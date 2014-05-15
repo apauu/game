@@ -7,14 +7,11 @@ public class Attack1_Object : MonoBehaviour {
 	public bool is_right_local = true;
 	// 進行スピード
 	public float spd = 0.3f;
-	// 消滅時間
-	public float destroyTime = 1f;
 	// 威力
 	public float damagePoint = 1f;
 
 	// Use this for initialization
 	void Start () {
-		Destroy(gameObject, destroyTime);
 	}
 	
 	// Update is called once per frame
@@ -51,11 +48,5 @@ public class Attack1_Object : MonoBehaviour {
 	void SetDirection(bool isRight)
 	{
 		is_right_local = isRight;
-	}
-	
-	//消滅までの時間を受け取る
-	void SetDestroyTime(float time)
-	{
-		destroyTime = time;
 	}
 }

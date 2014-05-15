@@ -112,28 +112,29 @@ public class Enemy_Base : Character_Base {
 	protected void FixedUpdate () {
 		base.FixedUpdate ();
 
-		//右向きなら右にGroundオブジェクトまでの距離を取得
-		if(rightDirectionFlg) {
-			//右にあるものの距離を取得
-			float rightDirection = RayCastDistance(Vector2.right);
-			if(!float.IsNegativeInfinity(rightDirection) && 1f >= rightDirection) {
-				this.JumpMove(Enemy_Const.ENEMY_JUMP_SPEED);
-			}
-		}
-		else {
-			//左にあるものの距離を取得
-			float leftDirection = RayCastDistance(-Vector2.right);
-			if(!float.IsNegativeInfinity(leftDirection) && 1f >= leftDirection) {
-				this.JumpMove(Enemy_Const.ENEMY_JUMP_SPEED);
-			}
-		}
-
-
 		//停止しないとき　メイン処理
 		if (!this.stopFlg) { 
 			//プレイヤーに気付いているとき
 			if (this.noticeFlg) {
 				if(!this.stiffFlg) {
+					//障害物がある場合はジャンプする
+					//右向きなら右にGroundオブジェクトまでの距離を取得
+					if(rightDirectionFlg) {
+						//右にあるものの距離を取得
+						float rightDirection = RayCastDistance(Vector2.right);
+						if(!float.IsNegativeInfinity(rightDirection) && 1f >= rightDirection) {
+							this.JumpMove(Enemy_Const.ENEMY_JUMP_SPEED);
+						}
+					}
+					else {
+						//左にあるものの距離を取得
+						float leftDirection = RayCastDistance(-Vector2.right);
+						if(!float.IsNegativeInfinity(leftDirection) && 1f >= leftDirection) {
+							this.JumpMove(Enemy_Const.ENEMY_JUMP_SPEED);
+						}
+					}
+
+					//AI起動
 					enemyAI();
 				}
 			}

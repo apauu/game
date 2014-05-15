@@ -87,8 +87,10 @@ public class Character_Base : MonoBehaviour {
 	private float jumpSpeed = 0;
 
 	protected void Start () {
-		//
-		this.rigidbody2D.isKinematic = true;
+
+		//rigitbodyの初期化
+		this.rigidbody2D.isKinematic = false;
+		this.rigidbody2D.gravityScale = 0f;
 
 		//球体判定を取得
 		this.CircleCollider = this.gameObject.GetComponent<CircleCollider2D>();
@@ -137,7 +139,7 @@ public class Character_Base : MonoBehaviour {
 
 
 	/// <summary>
-	/// 上下左右にあるGroundオブジェクトとの距離を調べる
+	/// 上下左右にあるBackGroundオブジェクトとの距離を調べる
 	/// </summary>
 	/// <returns>The cast distance.</returns>
 	/// <param name="direction">Direction.</param>
@@ -145,7 +147,8 @@ public class Character_Base : MonoBehaviour {
 		float distance = float.NegativeInfinity;
 
 		RaycastHit2D hit = new RaycastHit2D();
-		LayerMask mask = -1 - 1 << gameObject.layer;
+		//LayerMask mask = -1 - 1 << gameObject.layer;
+		LayerMask mask = (1 << LayerMask.NameToLayer("Background"));
 		//１M以内にあるものを検索
 		hit = Physics2D.Raycast (new Vector2(transform.position.x,transform.position.y),direction,float.PositiveInfinity,mask);
 		if(hit != null && hit.collider != null){
@@ -165,7 +168,7 @@ public class Character_Base : MonoBehaviour {
 		LayerMask mask = -1 - 1 << gameObject.layer;
 
 		if(this.CircleCollider != null) {
-			hit = Physics2D.Raycast (new Vector2(transform.position.x,transform.position.y),-Vector2.up,this.CircleCollider.radius,mask);
+			hit = Physics2D.Raycast (new Vector2(transform.position.x,transform.position.y),-Vector2.up,this.CircleCollider.radius+0.01f,mask);
 			if(hit != null && hit.collider != null){
 				if(hit.collider.gameObject.tag.Equals(Tag_Const.GROUND)){
 					onGroundFlg = true;
@@ -198,10 +201,6 @@ public class Character_Base : MonoBehaviour {
 			attackedLongTag = Tag_Const.PLAYER_LONG_ATTACK;
 			attackedBreakTag = Tag_Const.PLAYER_DIFFENCE_BREAK_ATTACK;
 		}
-		print ("init attaked Tags");
-		print ("attakedTag : " + attackedTag);
-		print ("attakedLongTag : " + attackedLongTag);
-		print ("attakedBreakTag : " + attackedBreakTag);
 	}
 	
 	/// <summary>
@@ -278,8 +277,6 @@ public class Character_Base : MonoBehaviour {
 	protected void Defense (float stiffTime) {
 		print ("Defense!!");
 		defenseFlg = true;
-		//硬直時間
-		StartCoroutine(WaitForStiffTime (stiffTime));
 
 		float h = rightDirectionFlg ? 1 : -1;
 
@@ -295,6 +292,9 @@ public class Character_Base : MonoBehaviour {
 			} else {
 				defenseObj.tag = Tag_Const.ENEMY_DIFFENCE;
 			}
+		}
+		else {
+			DefenseEnd();
 		}
 	}
 
@@ -327,9 +327,18 @@ public class Character_Base : MonoBehaviour {
 		iTween.MoveBy(gameObject, table);
 		//無敵時間
 		yield return new WaitForSeconds (avoidTime);
-		avoidFlg = false;
-		mutekiFlg = false;
+		this.avoidFlg = false;
+		this.mutekiFlg = false;
 
+	}
+
+	/// <summary>
+	/// 回避終了
+	/// </summary>
+	protected void AvoidEnd(){
+		print ("AvoidEnd!!");
+		this.avoidFlg = false;
+		this.mutekiFlg = false;
 	}
 	
 	/// <summary>
@@ -369,6 +378,17 @@ public class Character_Base : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// パリィ終了
+	/// </summary>
+	protected void ParryEnd() {
+		print ("ParryEnd!!");
+		parryFlg = false;
+		if(this.parryObj != null) {
+			Destroy(this.parryObj);
+		}
+	}
+
+	/// <summary>
 	/// 攻撃
 	/// </summary>
 	/// <param name="prefab">攻撃Prefab</param>
@@ -385,9 +405,6 @@ public class Character_Base : MonoBehaviour {
 		} else {
 			h = -1;
 		}
-		//硬直時間
-		StopCoroutine("WaitForStiffTime");
-		StartCoroutine(WaitForStiffTime (stiffTime));
 		//攻撃生成
 		attackObj = Instantiate(prefab, new Vector2(transform.position.x + 1 * h , transform.position.y)
 		                         , Quaternion.identity) as GameObject;
@@ -403,11 +420,16 @@ public class Character_Base : MonoBehaviour {
 
 		//攻撃方向のセット
 		attackObj.gameObject.SendMessage("SetDirection", rightDirectionFlg);
-		//消滅時間のセット
-		attackObj.gameObject.SendMessage("SetDestroyTime", destroyTime);
-		print ("After!!");
+	}
 
-
+	/// <summary>
+	/// 攻撃終了
+	/// </summary>
+	protected void AttackEnd(string attackKind) {
+		attack1Flg = false;
+		if(this.attackObj != null) {
+			Destroy(this.attackObj);
+		}
 	}
 
 	/// <summary>
@@ -465,7 +487,6 @@ public class Character_Base : MonoBehaviour {
 	/// </summary>
 	/// <param name="speed">Speed.</param>
 	protected void JumpMove(float speed) {
-		print ("jump");
 		//ジャンプ速度を設定
 		jumpSpeed = speed;
 	}

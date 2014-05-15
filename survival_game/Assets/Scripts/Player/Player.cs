@@ -390,6 +390,7 @@ public class Player : Character_Base {
 	/// アニメーションコントローラー用メソッド
 	/// </summary>
 	private void SetAttack1FlgFalse() {
+		this.AttackEnd ("attack1Flg");
 		animator.SetBool("attack1Flg", false );
 	}
 	
@@ -397,6 +398,7 @@ public class Player : Character_Base {
 	/// アニメーションコントローラー用メソッド
 	/// </summary>
 	private void SetAttack2FlgFalse() {
+		this.AttackEnd ("attack2Flg");
 		animator.SetBool("attack2Flg", false );
 	}
 	
@@ -404,6 +406,7 @@ public class Player : Character_Base {
 	/// アニメーションコントローラー用メソッド
 	/// </summary>
 	private void SetAttack3FlgFalse() {
+		this.AttackEnd ("attack3Flg");
 		animator.SetBool("attack3Flg", false );
 	}
 	
@@ -411,6 +414,7 @@ public class Player : Character_Base {
 	/// アニメーションコントローラー用メソッド
 	/// </summary>
 	private void SetAirAttack1FlgFalse() {
+		this.AttackEnd ("airAttack1Flg");
 		animator.SetBool("airAttack1Flg", false );
 	}
 	
@@ -418,6 +422,7 @@ public class Player : Character_Base {
 	/// アニメーションコントローラー用メソッド
 	/// </summary>
 	private void SetAirAttack2FlgFalse() {
+		this.AttackEnd ("airAttack2Flg");
 		animator.SetBool("airAttack2Flg", false );
 	}
 	
@@ -425,6 +430,7 @@ public class Player : Character_Base {
 	/// アニメーションコントローラー用メソッド
 	/// </summary>
 	private void SetParryAttack1FlgFalse() {
+		this.AttackEnd ("parryAttack1Flg");
 		animator.SetBool("parryAttack1Flg", false );
 	}
 	
@@ -432,6 +438,7 @@ public class Player : Character_Base {
 	/// アニメーションコントローラー用メソッド
 	/// </summary>
 	private void SetParryAttack2FlgFalse() {
+		this.AttackEnd ("parryAttack2Flg");
 		animator.SetBool("parryAttack2Flg", false );
 	}
 }
