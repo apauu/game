@@ -38,168 +38,103 @@ public class Player : Character_Base {
 	/// </summary>
 	void Update () {
 		base.Update ();
-			//防御
-			if (Input.GetButtonDown ("Defense")) {
-				base.Defense(Player_Const.DEFFENCE_BEFORE);
+		//防御
+		if (Input.GetButtonDown ("Defense")) {
+			base.Defense(Player_Const.DEFFENCE_BEFORE);
+		}
+
+		//パリィ
+		if (Input.GetButtonDown ("Parry")) {
+			base.Parry(Player_Const.PARRY_DESTROY, Player_Const.PARRY_STIFF);
+		}
+
+		//回避
+		if (Input.GetButtonDown ("Avoid")) {
+			float side = rightDirectionFlg ? 1 : -1;
+			if(Input.GetButton("Horizontal")) {
+				side = Input.GetAxisRaw ("Horizontal");
 			}
+			this.Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF, side);
+			Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF, side);
+		}
 
-			//パリィ
-			if (Input.GetButtonDown ("Parry")) {
-				base.Parry(Player_Const.PARRY_DESTROY, Player_Const.PARRY_STIFF);
-			}
+		//防御終了
+		if(this.defenseFlg && Input.GetButtonUp ("Defense")) {
+			base.DefenseEnd();
+		}
 
-			//回避
-			if (Input.GetButtonDown ("Avoid")) {
-				float side = rightDirectionFlg ? 1 : -1;
-				if(Input.GetButton("Horizontal")) {
-					side = Input.GetAxisRaw ("Horizontal");
-				}
-				this.Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF, side);
-				Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF, side);
-			}
+		//攻撃
+		//地上攻撃
+		if (onGroundFlg) {
+			if ((Input.GetButtonDown ("Fire4"))
+					&&(skill1Flg
+					|| skill2Flg)) {
+				//必殺攻撃
+				SuperSkill();
 
-			//防御終了
-			if(this.defenseFlg && Input.GetButtonUp ("Defense")) {
-				base.DefenseEnd();
-			}
+			} else if ((Input.GetButtonDown ("Fire2"))
+					&&(neutralFlg
+					|| attack1Flg
+					|| attack2Flg
+					|| attack3Flg
+			   		|| skill2Flg)) {
+				//技攻撃１
+				Skill1();
 
-			//攻撃
-			//地上攻撃
-			if (onGroundFlg) {
-				if ((Input.GetButtonDown ("Fire4"))
-						&&(skill1Flg
-						|| skill2Flg)) {
-					//必殺攻撃
-					print ("Player Fire4");
-					SuperSkill();
+			} else if ((Input.GetButtonDown ("Fire3"))
+					&&(neutralFlg
+					|| attack1Flg
+					|| attack2Flg
+					|| attack3Flg
+					|| skill1Flg)) {
+				//技攻撃２
+				Skill1();
 
-				} else if ((Input.GetButtonDown ("Fire2"))
-						&&(neutralFlg
-						|| attack1Flg
-						|| attack2Flg
-						|| attack3Flg
-				   		|| skill2Flg)) {
-					//技攻撃１
-					print ("Player Fire3");
-					Skill1();
+			} else if (Input.GetButtonDown ("Fire1")) {
+				if (parryAttack1Flg) {
+					//パリィ攻撃２
+					ParryAttack2();
 
-				} else if ((Input.GetButtonDown ("Fire3"))
-						&&(neutralFlg
-						|| attack1Flg
-						|| attack2Flg
-						|| attack3Flg
-						|| skill1Flg)) {
-					//技攻撃２
-					print ("Player Fire2");
-					Skill1();
+				} else if (parrySuccessFlg) {
+					//パリィ攻撃１
+					ParryAttack1();
 
-				} else if (Input.GetButtonDown ("Fire1")) {
-					print ("Player Fire1");
-					if (parryAttack1Flg) {
-						//パリィ攻撃２
-						ParryAttack2();
+				} else if (attack2Flg) {
+					//通常攻撃３
+					Attack3();
 
-					} else if (parrySuccessFlg) {
-						//パリィ攻撃１
-						ParryAttack1();
-
-					} else if (attack2Flg) {
-						//通常攻撃３
-						Attack3();
-
-					} else if (attack1Flg) {
-						//通常攻撃２
-						Attack2();
-				
-					} else {
-						//通常攻撃１
-						Attack1();
-					}
-				}
-			} else {
-				//空中攻撃
-				if (Input.GetButtonDown ("Fire1")) {
-					print ("Player Air Fire1");
-					if (jumpAttack1Flg) {
-						//ジャンプ攻撃２
-						JumpAttack2();
-			//回避中はできない
-			if (!this.avoidFlg) {
-				//地上攻撃
-				if (onGroundFlg) {
-					if ((Input.GetButtonDown ("Fire4"))
-							&&(skill1Flg
-							|| skill2Flg)) {
-						//必殺攻撃
-						SuperSkill();
-
-					} else if ((Input.GetButtonDown ("Fire2"))
-							&&(neutralFlg
-							|| attack1Flg
-							|| attack2Flg
-							|| attack3Flg
-					   		|| skill2Flg)) {
-						//技攻撃１
-						Skill1();
-
-					} else if ((Input.GetButtonDown ("Fire3"))
-							&&(neutralFlg
-							|| attack1Flg
-							|| attack2Flg
-							|| attack3Flg
-							|| skill1Flg)) {
-						//技攻撃２
-						Skill1();
-
-					} else if (Input.GetButtonDown ("Fire1")) {
-						if (parryAttack1Flg) {
-							//パリィ攻撃２
-							ParryAttack2();
-
-						} else if (parrySuccessFlg) {
-							//パリィ攻撃１
-							ParryAttack1();
-
-						} else if (attack2Flg) {
-							//通常攻撃３
-							Attack3();
-
-						} else if (attack1Flg) {
-							//通常攻撃２
-							Attack2();
-					
-						} else {
-							//通常攻撃１
-							Attack1();
-						}
-					}
+				} else if (attack1Flg) {
+					//通常攻撃２
+					Attack2();
+			
 				} else {
-					//空中攻撃
-					if (Input.GetButtonDown ("Fire1")) {
-						if (jumpAttack1Flg) {
-							//ジャンプ攻撃２
-							JumpAttack2();
-
-					} else {
-						//ジャンプ攻撃１
-						JumpAttack1();
-					}
+					//通常攻撃１
+					Attack1();
 				}
 			}
-
-			//左右入力の無い時
-			lastKeyTimer += Time.deltaTime;
-			//ダッシュキー待機時間終了時
-			if (lastKeyTimer > Player_Const.DOUBLE_KEY_TIME) {
-				//最終横方向キー初期化
-				lastRawKey = 0;
-				//タイマー初期化
-				lastKeyTimer = 0;
-			}
-					}
+		} else {
+			//空中攻撃
+			if (Input.GetButtonDown ("Fire1")) {
+				if (jumpAttack1Flg) {
+					//ジャンプ攻撃２
+					JumpAttack2();
+				} else {
+					//ジャンプ攻撃１
+					JumpAttack1();
 				}
+
 			}
-			}
+		}
+
+		//左右入力の無い時
+		lastKeyTimer += Time.deltaTime;
+		//ダッシュキー待機時間終了時
+		if (lastKeyTimer > Player_Const.DOUBLE_KEY_TIME) {
+			//最終横方向キー初期化
+			lastRawKey = 0;
+			//タイマー初期化
+			lastKeyTimer = 0;
+		}
 	}
 	
 	// FixedUpdate is called once per frame
