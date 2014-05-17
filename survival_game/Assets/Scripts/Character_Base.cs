@@ -212,18 +212,18 @@ public class Character_Base : MonoBehaviour {
 				{
 					onGroundFlg = false;
 				}
-			if(hit != null && hit.collider != null&& hit.collider.gameObject.tag.Equals(Tag_Const.GROUND)){
-				//animator.SetBool("airFlg", true );
-				onGroundFlg = true;
-				jmpFlg = true;
-				doubleJmpFlg = true;
-				vi = 0;
-			}
-			else
-			{
-				//animator.SetBool("airFlg", false );
-				onGroundFlg = false;
-
+				if(hit != null && hit.collider != null&& hit.collider.gameObject.tag.Equals(Tag_Const.GROUND)){
+					//animator.SetBool("airFlg", true );
+					onGroundFlg = true;
+					jmpFlg = true;
+					doubleJmpFlg = true;
+					vi = 0;
+				}
+				else
+				{
+					//animator.SetBool("airFlg", false );
+					onGroundFlg = false;
+				}
 			}
 		}
 	}
@@ -339,16 +339,17 @@ public class Character_Base : MonoBehaviour {
 		}
 		else {
 			DefenseEnd();
-		//盾オブジェクト生成
-		defenseObj = Instantiate(this.defensePrefab, new Vector2(transform.position.x + (1f * h), transform.position.y)
+			//盾オブジェクト生成
+			defenseObj = Instantiate(this.defensePrefab, new Vector2(transform.position.x + (1f * h), transform.position.y)
 		                         , Quaternion.identity) as GameObject;
-		//親を設定
-		defenseObj.transform.parent = this.transform;
-		//キャラクターのTagを判定して防御オブジェクトにTagをセット
-		if (gameObject.tag.Equals(Tag_Const.PLAYER)) {
-			defenseObj.tag = Tag_Const.PLAYER_DIFFENCE;
-		} else {
-			defenseObj.tag = Tag_Const.ENEMY_DIFFENCE;
+			//親を設定
+			defenseObj.transform.parent = this.transform;
+			//キャラクターのTagを判定して防御オブジェクトにTagをセット
+			if (gameObject.tag.Equals(Tag_Const.PLAYER)) {
+				defenseObj.tag = Tag_Const.PLAYER_DIFFENCE;
+			} else {
+				defenseObj.tag = Tag_Const.ENEMY_DIFFENCE;
+			}
 		}
 	}
 
@@ -389,19 +390,6 @@ public class Character_Base : MonoBehaviour {
 		this.avoidFlg = false;
 		this.mutekiFlg = false;
 		avoidSpeed = 0f;
-	}
-		//移動TweenのHashTable
-		Hashtable table = new Hashtable();
-		table.Add ("x", 15f * side);
-		//無敵時間より少し短い時間で移動する
-		table.Add ("time", avoidTime-0.03f);
-		table.Add ("easetype", iTween.EaseType.easeInOutSine);
-		iTween.MoveBy(gameObject, table);
-//		//無敵時間
-//		yield return new WaitForSeconds (avoidTime);
-//		this.avoidFlg = false;
-//		this.mutekiFlg = false;
-
 	}
 
 //	/// <summary>
@@ -706,6 +694,7 @@ public class Character_Base : MonoBehaviour {
 	/// </summary>
 	private void SetAttack1FlgFalse() {
 		attack1Flg = false;
+
 		this.AttackEnd ("attack1Flg");
 		animator.SetBool("attack1Flg", false );
 	}
