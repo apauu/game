@@ -438,7 +438,6 @@ public class Character_Base : MonoBehaviour {
 		                         , Quaternion.identity) as GameObject;
 		//親を設定
 		attackObj.transform.parent = this.transform;
-
 		//キャラクターのTagを判定して攻撃オブジェクトにTagをセット
 		//本当は遠距離攻撃かどうかの判定も必要！あとで実装！
 		if (gameObject.tag.Equals(Tag_Const.PLAYER)) { 
@@ -518,7 +517,7 @@ public class Character_Base : MonoBehaviour {
 					animator.SetBool("walkFlg", true );
 					
 				} else {
-					InitAllFlg();
+					//InitAllFlg();
 					animator.SetBool("dashFlg", true );
 				}
 			}

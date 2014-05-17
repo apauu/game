@@ -558,8 +558,6 @@ Transition:
   m_Name: 
   m_SrcState: {fileID: 110263023}
   m_DstState: {fileID: 110216526}
-  m_TransitionDuration: .100000001
-  m_TransitionOffset: .00321285776
   m_TransitionDuration: .0999999121
   m_TransitionOffset: 0
   m_Conditions:
@@ -726,6 +724,7 @@ Transition:
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 1
+--- !u!1101 &110129459
 Transition:
   m_ObjectHideFlags: 3
   m_PrefabParentObject: {fileID: 0}
@@ -1187,6 +1186,7 @@ Transition:
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 0
+--- !u!1101 &110152815
 Transition:
   m_ObjectHideFlags: 3
   m_PrefabParentObject: {fileID: 0}

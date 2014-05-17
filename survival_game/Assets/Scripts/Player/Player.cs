@@ -153,7 +153,7 @@ public class Player : Character_Base {
 				}
 				nowRawKey = sideButton;
 
-				SideMove();
+				this.SideMove();
 
 			} else {
 				//左右ボタンを離した時
