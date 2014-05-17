@@ -64,7 +64,6 @@ public class Player : Character_Base {
 			}
 
 			//攻撃
-<<<<<<< HEAD
 			//地上攻撃
 			if (onGroundFlg) {
 				if ((Input.GetButtonDown ("Fire4"))
@@ -92,7 +91,7 @@ public class Player : Character_Base {
 						|| skill1Flg)) {
 					//技攻撃２
 					print ("Player Fire2");
-					Skill2();
+					Skill1();
 
 				} else if (Input.GetButtonDown ("Fire1")) {
 					print ("Player Fire1");
@@ -124,7 +123,6 @@ public class Player : Character_Base {
 					if (jumpAttack1Flg) {
 						//ジャンプ攻撃２
 						JumpAttack2();
-=======
 			//回避中はできない
 			if (!this.avoidFlg) {
 				//地上攻撃
@@ -181,7 +179,6 @@ public class Player : Character_Base {
 						if (jumpAttack1Flg) {
 							//ジャンプ攻撃２
 							JumpAttack2();
->>>>>>> 8886726bb642faccf6a2038f18384026f78b890f
 
 					} else {
 						//ジャンプ攻撃１
@@ -198,6 +195,10 @@ public class Player : Character_Base {
 				lastRawKey = 0;
 				//タイマー初期化
 				lastKeyTimer = 0;
+			}
+					}
+				}
+			}
 			}
 	}
 	
