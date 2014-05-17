@@ -200,15 +200,15 @@ public class Character_Base : MonoBehaviour {
 			hit = Physics2D.Raycast (new Vector2(transform.position.x,transform.position.y),-Vector2.up,this.CircleCollider.radius+0.01f,mask);
 
 			if(hit != null && hit.collider != null&& hit.collider.gameObject.tag.Equals(Tag_Const.GROUND)){
+				if(!onGroundFlg) {
 				animator.SetBool("onGroundFlg", true );
 				onGroundFlg = true;
 				jmpFlg = true;
 				doubleJmpFlg = true;
 				vi = 0;
-	                        //硬直時間
-                        	StartCoroutine(WaitForStiffTime (0.1f));
-
-
+	            //硬直時間
+                StartCoroutine(WaitForStiffTime (0.1f));
+				}
 			}
 			else
 			{
