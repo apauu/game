@@ -107,7 +107,7 @@ public class Player : Character_Base {
 					//通常攻撃２
 					Attack2();
 			
-				} else {
+				} else if (!attack3Flg && !parryAttack2Flg) {
 					//通常攻撃１
 					Attack1();
 				}
@@ -118,7 +118,7 @@ public class Player : Character_Base {
 				if (jumpAttack1Flg) {
 					//ジャンプ攻撃２
 					JumpAttack2();
-				} else {
+				} else if (!jumpAttack2Flg) {
 					//ジャンプ攻撃１
 					JumpAttack1();
 				}
@@ -154,7 +154,7 @@ public class Player : Character_Base {
 				}
 				nowRawKey = sideButton;
 
-				this.SideMove();
+				SideMove();
 
 			} else {
 				//左右ボタンを離した時
@@ -163,6 +163,8 @@ public class Player : Character_Base {
 					lastKeyTimer = 0;
 					walkFlg = false;
 					dashFlg = false;
+					animator.SetBool("walkFlg", false );
+					animator.SetBool("dashFlg", false );
 				}
 			}
 

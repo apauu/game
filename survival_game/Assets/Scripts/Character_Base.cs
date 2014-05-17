@@ -421,7 +421,7 @@ public class Character_Base : MonoBehaviour {
 	/// <param name="destroyTime">判定の出ている時間</param>
 	/// <param name="beforeActionTime">行動前硬直</param>
 	/// <param name="stiffTime">硬直時間</param>
-	protected void Attack (GameObject prefab, float destroyTime, float beforeActionTime, float stiffTime) {
+	protected void Attack (GameObject prefab) {
 
 		//TODO:フラグで行動をとれるかの判定を追加
 
@@ -439,6 +439,7 @@ public class Character_Base : MonoBehaviour {
 		                         , Quaternion.identity) as GameObject;
 		//親を設定
 		attackObj.transform.parent = this.transform;
+
 		//キャラクターのTagを判定して攻撃オブジェクトにTagをセット
 		//本当は遠距離攻撃かどうかの判定も必要！あとで実装！
 		if (gameObject.tag.Equals(Tag_Const.PLAYER)) { 
@@ -454,8 +455,7 @@ public class Character_Base : MonoBehaviour {
 	/// <summary>
 	/// 攻撃終了
 	/// </summary>
-	protected void AttackEnd(string attackKind) {
-		attack1Flg = false;
+	protected void AttackEnd(String attackKind) {
 		if(this.attackObj != null) {
 			Destroy(this.attackObj);
 		}
@@ -512,6 +512,18 @@ public class Character_Base : MonoBehaviour {
 			this.rightDirectionFlg = direction;
 			this.transform.Translate (new Vector3(deltaX,0,0));
 			this.transform.localScale = new Vector3 ((rightDirectionFlg ? -1 : 1), 1, 1);
+			
+			// アニメーション遷移
+			if (onGroundFlg) {
+				if (!dashFlg) {
+					InitAllFlg();
+					animator.SetBool("walkFlg", true );
+					
+				} else {
+					InitAllFlg();
+					animator.SetBool("dashFlg", true );
+				}
+			}
 		}
 	}
 

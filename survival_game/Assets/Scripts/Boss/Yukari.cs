@@ -117,7 +117,7 @@ public class Yukari : Enemy_Base {
 	private void GetAttack() {
 		print ("YukariGetAttack!!");
 		if(Mathf.Abs(nowDistanceX) < Enemy_Const.YUKARI_ATTACK_DISTANCE) {
-			base.Attack (attack1Prefab, Enemy_Const.YUKARI_ATTACK1_DESTROY, Enemy_Const.YUKARI_ATTACK1_BEFORE, Enemy_Const.YUKARI_ATTACK1_STIFF);
+//			base.Attack (attack1Prefab, Enemy_Const.YUKARI_ATTACK1_DESTROY, Enemy_Const.YUKARI_ATTACK1_BEFORE, Enemy_Const.YUKARI_ATTACK1_STIFF);
 			this.getAttackFlg = false;
 		} 
 		else {
@@ -127,7 +127,7 @@ public class Yukari : Enemy_Base {
 	private void GetAttack2() {
 		print ("YukariGetAttack2!!");
 		if(Mathf.Abs(nowDistanceX) < Enemy_Const.YUKARI_ATTACK_DISTANCE) {
-			base.Attack (attack1Prefab, Enemy_Const.YUKARI_ATTACK1_DESTROY, Enemy_Const.YUKARI_ATTACK1_BEFORE, Enemy_Const.YUKARI_ATTACK1_STIFF);
+//			base.Attack (attack1Prefab, Enemy_Const.YUKARI_ATTACK1_DESTROY, Enemy_Const.YUKARI_ATTACK1_BEFORE, Enemy_Const.YUKARI_ATTACK1_STIFF);
 			this.getAttackFlg2 = false;
 		} 
 		else {
@@ -137,7 +137,7 @@ public class Yukari : Enemy_Base {
 	private void GetAttack3() {
 		print ("YukariGetAttack3!!");
 		if(Mathf.Abs(nowDistanceX) < Enemy_Const.YUKARI_ATTACK_DISTANCE) {
-			base.Attack (attack1Prefab, Enemy_Const.YUKARI_ATTACK1_DESTROY, Enemy_Const.YUKARI_ATTACK1_BEFORE, Enemy_Const.YUKARI_ATTACK1_STIFF);
+//			base.Attack (attack1Prefab, Enemy_Const.YUKARI_ATTACK1_DESTROY, Enemy_Const.YUKARI_ATTACK1_BEFORE, Enemy_Const.YUKARI_ATTACK1_STIFF);
 			this.getAttackFlg3 = false;
 		} 
 		else {
