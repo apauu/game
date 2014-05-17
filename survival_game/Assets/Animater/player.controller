@@ -537,7 +537,7 @@ Transition:
   m_SrcState: {fileID: 110263023}
   m_DstState: {fileID: 110216526}
   m_TransitionDuration: .100000001
-  m_TransitionOffset: 0
+  m_TransitionOffset: .00321285776
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: attack2Flg

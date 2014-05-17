@@ -177,7 +177,6 @@ public class Character_Base : MonoBehaviour {
 		float distance = float.NegativeInfinity;
 
 		RaycastHit2D hit = new RaycastHit2D();
-		//LayerMask mask = -1 - 1 << gameObject.layer;
 		LayerMask mask = (1 << LayerMask.NameToLayer("Background"));
 		hit = Physics2D.Raycast (new Vector2(transform.position.x,transform.position.y),direction,float.PositiveInfinity,mask);
 		if(hit != null && hit.collider != null){
@@ -200,12 +199,12 @@ public class Character_Base : MonoBehaviour {
 			hit = Physics2D.Raycast (new Vector2(transform.position.x,transform.position.y),-Vector2.up,this.CircleCollider.radius+0.01f,mask);
 
 			if(hit != null && hit.collider != null&& hit.collider.gameObject.tag.Equals(Tag_Const.GROUND)){
+				vi = 0;
+				jmpFlg = true;
+				doubleJmpFlg = true;
 				if(!onGroundFlg) {
 				animator.SetBool("onGroundFlg", true );
 				onGroundFlg = true;
-				jmpFlg = true;
-				doubleJmpFlg = true;
-				vi = 0;
 	            //硬直時間
                 StartCoroutine(WaitForStiffTime (0.1f));
 				}
@@ -304,31 +303,32 @@ public class Character_Base : MonoBehaviour {
 	/// 防御
 	/// </summary>
 	/// <param name="stiffTime">前硬直時間</param>
-	protected void Defense (float stiffTime) {
+	protected void Defense(float stiffTime) {
 
-		//TODO:フラグで行動をとれるかの判定を追加
+		//防御できる場合
+		if(CheckEventAwake() && onGroundFlg) {
+			print ("Defense!!");
+			animator.SetBool("defenseFlg", true );
+			defenseFlg = true;
 
-		print ("Defense!!");
-		animator.SetBool("defenseFlg", true );
-		defenseFlg = true;
+			float h = rightDirectionFlg ? 1 : -1;
 
-		float h = rightDirectionFlg ? 1 : -1;
-
-		if(this.defenseFlg) {
-			//盾オブジェクト生成
-			defenseObj = Instantiate(this.defensePrefab, new Vector2(transform.position.x + (0.5f * h), transform.position.y)
-			                         , Quaternion.identity) as GameObject;
-			//親を設定
-			defenseObj.transform.parent = this.transform;
-			//キャラクターのTagを判定して防御オブジェクトにTagをセット
-			if (gameObject.tag.Equals(Tag_Const.PLAYER)) {
-				defenseObj.tag = Tag_Const.PLAYER_DIFFENCE;
-			} else {
-				defenseObj.tag = Tag_Const.ENEMY_DIFFENCE;
+			if(this.defenseFlg) {
+				//盾オブジェクト生成
+				defenseObj = Instantiate(this.defensePrefab, new Vector2(transform.position.x + (0.5f * h), transform.position.y)
+				                         , Quaternion.identity) as GameObject;
+				//親を設定
+				defenseObj.transform.parent = this.transform;
+				//キャラクターのTagを判定して防御オブジェクトにTagをセット
+				if (gameObject.tag.Equals(Tag_Const.PLAYER)) {
+					defenseObj.tag = Tag_Const.PLAYER_DIFFENCE;
+				} else {
+					defenseObj.tag = Tag_Const.ENEMY_DIFFENCE;
+				}
 			}
-		}
-		else {
-			DefenseEnd();
+			else {
+				DefenseEnd();
+			}
 		}
 	}
 
@@ -359,7 +359,7 @@ public class Character_Base : MonoBehaviour {
 		animator.SetBool("avoidFlg", true );
 		avoidFlg = true;
 		mutekiFlg = true;
-		avoidSpeed = 2f;
+		avoidSpeed = 4f;
 	}
 
 	
@@ -370,37 +370,36 @@ public class Character_Base : MonoBehaviour {
 	/// <param name="stiffTime">硬直時間</param>
 	protected void Parry (float destroyTime, float stiffTime) {
 
-		//TODO:フラグで行動をとれるかの判定を追加
-
-		print ("Parry!!");
-		animator.SetBool("parryFlg", true );
-		parryFlg = true;
-
-		float h = 0;
-		
-		if (rightDirectionFlg) {
-			h = 1;
-		} else {
-			h = -1;
+		//パリイできる場合
+		if(CheckEventAwake() && onGroundFlg) {
+			print ("Parry!!");
+			animator.SetBool("parryFlg", true );
+			parryFlg = true;
+			
+			float h = 0;
+			
+			if (rightDirectionFlg) {
+				h = 1;
+			} else {
+				h = -1;
+			}
+			//パリィオブジェクト生成
+			
+			parryObj = Instantiate(this.parryPrefab, new Vector2(transform.position.x + (1f * h), transform.position.y)
+			                       , Quaternion.identity) as GameObject;
+			//親を設定
+			parryObj.transform.parent = this.transform;
+			//キャラクターのTagを判定してパリィオブジェクトにTagをセット
+			if (gameObject.tag.Equals(Tag_Const.PLAYER)) {
+				parryObj.tag = Tag_Const.PLAYER_PARRY;
+			} else {
+				parryObj.tag = Tag_Const.ENEMY_PARRY;
+			}
+			
+			//消滅時間のセット
+			parryObj.gameObject.SendMessage("SetDestroyTime", destroyTime);
 		}
-		//パリィオブジェクト生成
 
-		parryObj = Instantiate(this.parryPrefab, new Vector2(transform.position.x + (1f * h), transform.position.y)
-		                         , Quaternion.identity) as GameObject;
-		//親を設定
-		parryObj.transform.parent = this.transform;
-		//キャラクターのTagを判定してパリィオブジェクトにTagをセット
-		if (gameObject.tag.Equals(Tag_Const.PLAYER)) {
-			parryObj.tag = Tag_Const.PLAYER_PARRY;
-		} else {
-			parryObj.tag = Tag_Const.ENEMY_PARRY;
-		}
-
-		//消滅時間のセット
-		parryObj.gameObject.SendMessage("SetDestroyTime", destroyTime);
-		
-		//硬直時間
-		StartCoroutine(WaitForStiffTime (stiffTime));
 	}
 
 	/// <summary>
@@ -454,8 +453,7 @@ public class Character_Base : MonoBehaviour {
 	/// <summary>
 	/// 攻撃終了
 	/// </summary>
-	protected void AttackEnd(string attackKind) {
-		attack1Flg = false;
+	protected void AttackEnd() {
 		if(this.attackObj != null) {
 			Destroy(this.attackObj);
 		}
@@ -491,8 +489,7 @@ public class Character_Base : MonoBehaviour {
 	protected void SideMove(float speed,bool direction){
 
 		//動ける場合
-		if(!(stiffFlg || attack1Flg || attack2Flg || attack3Flg || jumpAttack1Flg || jumpAttack2Flg ||
-		     parryFlg || parryAttack1Flg || parryAttack2Flg || avoidFlg || skill1Flg || skill2Flg || superSkillFlg)) {
+		if(CheckEventAwake()) {
 			float deltaX = speed * t *(direction ? 1 : -1);
 			
 			if(deltaX >= 0) {
@@ -520,10 +517,21 @@ public class Character_Base : MonoBehaviour {
 	/// </summary>
 	/// <param name="speed">Speed.</param>
 	protected void JumpMove(float speed) {
-		//ジャンプ速度を設定
-		if(!jmpFlg || !doubleJmpFlg) {
-			jumpSpeed = speed;
+		//動ける場合
+		if(CheckEventAwake()) {
+			//ジャンプ速度を設定
+			if(!jmpFlg || !doubleJmpFlg) {
+				jumpSpeed = speed;
+			}
 		}
+	}
+
+	/// <summary>
+	/// プレイヤーが動けるかどうかチェックする
+	/// </summary>
+	protected bool CheckEventAwake() {
+		return !(stiffFlg || attack1Flg || attack2Flg || attack3Flg || jumpAttack1Flg || jumpAttack2Flg || defenseFlg ||
+		         parryFlg || parryAttack1Flg || parryAttack2Flg || avoidFlg || skill1Flg || skill2Flg || superSkillFlg);
 	}
 
 	//フラグを全て初期化する(空中以外)
@@ -616,7 +624,14 @@ public class Character_Base : MonoBehaviour {
 		defenseFlg = false;
 		animator.SetBool("defenseFlg", false );
 	}
-	
+
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetMutekiFlgFalse() {
+		mutekiFlg = false;
+	}
+
 	/// <summary>
 	/// アニメーションコントローラー用メソッド
 	/// </summary>
@@ -650,8 +665,7 @@ public class Character_Base : MonoBehaviour {
 	/// </summary>
 	private void SetAttack1FlgFalse() {
 		attack1Flg = false;
-
-		this.AttackEnd ("attack1Flg");
+		this.AttackEnd ();
 		animator.SetBool("attack1Flg", false );
 	}
 	
@@ -660,7 +674,7 @@ public class Character_Base : MonoBehaviour {
 	/// </summary>
 	private void SetAttack2FlgFalse() {
 		attack2Flg = false;
-		this.AttackEnd ("attack2Flg");
+		this.AttackEnd ();
 		animator.SetBool("attack2Flg", false );
 	}
 	
@@ -669,7 +683,7 @@ public class Character_Base : MonoBehaviour {
 	/// </summary>
 	private void SetAttack3FlgFalse() {
 		attack3Flg = false;
-		this.AttackEnd ("attack3Flg");
+		this.AttackEnd ();
 		animator.SetBool("attack3Flg", false );
 	}
 	
@@ -678,7 +692,7 @@ public class Character_Base : MonoBehaviour {
 	/// </summary>
 	private void SetJumpAttack1FlgFalse() {
 		jumpAttack1Flg = false;
-		this.AttackEnd ("jumpAttack1Flg");
+		this.AttackEnd ();
 		animator.SetBool("jumpAttack1Flg", false );
 	}
 	
@@ -687,7 +701,7 @@ public class Character_Base : MonoBehaviour {
 	/// </summary>
 	private void SetJumpAttack2FlgFalse() {
 		jumpAttack2Flg = false;
-		this.AttackEnd ("jumpAttack2Flg");
+		this.AttackEnd ();
 		animator.SetBool("jumpAttack2Flg", false );
 	}
 	
@@ -696,7 +710,7 @@ public class Character_Base : MonoBehaviour {
 	/// </summary>
 	private void SetParryAttack1FlgFalse() {
 		parryAttack1Flg = false;
-		this.AttackEnd ("parryAttack1Flg");
+		this.AttackEnd ();
 		animator.SetBool("parryAttack1Flg", false );
 	}
 	
@@ -705,7 +719,7 @@ public class Character_Base : MonoBehaviour {
 	/// </summary>
 	private void SetParryAttack2FlgFalse() {
 		parryAttack2Flg = false;
-		this.AttackEnd ("parryAttack2Flg");
+		this.AttackEnd ();
 		animator.SetBool("parryAttack2Flg", false );
 	}
 }

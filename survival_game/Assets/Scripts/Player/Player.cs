@@ -55,7 +55,6 @@ public class Player : Character_Base {
 				side = Input.GetAxisRaw ("Horizontal");
 			}
 			this.Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF, side);
-			Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF, side);
 		}
 
 		//防御終了
@@ -305,13 +304,5 @@ public class Player : Character_Base {
 			iTween.MoveBy(gameObject, table);
 
 		}
-	}
-
-	/// <summary>
-	/// プレイヤーがイベントを起こせるかどうかチェックする
-	/// </summary>
-	private bool CheckEventAwake() {
-		return !(!onGroundFlg || attack1Flg || attack2Flg || attack3Flg || jumpAttack1Flg || jumpAttack2Flg ||
-		         parryFlg || parryAttack1Flg || parryAttack2Flg || avoidFlg || skill1Flg || skill2Flg || superSkillFlg);
 	}
 }
