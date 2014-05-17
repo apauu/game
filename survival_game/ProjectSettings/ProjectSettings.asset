@@ -152,7 +152,8 @@ PlayerSettings:
   ps3TrialMode: 0
   flashStrippingLevel: 2
   spritePackerPolicy: 
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    4: 
   metroPackageName: survival_game
   metroPackageLogo: 
   metroPackageVersion: 

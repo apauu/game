@@ -3,8 +3,6 @@ using System.Collections;
 using System;
 
 public class Player : Character_Base {
-	
-	protected Animator animator;
 
 	//前回のキーを離してからの時間
 	private float lastKeyTimer = 0;
@@ -21,7 +19,6 @@ public class Player : Character_Base {
 	// Use this for initialization
 	void Start () {
 		base.Start ();
-		animator = GetComponent<Animator>();
 		//初期HP
 		hitPoint = Player_Const.HIT_POINT;
 		//被弾時無敵時間
@@ -61,7 +58,7 @@ public class Player : Character_Base {
 					if(Input.GetButton("Horizontal")) {
 						side = Input.GetAxisRaw ("Horizontal");
 					}
-					StartCoroutine(this.Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF, side));
+					Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF, side);
 				}
 			}
 
@@ -80,9 +77,8 @@ public class Player : Character_Base {
 							|| skill2Flg)) {
 						//必殺攻撃
 						print ("Player Fire4");
-						this.InitAttackFlg();
-						superSkillFlg = true;
-						//Attack.SuperSkill(rigidbody2D, rightDirectionFlg, destroyTime);
+						SuperSkill();
+
 					} else if ((Input.GetButtonDown ("Fire2"))
 							&&(neutralFlg
 							|| attack1Flg
@@ -91,9 +87,8 @@ public class Player : Character_Base {
 					   		|| skill2Flg)) {
 						//技攻撃１
 						print ("Player Fire3");
-						this.InitAttackFlg();
-						skill1Flg = true;
-						Attack2(Player_Const.SKILL1_DESTROY, 0, Player_Const.SKILL1_STIFF);
+						Skill1();
+
 					} else if ((Input.GetButtonDown ("Fire3"))
 							&&(neutralFlg
 							|| attack1Flg
@@ -102,36 +97,29 @@ public class Player : Character_Base {
 							|| skill1Flg)) {
 						//技攻撃２
 						print ("Player Fire2");
-						this.InitAttackFlg();
-						skill2Flg = true;
-						//Attack.Skill2(rigidbody2D, rightDirectionFlg, destroyTime);
+						Skill2();
+
 					} else if (Input.GetButtonDown ("Fire1")) {
 						print ("Player Fire1");
 						if (parryAttack1Flg) {
 							//パリィ攻撃２
-							this.InitAttackFlg();
-							parryAttack2Flg = true;
-							//Attack.ParryAttack2(rigidbody2D, rightDirectionFlg, destroyTime);
+							ParryAttack2();
+
 						} else if (parrySuccessFlg) {
 							//パリィ攻撃１
-							this.InitAttackFlg();
-							parryAttack1Flg = true;
-							//Attack.ParryAttack1(rigidbody2D, rightDirectionFlg, destroyTime);
+							ParryAttack1();
+
 						} else if (attack2Flg) {
 							//通常攻撃３
-							this.InitAttackFlg();
-							attack3Flg = true;
-							//Attack.Attack3(rigidbody2D, rightDirectionFlg, destroyTime);
+							Attack3();
+
 						} else if (attack1Flg) {
 							//通常攻撃２
-							this.InitAttackFlg();
+							Attack2();
 					
-							//Attack.Attack2(rigidbody2D, rightDirectionFlg, destroyTime);
 						} else {
 							//通常攻撃１
-							this.InitAttackFlg();
-							attack1Flg = true;
-							this.Attack1();
+							Attack1();
 						}
 					}
 				} else {
@@ -140,14 +128,11 @@ public class Player : Character_Base {
 						print ("Player Air Fire1");
 						if (jumpAttack1Flg) {
 							//ジャンプ攻撃２
-							this.InitAttackFlg();
-							jumpAttack2Flg = true;
-							//Attack.JumpAttack2(rigidbody2D, rightDirectionFlg, destroyTime);
+							JumpAttack2();
+
 						} else {
 							//ジャンプ攻撃１
-							this.InitAttackFlg();
-							jumpAttack1Flg = true;
-							//Attack.JumpAttack1(rigidbody2D, rightDirectionFlg, destroyTime);
+							JumpAttack1();
 						}
 					}
 				}				
@@ -265,16 +250,73 @@ public class Player : Character_Base {
 	}
 	
 	//攻撃１
-	void Attack1 () {
+	private void Attack1 () {
+		InitAllFlg();
+		attack1Flg = true;
 		animator.SetBool("attack1Flg", true );
-		base.Attack (attack1Prefab, Player_Const.ATTACK1_DESTROY, Player_Const.ATTACK1_BEFORE, Player_Const.ATTACK1_STIFF);
 	}
 
 	//攻撃２
-	private void Attack2 (float destroyTime,float beforeActionTime,  float stiffTime) {
-		for (int i = 0 ; i < 5; i++) {
-			base.Attack (attack2Prefab, destroyTime, beforeActionTime, stiffTime);
-		}
+	private void Attack2 () {
+		InitAllFlg();
+		attack2Flg = true;
+		animator.SetBool("attack2Flg", true );
+	}
+
+	//攻撃３
+	private void Attack3 () {
+		InitAllFlg();
+		attack3Flg = true;
+		animator.SetBool("attack3Flg", true );
+	}
+	
+	//パリィ攻撃１
+	private void ParryAttack1 () {
+		InitAllFlg();
+		parryAttack1Flg = true;
+		animator.SetBool("parryAttack1Flg", true );
+	}
+	
+	//パリィ攻撃２
+	private void ParryAttack2 () {
+		InitAllFlg();
+		parryAttack2Flg = true;
+		animator.SetBool("parryAttack2Flg", true );
+	}
+	
+	//空中攻撃１
+	private void JumpAttack1 () {
+		InitAllFlg();
+		jumpAttack1Flg = true;
+		animator.SetBool("jumpAttack1Flg", true );
+	}
+	
+	//空中攻撃２
+	private void JumpAttack2 () {
+		InitAllFlg();
+		jumpAttack2Flg = true;
+		animator.SetBool("jumpAttack2Flg", true );
+	}
+	
+	//スキル１
+	private void Skill1 () {
+		InitAllFlg();
+		skill1Flg = true;
+		animator.SetBool("skill1Flg", true );
+	}
+	
+	//スキル２
+	private void Skill2 () {
+		InitAllFlg();
+		skill2Flg = true;
+		animator.SetBool("skill2Flg", true );
+	}
+	
+	//スーパースキル
+	private void SuperSkill () {
+		InitAllFlg();
+		superSkillFlg = true;
+		animator.SetBool("superSkillFlg", true );
 	}
 
 	//横移動
@@ -321,124 +363,5 @@ public class Player : Character_Base {
 	private bool CheckEventAwake() {
 		return !(!onGroundFlg || attack1Flg || attack2Flg || attack3Flg || jumpAttack1Flg || jumpAttack2Flg ||
 		         parryFlg || parryAttack1Flg || parryAttack2Flg || avoidFlg || skill1Flg || skill2Flg || superSkillFlg);
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetDamageFlgFalse() {
-		animator.SetBool("damageFlg", false );
-	}
-
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetWalkFlgFalse() {
-		animator.SetBool("walkFlg", false );
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetDashFlgFalse() {
-		animator.SetBool("dashFlg", false );
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetAirFlgFalse() {
-		animator.SetBool("airFlg", false );
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetParryFlgFalse() {
-		animator.SetBool("parryFlg", false );
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetDefenceFlgFalse() {
-		animator.SetBool("defenceFlg", false );
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetAvoidFlgFalse() {
-		animator.SetBool("avoidFlg", false );
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetSkill1FlgFalse() {
-		animator.SetBool("skill1Flg", false );
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetSuperSkillFlgFalse() {
-		animator.SetBool("superSkillFlg", false );
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetAttack1FlgFalse() {
-		this.AttackEnd ("attack1Flg");
-		animator.SetBool("attack1Flg", false );
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetAttack2FlgFalse() {
-		this.AttackEnd ("attack2Flg");
-		animator.SetBool("attack2Flg", false );
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetAttack3FlgFalse() {
-		this.AttackEnd ("attack3Flg");
-		animator.SetBool("attack3Flg", false );
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetAirAttack1FlgFalse() {
-		this.AttackEnd ("airAttack1Flg");
-		animator.SetBool("airAttack1Flg", false );
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetAirAttack2FlgFalse() {
-		this.AttackEnd ("airAttack2Flg");
-		animator.SetBool("airAttack2Flg", false );
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetParryAttack1FlgFalse() {
-		this.AttackEnd ("parryAttack1Flg");
-		animator.SetBool("parryAttack1Flg", false );
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
-	private void SetParryAttack2FlgFalse() {
-		this.AttackEnd ("parryAttack2Flg");
-		animator.SetBool("parryAttack2Flg", false );
 	}
 }
