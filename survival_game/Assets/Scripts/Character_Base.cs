@@ -110,11 +110,14 @@ public class Character_Base : MonoBehaviour {
 	}
 
 	protected void Update(){
-
 	}
 
 	protected void FixedUpdate() {
 		SetFlgOnGround ();
+		if(!onGroundFlg) {
+			//硬直時間
+			StartCoroutine(WaitForStiffTime (0.1f));
+		}
 
 		if(!jumpSpeed.Equals(0)) 
 		{
@@ -197,33 +200,17 @@ public class Character_Base : MonoBehaviour {
 
 		if(this.CircleCollider != null) {
 			hit = Physics2D.Raycast (new Vector2(transform.position.x,transform.position.y),-Vector2.up,this.CircleCollider.radius+0.01f,mask);
-			if(hit != null && hit.collider != null){
-				if(hit.collider.gameObject.tag.Equals(Tag_Const.GROUND)){
-					if(!onGroundFlg) {
-						onGroundFlg = true;
-						jmpFlg = true;
-						doubleJmpFlg = true;
-						vi = 0;
-						//硬直時間
-						StartCoroutine(WaitForStiffTime (0.1f));
-					}
-				}
-				else
-				{
-					onGroundFlg = false;
-				}
-				if(hit != null && hit.collider != null&& hit.collider.gameObject.tag.Equals(Tag_Const.GROUND)){
-					//animator.SetBool("airFlg", true );
-					onGroundFlg = true;
-					jmpFlg = true;
-					doubleJmpFlg = true;
-					vi = 0;
-				}
-				else
-				{
-					//animator.SetBool("airFlg", false );
-					onGroundFlg = false;
-				}
+
+			if(hit != null && hit.collider != null&& hit.collider.gameObject.tag.Equals(Tag_Const.GROUND)){
+				animator.SetBool("onGroundFlg", true );
+				onGroundFlg = true;
+				jmpFlg = true;
+				doubleJmpFlg = true;
+			}
+			else
+			{
+				animator.SetBool("onGroundFlg", false );
+				onGroundFlg = false;
 			}
 		}
 	}
@@ -324,7 +311,7 @@ public class Character_Base : MonoBehaviour {
 
 		float h = rightDirectionFlg ? 1 : -1;
 
-		if(this.defenseFlg) {
+		if(defenseFlg) {
 			//盾オブジェクト生成
 			defenseObj = Instantiate(this.defensePrefab, new Vector2(transform.position.x + (0.5f * h), transform.position.y)
 			                         , Quaternion.identity) as GameObject;
@@ -339,17 +326,6 @@ public class Character_Base : MonoBehaviour {
 		}
 		else {
 			DefenseEnd();
-			//盾オブジェクト生成
-			defenseObj = Instantiate(this.defensePrefab, new Vector2(transform.position.x + (1f * h), transform.position.y)
-		                         , Quaternion.identity) as GameObject;
-			//親を設定
-			defenseObj.transform.parent = this.transform;
-			//キャラクターのTagを判定して防御オブジェクトにTagをセット
-			if (gameObject.tag.Equals(Tag_Const.PLAYER)) {
-				defenseObj.tag = Tag_Const.PLAYER_DIFFENCE;
-			} else {
-				defenseObj.tag = Tag_Const.ENEMY_DIFFENCE;
-			}
 		}
 	}
 
@@ -360,6 +336,7 @@ public class Character_Base : MonoBehaviour {
 		print ("DefenseEnd!!");
 		animator.SetBool("defenseFlg", false );
 		defenseFlg = false;
+
 		if(this.defenseObj != null) {
 			Destroy(this.defenseObj);
 		}
@@ -380,16 +357,6 @@ public class Character_Base : MonoBehaviour {
 		avoidFlg = true;
 		mutekiFlg = true;
 		avoidSpeed = 2f;
-	}
-
-	/// <summary>
-	/// 回避終了
-	/// </summary>
-	protected void AvoidEnd(){
-		print ("AvoidEnd!!");
-		this.avoidFlg = false;
-		this.mutekiFlg = false;
-		avoidSpeed = 0f;
 	}
 
 //	/// <summary>
@@ -564,7 +531,7 @@ public class Character_Base : MonoBehaviour {
 		}
 	}
 
-	//攻撃関係のフラグを全て初期化する(空中以外)
+	//フラグを全て初期化する(空中以外)
 	protected void InitAllFlg () {
 		attack1Flg = false;
 		attack2Flg = false;
@@ -590,10 +557,8 @@ public class Character_Base : MonoBehaviour {
 		animator.SetBool("jumpAttack1Flg", false );
 		animator.SetBool("jumpAttack2Flg", false );
 		animator.SetBool("skill1Flg", false );
-		animator.SetBool("skill2Flg", false );
 		animator.SetBool("superSkillFlg", false );
 		animator.SetBool("walkFlg", false );
-		animator.SetBool("ariFlg", false );
 		animator.SetBool("damageFlg", false );
 		animator.SetBool("dashFlg", false );
 		animator.SetBool("parryFlg", false );
@@ -644,13 +609,6 @@ public class Character_Base : MonoBehaviour {
 	/// <summary>
 	/// アニメーションコントローラー用メソッド
 	/// </summary>
-	private void SetAirFlgFalse() {
-		animator.SetBool("airFlg", false );
-	}
-	
-	/// <summary>
-	/// アニメーションコントローラー用メソッド
-	/// </summary>
 	private void SetParryFlgFalse() {
 		parryFlg = false;
 		animator.SetBool("parryFlg", false );
@@ -684,9 +642,10 @@ public class Character_Base : MonoBehaviour {
 	/// アニメーションコントローラー用メソッド
 	/// </summary>
 	private void SetSuperSkillFlgFalse() {
-		superSkillFlg = false;
-		this.AttackEnd ("attack1Flg");
-		animator.SetBool("superSkillFlg", false );
+		InitAllFlg();
+//		superSkillFlg = false;
+//		this.AttackEnd ("attack1Flg");
+//		animator.SetBool("superSkillFlg", false );
 	}
 	
 	/// <summary>
@@ -720,19 +679,19 @@ public class Character_Base : MonoBehaviour {
 	/// <summary>
 	/// アニメーションコントローラー用メソッド
 	/// </summary>
-	private void SetAirAttack1FlgFalse() {
+	private void SetJumpAttack1FlgFalse() {
 		jumpAttack1Flg = false;
-		this.AttackEnd ("airAttack1Flg");
-		animator.SetBool("airAttack1Flg", false );
+		this.AttackEnd ("jumpAttack1Flg");
+		animator.SetBool("jumpAttack1Flg", false );
 	}
 	
 	/// <summary>
 	/// アニメーションコントローラー用メソッド
 	/// </summary>
-	private void SetAirAttack2FlgFalse() {
+	private void SetJumpAttack2FlgFalse() {
 		jumpAttack2Flg = false;
-		this.AttackEnd ("airAttack2Flg");
-		animator.SetBool("airAttack2Flg", false );
+		this.AttackEnd ("jumpAttack2Flg");
+		animator.SetBool("jumpAttack2Flg", false );
 	}
 	
 	/// <summary>
