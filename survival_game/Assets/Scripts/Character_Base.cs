@@ -116,34 +116,6 @@ public class Character_Base : MonoBehaviour {
 	protected void FixedUpdate() {
 		SetFlgOnGround ();
 
-		if(!jumpSpeed.Equals(0)) 
-		{
-			vi = jumpSpeed;
-			jumpSpeed = 0;
-		}
-		t = Time.deltaTime;
-		vf= vi + Physics_Const.GRAVITY_ACCELERATION * t;            //最終速度＝初速度＋加速度×時間
-		float deltaY = 0.5f*(vi+vf)*t;    //変位＝１／２（初速度＋最終速度）×時間
-		//移動量が正の場合
-		if(deltaY >= 0f) {
-			//上にあるものの距離を取得
-			float upDirection = RayCastDistance(Vector2.up);
-			if(!float.IsNegativeInfinity(upDirection) && Mathf.Abs(deltaY) >= upDirection) {
-				deltaY = upDirection;
-				vi = 0;
-			}
-		}
-		else {
-			//下にあるものの距離を取得
-			float downDirection = RayCastDistance(-Vector2.up);
-			if(!float.IsNegativeInfinity(downDirection) && Mathf.Abs(deltaY) >= downDirection) {
-				deltaY = -downDirection;
-				vi = 0;
-			}
-		}
-		vi = vf;
-		this.transform.Translate (new Vector3(0,deltaY,0));
-
 		//回避行動
 		if(avoidFlg){
 			float deltaX = avoidSpeed * t *(rightDirectionFlg ? 1 : -1);
@@ -163,6 +135,36 @@ public class Character_Base : MonoBehaviour {
 			}
 			
 			this.transform.Translate (new Vector3(deltaX,0,0));
+		}
+		else {
+			if(!jumpSpeed.Equals(0)) 
+			{
+				vi = jumpSpeed;
+				jumpSpeed = 0;
+			}
+			t = Time.deltaTime;
+			vf= vi + Physics_Const.GRAVITY_ACCELERATION * t;            //最終速度＝初速度＋加速度×時間
+			float deltaY = 0.5f*(vi+vf)*t;    //変位＝１／２（初速度＋最終速度）×時間
+			//移動量が正の場合
+			if(deltaY >= 0f) {
+				//上にあるものの距離を取得
+				float upDirection = RayCastDistance(Vector2.up);
+				if(!float.IsNegativeInfinity(upDirection) && Mathf.Abs(deltaY) >= upDirection) {
+					deltaY = upDirection;
+					vi = 0;
+				}
+			}
+			else {
+				//下にあるものの距離を取得
+				float downDirection = RayCastDistance(-Vector2.up);
+				if(!float.IsNegativeInfinity(downDirection) && Mathf.Abs(deltaY) >= downDirection) {
+					deltaY = -downDirection;
+					vi = 0;
+				}
+			}
+			vi = vf;
+			this.transform.Translate (new Vector3(0,deltaY,0));
+
 		}
 	}
 
@@ -382,25 +384,6 @@ public class Character_Base : MonoBehaviour {
 		avoidSpeed = 2f;
 	}
 
-	/// <summary>
-	/// 回避終了
-	/// </summary>
-	protected void AvoidEnd(){
-		print ("AvoidEnd!!");
-		this.avoidFlg = false;
-		this.mutekiFlg = false;
-		avoidSpeed = 0f;
-	}
-
-//	/// <summary>
-//	/// 回避終了
-//	/// </summary>
-//	protected void AvoidEnd(){
-//		print ("AvoidEnd!!");
-//		this.avoidFlg = false;
-//		this.mutekiFlg = false;
-//	}
-	
 	/// <summary>
 	/// パリィ
 	/// </summary>
@@ -670,6 +653,8 @@ public class Character_Base : MonoBehaviour {
 	private void SetAvoidFlgFalse() {
 		avoidFlg = false;
 		animator.SetBool("avoidFlg", false );
+		avoidSpeed = 0;
+		vi = 0;
 	}
 	
 	/// <summary>
