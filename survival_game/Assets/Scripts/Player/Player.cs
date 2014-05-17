@@ -64,6 +64,7 @@ public class Player : Character_Base {
 			}
 
 			//攻撃
+<<<<<<< HEAD
 			//地上攻撃
 			if (onGroundFlg) {
 				if ((Input.GetButtonDown ("Fire4"))
@@ -123,6 +124,64 @@ public class Player : Character_Base {
 					if (jumpAttack1Flg) {
 						//ジャンプ攻撃２
 						JumpAttack2();
+=======
+			//回避中はできない
+			if (!this.avoidFlg) {
+				//地上攻撃
+				if (onGroundFlg) {
+					if ((Input.GetButtonDown ("Fire4"))
+							&&(skill1Flg
+							|| skill2Flg)) {
+						//必殺攻撃
+						SuperSkill();
+
+					} else if ((Input.GetButtonDown ("Fire2"))
+							&&(neutralFlg
+							|| attack1Flg
+							|| attack2Flg
+							|| attack3Flg
+					   		|| skill2Flg)) {
+						//技攻撃１
+						Skill1();
+
+					} else if ((Input.GetButtonDown ("Fire3"))
+							&&(neutralFlg
+							|| attack1Flg
+							|| attack2Flg
+							|| attack3Flg
+							|| skill1Flg)) {
+						//技攻撃２
+						Skill1();
+
+					} else if (Input.GetButtonDown ("Fire1")) {
+						if (parryAttack1Flg) {
+							//パリィ攻撃２
+							ParryAttack2();
+
+						} else if (parrySuccessFlg) {
+							//パリィ攻撃１
+							ParryAttack1();
+
+						} else if (attack2Flg) {
+							//通常攻撃３
+							Attack3();
+
+						} else if (attack1Flg) {
+							//通常攻撃２
+							Attack2();
+					
+						} else {
+							//通常攻撃１
+							Attack1();
+						}
+					}
+				} else {
+					//空中攻撃
+					if (Input.GetButtonDown ("Fire1")) {
+						if (jumpAttack1Flg) {
+							//ジャンプ攻撃２
+							JumpAttack2();
+>>>>>>> 8886726bb642faccf6a2038f18384026f78b890f
 
 					} else {
 						//ジャンプ攻撃１
@@ -206,6 +265,7 @@ public class Player : Character_Base {
 	
 	//攻撃１
 	private void Attack1 () {
+		print ("Player Attack1");
 		InitAllFlg();
 		attack1Flg = true;
 		animator.SetBool("attack1Flg", true );
@@ -213,6 +273,7 @@ public class Player : Character_Base {
 
 	//攻撃２
 	private void Attack2 () {
+		print ("Player Attack2");
 		InitAllFlg();
 		attack2Flg = true;
 		animator.SetBool("attack2Flg", true );
@@ -220,6 +281,7 @@ public class Player : Character_Base {
 
 	//攻撃３
 	private void Attack3 () {
+		print ("Player Attack3");
 		InitAllFlg();
 		attack3Flg = true;
 		animator.SetBool("attack3Flg", true );
@@ -227,6 +289,7 @@ public class Player : Character_Base {
 	
 	//パリィ攻撃１
 	private void ParryAttack1 () {
+		print ("Player ParryAttack1");
 		InitAllFlg();
 		parryAttack1Flg = true;
 		animator.SetBool("parryAttack1Flg", true );
@@ -234,6 +297,7 @@ public class Player : Character_Base {
 	
 	//パリィ攻撃２
 	private void ParryAttack2 () {
+		print ("Player ParryAttack2");
 		InitAllFlg();
 		parryAttack2Flg = true;
 		animator.SetBool("parryAttack2Flg", true );
@@ -241,6 +305,7 @@ public class Player : Character_Base {
 	
 	//空中攻撃１
 	private void JumpAttack1 () {
+		print ("Player JumpAttack1");
 		InitAllFlg();
 		jumpAttack1Flg = true;
 		animator.SetBool("jumpAttack1Flg", true );
@@ -248,6 +313,7 @@ public class Player : Character_Base {
 	
 	//空中攻撃２
 	private void JumpAttack2 () {
+		print ("Player JumpAttack2");
 		InitAllFlg();
 		jumpAttack2Flg = true;
 		animator.SetBool("jumpAttack2Flg", true );
@@ -255,20 +321,15 @@ public class Player : Character_Base {
 	
 	//スキル１
 	private void Skill1 () {
+		print ("Player Skill");
 		InitAllFlg();
 		skill1Flg = true;
 		animator.SetBool("skill1Flg", true );
 	}
 	
-	//スキル２
-	private void Skill2 () {
-		InitAllFlg();
-		skill2Flg = true;
-		animator.SetBool("skill2Flg", true );
-	}
-	
 	//スーパースキル
 	private void SuperSkill () {
+		print ("Player SuperSkill");
 		InitAllFlg();
 		superSkillFlg = true;
 		animator.SetBool("superSkillFlg", true );

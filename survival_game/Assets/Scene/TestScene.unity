@@ -516,9 +516,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52887bb0b26ebf842a039a8022382422, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defensePrefab: {fileID: 100000, guid: d5e6ba47d93a92740b10427c53c73543, type: 2}
-  parryPrefab: {fileID: 100000, guid: c618c861a0b0af648bb64e34740fed30, type: 2}
-  attack1Prefab: {fileID: 100000, guid: 55418912924c5ab4e944381748b4ca7d, type: 2}
+  defensePrefab: {fileID: 0}
+  parryPrefab: {fileID: 0}
+  attack1Prefab: {fileID: 0}
 --- !u!58 &1155256240
 CircleCollider2D:
   m_ObjectHideFlags: 0

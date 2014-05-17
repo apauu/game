@@ -14,7 +14,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: airFlg
+  - m_Name: onGroundFlg
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -92,13 +92,13 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: airAttack1Flg
+  - m_Name: jumpAttack1Flg
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: airAttack2Flg
+  - m_Name: jumpAttack2Flg
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -175,6 +175,28 @@ Transition:
     m_ConditionEvent: attack3Flg
     m_EventTreshold: 0
     m_ExitTime: .899999976
+  m_Atomic: 1
+  m_Solo: 0
+  m_Mute: 1
+--- !u!1101 &110105211
+Transition:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_SrcState: {fileID: 110222907}
+  m_DstState: {fileID: 110296963}
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: onGroundFlg
+    m_EventTreshold: 0
+    m_ExitTime: 1
+  - m_ConditionMode: 2
+    m_ConditionEvent: jumpAttack2Flg
+    m_EventTreshold: 0
+    m_ExitTime: 1
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 0
@@ -280,20 +302,20 @@ Transition:
   m_TransitionOffset: 0
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: airAttack1Flg
+    m_ConditionEvent: jumpAttack1Flg
     m_EventTreshold: 0
     m_ExitTime: .899999976
   - m_ConditionMode: 2
-    m_ConditionEvent: airAttack2Flg
+    m_ConditionEvent: jumpAttack2Flg
     m_EventTreshold: 0
     m_ExitTime: .899999976
-  - m_ConditionMode: 2
-    m_ConditionEvent: airFlg
+  - m_ConditionMode: 1
+    m_ConditionEvent: onGroundFlg
     m_EventTreshold: 0
     m_ExitTime: .899999976
   m_Atomic: 1
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
 --- !u!1101 &110116156
 Transition:
   m_ObjectHideFlags: 3
@@ -333,7 +355,7 @@ Transition:
     m_ExitTime: .899999976
   m_Atomic: 1
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
 --- !u!1101 &110118405
 Transition:
   m_ObjectHideFlags: 3
@@ -351,6 +373,84 @@ Transition:
     m_ExitTime: 1
   m_Atomic: 1
   m_Solo: 0
+  m_Mute: 0
+--- !u!1101 &110119293
+Transition:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_SrcState: {fileID: 0}
+  m_DstState: {fileID: 110213675}
+  m_TransitionDuration: .100000001
+  m_TransitionOffset: 0
+  m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: walkFlg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 1
+    m_ConditionEvent: onGroundFlg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 2
+    m_ConditionEvent: attack1Flg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 2
+    m_ConditionEvent: attack2Flg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 2
+    m_ConditionEvent: attack3Flg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 2
+    m_ConditionEvent: damageFlg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 2
+    m_ConditionEvent: skill1Flg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 2
+    m_ConditionEvent: dashFlg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 2
+    m_ConditionEvent: parryFlg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 2
+    m_ConditionEvent: parryAttack1Flg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 2
+    m_ConditionEvent: parryAttack2Flg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 2
+    m_ConditionEvent: superSkillFlg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 2
+    m_ConditionEvent: avoidFlg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 2
+    m_ConditionEvent: defenseFlg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 2
+    m_ConditionEvent: jumpAttack1Flg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 2
+    m_ConditionEvent: jumpAttack2Flg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  m_Atomic: 1
+  m_Solo: 1
   m_Mute: 0
 --- !u!1101 &110119793
 Transition:
@@ -381,15 +481,15 @@ Transition:
   m_TransitionDuration: .100000001
   m_TransitionOffset: 0
   m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: getDamageFlg
+  - m_ConditionMode: 2
+    m_ConditionEvent: onGroundFlg
     m_EventTreshold: 0
     m_ExitTime: .899999976
   - m_ConditionMode: 1
-    m_ConditionEvent: airFlg
+    m_ConditionEvent: damageFlg
     m_EventTreshold: 0
     m_ExitTime: .899999976
-  m_Atomic: 1
+  m_Atomic: 0
   m_Solo: 0
   m_Mute: 0
 --- !u!1101 &110121411
@@ -403,8 +503,8 @@ Transition:
   m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: airFlg
+  - m_ConditionMode: 2
+    m_ConditionEvent: onGroundFlg
     m_EventTreshold: 0
     m_ExitTime: 1
   m_Atomic: 1
@@ -464,6 +564,24 @@ Transition:
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 0
+--- !u!1101 &110124205
+Transition:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_SrcState: {fileID: 110213675}
+  m_DstState: {fileID: 110213675}
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_Conditions:
+  - m_ConditionMode: 5
+    m_ConditionEvent: 
+    m_EventTreshold: 0
+    m_ExitTime: 1
+  m_Atomic: 1
+  m_Solo: 0
+  m_Mute: 0
 --- !u!1101 &110124470
 Transition:
   m_ObjectHideFlags: 3
@@ -479,8 +597,8 @@ Transition:
     m_ConditionEvent: avoidFlg
     m_EventTreshold: 0
     m_ExitTime: .899999976
-  - m_ConditionMode: 1
-    m_ConditionEvent: airFlg
+  - m_ConditionMode: 2
+    m_ConditionEvent: onGroundFlg
     m_EventTreshold: 0
     m_ExitTime: .899999976
   m_Atomic: 1
@@ -507,7 +625,7 @@ Transition:
     m_ExitTime: .899999976
   m_Atomic: 1
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
 --- !u!1101 &110127306
 Transition:
   m_ObjectHideFlags: 3
@@ -583,7 +701,7 @@ Transition:
     m_ExitTime: .899999976
   m_Atomic: 1
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
 --- !u!1101 &110129599
 Transition:
   m_ObjectHideFlags: 3
@@ -655,6 +773,28 @@ Transition:
     m_ExitTime: .899999976
   m_Atomic: 1
   m_Solo: 0
+  m_Mute: 1
+--- !u!1101 &110136913
+Transition:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_SrcState: {fileID: 110207316}
+  m_DstState: {fileID: 110296963}
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: onGroundFlg
+    m_EventTreshold: 0
+    m_ExitTime: 1
+  - m_ConditionMode: 2
+    m_ConditionEvent: jumpAttack1Flg
+    m_EventTreshold: 0
+    m_ExitTime: 1
+  m_Atomic: 1
+  m_Solo: 0
   m_Mute: 0
 --- !u!1101 &110138009
 Transition:
@@ -667,13 +807,13 @@ Transition:
   m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_Conditions:
-  - m_ConditionMode: 5
+  - m_ConditionMode: 2
     m_ConditionEvent: damageFlg
     m_EventTreshold: 0
     m_ExitTime: 1
   m_Atomic: 1
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
 --- !u!1101 &110138382
 Transition:
   m_ObjectHideFlags: 3
@@ -731,7 +871,7 @@ Transition:
     m_ExitTime: .899999976
   m_Atomic: 1
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
 --- !u!1101 &110140440
 Transition:
   m_ObjectHideFlags: 3
@@ -747,6 +887,24 @@ Transition:
     m_ConditionEvent: skill1Flg
     m_EventTreshold: 0
     m_ExitTime: .899999976
+  m_Atomic: 1
+  m_Solo: 0
+  m_Mute: 0
+--- !u!1101 &110141214
+Transition:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_SrcState: {fileID: 110266296}
+  m_DstState: {fileID: 110231868}
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: superSkillFlg
+    m_EventTreshold: 0
+    m_ExitTime: 1
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 0
@@ -785,7 +943,7 @@ Transition:
     m_ExitTime: .899999976
   m_Atomic: 1
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
 --- !u!1101 &110143251
 Transition:
   m_ObjectHideFlags: 3
@@ -857,7 +1015,7 @@ Transition:
     m_ExitTime: .899999976
   m_Atomic: 1
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
 --- !u!1101 &110145315
 Transition:
   m_ObjectHideFlags: 3
@@ -960,11 +1118,11 @@ Transition:
   m_TransitionOffset: 0
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: airAttack1Flg
+    m_ConditionEvent: jumpAttack1Flg
     m_EventTreshold: 0
     m_ExitTime: .899999976
-  - m_ConditionMode: 1
-    m_ConditionEvent: airFlg
+  - m_ConditionMode: 2
+    m_ConditionEvent: onGroundFlg
     m_EventTreshold: 0
     m_ExitTime: .899999976
   m_Atomic: 1
@@ -1035,13 +1193,13 @@ Transition:
   m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_Conditions:
-  - m_ConditionMode: 5
-    m_ConditionEvent: dashFlg
+  - m_ConditionMode: 2
+    m_ConditionEvent: damageFlg
     m_EventTreshold: 0
     m_ExitTime: 1
   m_Atomic: 1
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
 --- !u!1101 &110157029
 Transition:
   m_ObjectHideFlags: 3
@@ -1072,11 +1230,11 @@ Transition:
   m_TransitionOffset: 0
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: airAttack2Flg
+    m_ConditionEvent: jumpAttack2Flg
     m_EventTreshold: 0
     m_ExitTime: .899999976
-  - m_ConditionMode: 1
-    m_ConditionEvent: airFlg
+  - m_ConditionMode: 2
+    m_ConditionEvent: onGroundFlg
     m_EventTreshold: 0
     m_ExitTime: .899999976
   m_Atomic: 1
@@ -1190,6 +1348,28 @@ Transition:
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 0
+--- !u!1101 &110161660
+Transition:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_SrcState: {fileID: 0}
+  m_DstState: {fileID: 110227093}
+  m_TransitionDuration: .100000001
+  m_TransitionOffset: 0
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: damageFlg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  - m_ConditionMode: 1
+    m_ConditionEvent: onGroundFlg
+    m_EventTreshold: 0
+    m_ExitTime: .899999976
+  m_Atomic: 0
+  m_Solo: 0
+  m_Mute: 0
 --- !u!1101 &110161990
 Transition:
   m_ObjectHideFlags: 3
@@ -1243,7 +1423,7 @@ Transition:
     m_ExitTime: .899999976
   m_Atomic: 1
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
 --- !u!1101 &110166659
 Transition:
   m_ObjectHideFlags: 3
@@ -1259,6 +1439,42 @@ Transition:
     m_ConditionEvent: dashFlg
     m_EventTreshold: 0
     m_ExitTime: .899999976
+  m_Atomic: 1
+  m_Solo: 0
+  m_Mute: 1
+--- !u!1101 &110167514
+Transition:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_SrcState: {fileID: 110231868}
+  m_DstState: {fileID: 110231868}
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_Conditions:
+  - m_ConditionMode: 5
+    m_ConditionEvent: 
+    m_EventTreshold: 0
+    m_ExitTime: 1
+  m_Atomic: 1
+  m_Solo: 0
+  m_Mute: 0
+--- !u!1101 &110168581
+Transition:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_SrcState: {fileID: 110266296}
+  m_DstState: {fileID: 110231868}
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_Conditions:
+  - m_ConditionMode: 5
+    m_ConditionEvent: 
+    m_EventTreshold: 0
+    m_ExitTime: 1
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 0
@@ -1346,16 +1562,16 @@ Transition:
   m_TransitionOffset: 0
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: airAttack2Flg
+    m_ConditionEvent: jumpAttack2Flg
     m_EventTreshold: 0
     m_ExitTime: .899999976
-  - m_ConditionMode: 2
-    m_ConditionEvent: airFlg
+  - m_ConditionMode: 1
+    m_ConditionEvent: onGroundFlg
     m_EventTreshold: 0
     m_ExitTime: .899999976
   m_Atomic: 1
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
 --- !u!1101 &110171379
 Transition:
   m_ObjectHideFlags: 3
@@ -1403,13 +1619,13 @@ Transition:
   m_TransitionDuration: .100000001
   m_TransitionOffset: 0
   m_Conditions:
-  - m_ConditionMode: 5
-    m_ConditionEvent: dashFlg
+  - m_ConditionMode: 1
+    m_ConditionEvent: onGroundFlg
     m_EventTreshold: 0
     m_ExitTime: .899999976
   m_Atomic: 1
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
 --- !u!1101 &110177794
 Transition:
   m_ObjectHideFlags: 3
@@ -1481,7 +1697,7 @@ Transition:
     m_ExitTime: .899999976
   m_Atomic: 1
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
 --- !u!1101 &110181799
 Transition:
   m_ObjectHideFlags: 3
@@ -1515,28 +1731,6 @@ Transition:
     m_ConditionEvent: attack1Flg
     m_EventTreshold: 0
     m_ExitTime: 1
-  m_Atomic: 1
-  m_Solo: 0
-  m_Mute: 0
---- !u!1101 &110183892
-Transition:
-  m_ObjectHideFlags: 3
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_SrcState: {fileID: 0}
-  m_DstState: {fileID: 110227093}
-  m_TransitionDuration: .100000001
-  m_TransitionOffset: 0
-  m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: getDamageFlg
-    m_EventTreshold: 0
-    m_ExitTime: .899999976
-  - m_ConditionMode: 2
-    m_ConditionEvent: airFlg
-    m_EventTreshold: 0
-    m_ExitTime: .899999976
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 0
@@ -1738,6 +1932,24 @@ Transition:
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 0
+--- !u!1101 &110195054
+Transition:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_SrcState: {fileID: 110231868}
+  m_DstState: {fileID: 110231868}
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_Conditions:
+  - m_ConditionMode: 5
+    m_ConditionEvent: 
+    m_EventTreshold: 0
+    m_ExitTime: 1
+  m_Atomic: 1
+  m_Solo: 0
+  m_Mute: 0
 --- !u!1101 &110195463
 Transition:
   m_ObjectHideFlags: 3
@@ -1753,24 +1965,6 @@ Transition:
     m_ConditionEvent: jump
     m_EventTreshold: 0
     m_ExitTime: 1
-  m_Atomic: 1
-  m_Solo: 0
-  m_Mute: 0
---- !u!1101 &110199374
-Transition:
-  m_ObjectHideFlags: 3
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_SrcState: {fileID: 0}
-  m_DstState: {fileID: 110231868}
-  m_TransitionDuration: .100000001
-  m_TransitionOffset: 0
-  m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: superSkillFlg
-    m_EventTreshold: 0
-    m_ExitTime: .899999976
   m_Atomic: 1
   m_Solo: 0
   m_Mute: 0
@@ -1803,13 +1997,13 @@ Transition:
   m_TransitionDuration: .100000001
   m_TransitionOffset: 0
   m_Conditions:
-  - m_ConditionMode: 2
+  - m_ConditionMode: 5
     m_ConditionEvent: superSkillFlg
     m_EventTreshold: 0
     m_ExitTime: .899999976
   m_Atomic: 1
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
 --- !u!1102 &110200000
 State:
   m_ObjectHideFlags: 3
@@ -1875,7 +2069,7 @@ State:
   - {fileID: 0}
   - {fileID: 0}
   m_ParentStateMachine: {fileID: 110740345}
-  m_Position: {x: 528, y: 96, z: 0}
+  m_Position: {x: 312, y: 84, z: 0}
   m_IKOnFeet: 0
   m_Mirror: 0
   m_Tag: 
@@ -2393,9 +2587,9 @@ StateMachine:
     data:
       first: {fileID: 0}
       second:
-      - {fileID: 110183892}
       - {fileID: 110120881}
-      - {fileID: 110199374}
+      - {fileID: 110119293}
+      - {fileID: 110161660}
     data:
       first: {fileID: 110213675}
       second:
@@ -2424,6 +2618,7 @@ StateMachine:
       - {fileID: 110116084}
       - {fileID: 110186504}
       - {fileID: 110131402}
+      - {fileID: 110136913}
     data:
       first: {fileID: 110215732}
       second:
@@ -2444,6 +2639,7 @@ StateMachine:
       - {fileID: 110170902}
       - {fileID: 110105395}
       - {fileID: 110190379}
+      - {fileID: 110105211}
     data:
       first: {fileID: 110223738}
       second:
@@ -2482,6 +2678,7 @@ StateMachine:
       first: {fileID: 110266296}
       second:
       - {fileID: 110145216}
+      - {fileID: 110141214}
     data:
       first: {fileID: 110277992}
       second:
