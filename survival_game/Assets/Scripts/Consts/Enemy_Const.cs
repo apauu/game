@@ -53,7 +53,7 @@ public class Enemy_Const{
 	/// SAITO定数
 	/// 攻撃する距離
 	/// </summary>
-	public const float SAITO_ATTACK_DISTANCE = 0.5f;
+	public const float SAITO_ATTACK_DISTANCE = 1.5f;
 	/// <summary>
 	/// SAITO定数
 	/// 攻撃１前硬直時間

@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   is_right_local: 1
-  spd: .300000012
+  spd: .00999999978
   damagePoint: 1
 --- !u!1001 &100100000
 Prefab:

@@ -61,7 +61,7 @@ public class Player : Character_Base {
 					if(Input.GetButton("Horizontal")) {
 						side = Input.GetAxisRaw ("Horizontal");
 					}
-					StartCoroutine(this.Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF, side));
+					this.Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF, side);
 				}
 			}
 

@@ -6,7 +6,7 @@ public class Attack1_Object : MonoBehaviour {
 	// 左右方向
 	public bool is_right_local = true;
 	// 進行スピード
-	public float spd = 0.3f;
+	public float spd = 0.01f;
 	// 威力
 	public float damagePoint = 1f;
 
@@ -18,9 +18,9 @@ public class Attack1_Object : MonoBehaviour {
 	void Update () {
 		//受け取った方向を元に攻撃方向を決定
 		if(is_right_local){
-			//transform.Translate(Vector3.right * spd);
+			transform.Translate(Vector3.right * spd);
 		}else{
-			//transform.Translate(Vector3.left * spd);
+			transform.Translate(Vector3.left * spd);
 		}
 	}
 

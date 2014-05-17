@@ -90,7 +90,7 @@ public class Saito : Enemy_Base {
 
 	private void GetAttack() {
 		print ("EnemyGetAttack!!");
-			if(Mathf.Abs(nowDistanceX) < Enemy_Const.SAITO_ATTACK_DISTANCE) {
+		if(Mathf.Abs(nowDistanceX) < Enemy_Const.SAITO_ATTACK_DISTANCE) {
 			base.Attack (attack1Prefab, Enemy_Const.SAITO_ATTACK1_DESTROY, Enemy_Const.SAITO_ATTACK1_BEFORE, Enemy_Const.SAITO_ATTACK1_STIFF);
 			this.getAttackFlg = false;
 		} 

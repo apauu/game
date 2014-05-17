@@ -83,8 +83,10 @@ public class Character_Base : MonoBehaviour {
 
 	//重力計算用
 	private float vi = 0,vf,t;
-
+	//ジャンプ速度
 	private float jumpSpeed = 0;
+	//回避速度
+	private float avoidSpeed = 0;
 
 	protected void Start () {
 
@@ -103,10 +105,11 @@ public class Character_Base : MonoBehaviour {
 	}
 
 	protected void Update(){
-		SetFlgOnGround ();
+
 	}
 
 	protected void FixedUpdate() {
+		SetFlgOnGround ();
 
 		if(!jumpSpeed.Equals(0)) 
 		{
@@ -135,6 +138,27 @@ public class Character_Base : MonoBehaviour {
 		}
 		vi = vf;
 		this.transform.Translate (new Vector3(0,deltaY,0));
+
+		//回避行動
+		if(avoidFlg){
+			float deltaX = avoidSpeed * t *(rightDirectionFlg ? 1 : -1);
+			if(deltaX >= 0) {
+				//右にあるものの距離を取得
+				float rightDirection = RayCastDistance(Vector2.right);
+				if(!float.IsNegativeInfinity(rightDirection) && Mathf.Abs(deltaX) >= rightDirection) {
+					deltaX = rightDirection;
+				}
+			}
+			else {
+				//左にあるものの距離を取得
+				float leftDirection = RayCastDistance(-Vector2.right);
+				if(!float.IsNegativeInfinity(leftDirection) && Mathf.Abs(deltaX) >= leftDirection) {
+					deltaX = leftDirection;
+				}
+			}
+			
+			this.transform.Translate (new Vector3(deltaX,0,0));
+		}
 	}
 
 
@@ -149,7 +173,6 @@ public class Character_Base : MonoBehaviour {
 		RaycastHit2D hit = new RaycastHit2D();
 		//LayerMask mask = -1 - 1 << gameObject.layer;
 		LayerMask mask = (1 << LayerMask.NameToLayer("Background"));
-		//１M以内にあるものを検索
 		hit = Physics2D.Raycast (new Vector2(transform.position.x,transform.position.y),direction,float.PositiveInfinity,mask);
 		if(hit != null && hit.collider != null){
 			if(hit.collider.gameObject.tag.Equals(Tag_Const.GROUND)){
@@ -171,10 +194,14 @@ public class Character_Base : MonoBehaviour {
 			hit = Physics2D.Raycast (new Vector2(transform.position.x,transform.position.y),-Vector2.up,this.CircleCollider.radius+0.01f,mask);
 			if(hit != null && hit.collider != null){
 				if(hit.collider.gameObject.tag.Equals(Tag_Const.GROUND)){
-					onGroundFlg = true;
-					jmpFlg = true;
-					doubleJmpFlg = true;
-					vi = 0;
+					if(!onGroundFlg) {
+						onGroundFlg = true;
+						jmpFlg = true;
+						doubleJmpFlg = true;
+						vi = 0;
+						//硬直時間
+						StartCoroutine(WaitForStiffTime (0.1f));
+					}
 				}
 				else
 				{
@@ -275,6 +302,9 @@ public class Character_Base : MonoBehaviour {
 	/// </summary>
 	/// <param name="stiffTime">前硬直時間</param>
 	protected void Defense (float stiffTime) {
+
+		//TODO:フラグで行動をとれるかの判定を追加
+
 		print ("Defense!!");
 		defenseFlg = true;
 
@@ -282,7 +312,7 @@ public class Character_Base : MonoBehaviour {
 
 		if(this.defenseFlg) {
 			//盾オブジェクト生成
-			defenseObj = Instantiate(this.defensePrefab, new Vector2(transform.position.x + (1f * h), transform.position.y)
+			defenseObj = Instantiate(this.defensePrefab, new Vector2(transform.position.x + (0.5f * h), transform.position.y)
 			                         , Quaternion.identity) as GameObject;
 			//親を設定
 			defenseObj.transform.parent = this.transform;
@@ -301,7 +331,7 @@ public class Character_Base : MonoBehaviour {
 	/// <summary>
 	/// 防御終了
 	/// </summary>
-	protected void DefenseEnd () {
+	public void DefenseEnd () {
 		print ("DefenseEnd!!");
 		defenseFlg = false;
 		if(this.defenseObj != null) {
@@ -314,22 +344,14 @@ public class Character_Base : MonoBehaviour {
 	/// </summary>
 	/// <param name="avoidTime">無敵時間</param>
 	/// <param name="stiffTime">硬直時間</param>
-	protected IEnumerator Avoid (float avoidTime, float stiffTime, float side) {
+	protected void Avoid (float avoidTime, float stiffTime, float side) {
+
+		//TODO:フラグで行動をとれるかの判定を追加
+
 		print ("Avoid!!");
 		avoidFlg = true;
 		mutekiFlg = true;
-		//移動TweenのHashTable
-		Hashtable table = new Hashtable();
-		table.Add ("x", 15f * side);
-		//無敵時間より少し短い時間で移動する
-		table.Add ("time", avoidTime-0.03f);
-		table.Add ("easetype", iTween.EaseType.easeInOutSine);
-		iTween.MoveBy(gameObject, table);
-		//無敵時間
-		yield return new WaitForSeconds (avoidTime);
-		this.avoidFlg = false;
-		this.mutekiFlg = false;
-
+		avoidSpeed = 2f;
 	}
 
 	/// <summary>
@@ -339,6 +361,7 @@ public class Character_Base : MonoBehaviour {
 		print ("AvoidEnd!!");
 		this.avoidFlg = false;
 		this.mutekiFlg = false;
+		avoidSpeed = 0f;
 	}
 	
 	/// <summary>
@@ -347,6 +370,9 @@ public class Character_Base : MonoBehaviour {
 	/// <param name="destroyTime">判定の出ている時間</param>
 	/// <param name="stiffTime">硬直時間</param>
 	protected void Parry (float destroyTime, float stiffTime) {
+
+		//TODO:フラグで行動をとれるかの判定を追加
+
 		print ("Parry!!");
 		parryFlg = true;
 
@@ -396,6 +422,9 @@ public class Character_Base : MonoBehaviour {
 	/// <param name="beforeActionTime">行動前硬直</param>
 	/// <param name="stiffTime">硬直時間</param>
 	protected void Attack (GameObject prefab, float destroyTime, float beforeActionTime, float stiffTime) {
+
+		//TODO:フラグで行動をとれるかの判定を追加
+
 		print ("Attack!!");
 		attack1Flg = true;
 		float h = 0;
@@ -406,7 +435,7 @@ public class Character_Base : MonoBehaviour {
 			h = -1;
 		}
 		//攻撃生成
-		attackObj = Instantiate(prefab, new Vector2(transform.position.x + 1 * h , transform.position.y)
+		attackObj = Instantiate(prefab, new Vector2(transform.position.x + 0 * h , transform.position.y)
 		                         , Quaternion.identity) as GameObject;
 		//親を設定
 		attackObj.transform.parent = this.transform;
@@ -461,25 +490,29 @@ public class Character_Base : MonoBehaviour {
 	/// <param name="direction">進む方向　右　＝　true</param>
 	protected void SideMove(float speed,bool direction){
 
-		float deltaX = speed * t *(direction ? 1 : -1);
-
-		if(deltaX >= 0) {
-			//右にあるものの距離を取得
-			float rightDirection = RayCastDistance(Vector2.right);
-			if(!float.IsNegativeInfinity(rightDirection) && Mathf.Abs(deltaX) >= rightDirection) {
-				deltaX = rightDirection;
+		//動ける場合
+		if(!(stiffFlg || attack1Flg || attack2Flg || attack3Flg || jumpAttack1Flg || jumpAttack2Flg ||
+		     parryFlg || parryAttack1Flg || parryAttack2Flg || avoidFlg || skill1Flg || skill2Flg || superSkillFlg)) {
+			float deltaX = speed * t *(direction ? 1 : -1);
+			
+			if(deltaX >= 0) {
+				//右にあるものの距離を取得
+				float rightDirection = RayCastDistance(Vector2.right);
+				if(!float.IsNegativeInfinity(rightDirection) && Mathf.Abs(deltaX) >= rightDirection) {
+					deltaX = rightDirection;
+				}
 			}
-		}
-		else {
-			//左にあるものの距離を取得
-			float leftDirection = RayCastDistance(-Vector2.right);
-			if(!float.IsNegativeInfinity(leftDirection) && Mathf.Abs(deltaX) >= leftDirection) {
-				deltaX = leftDirection;
+			else {
+				//左にあるものの距離を取得
+				float leftDirection = RayCastDistance(-Vector2.right);
+				if(!float.IsNegativeInfinity(leftDirection) && Mathf.Abs(deltaX) >= leftDirection) {
+					deltaX = leftDirection;
+				}
 			}
+			this.rightDirectionFlg = direction;
+			this.transform.Translate (new Vector3(deltaX,0,0));
+			this.transform.localScale = new Vector3 ((rightDirectionFlg ? -1 : 1), 1, 1);
 		}
-		this.rightDirectionFlg = direction;
-		this.transform.Translate (new Vector3(deltaX,0,0));
-		this.transform.localScale = new Vector3 ((rightDirectionFlg ? -1 : 1), 1, 1);
 	}
 
 	/// <summary>
@@ -488,7 +521,9 @@ public class Character_Base : MonoBehaviour {
 	/// <param name="speed">Speed.</param>
 	protected void JumpMove(float speed) {
 		//ジャンプ速度を設定
-		jumpSpeed = speed;
+		if(!jmpFlg || !doubleJmpFlg) {
+			jumpSpeed = speed;
+		}
 	}
 
 	//攻撃関係のフラグを全て初期化する
