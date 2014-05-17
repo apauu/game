@@ -50,3 +50,11 @@ AnimationClip:
   m_EditorCurves: []
   m_EulerEditorCurves: []
   m_Events: []
+  m_Events:
+  - time: .5
+    functionName: SetAttack1FlgFalse
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
