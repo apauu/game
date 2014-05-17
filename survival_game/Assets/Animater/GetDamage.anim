@@ -63,7 +63,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: .833333313
-    functionName: SetDamageFlgFalse
+    functionName: InitAllFlg
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

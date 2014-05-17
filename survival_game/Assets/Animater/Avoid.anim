@@ -58,7 +58,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: .583333313
-    functionName: SetAvoidFlgFalse
+    functionName: InitAllFlg
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -38,91 +38,100 @@ public class Player : Character_Base {
 	/// </summary>
 	void Update () {
 		base.Update ();
-		//防御
-		if (Input.GetButtonDown ("Defense")) {
-			base.Defense(Player_Const.DEFFENCE_BEFORE);
-		}
 
-		//パリィ
-		if (Input.GetButtonDown ("Parry")) {
-			base.Parry(Player_Const.PARRY_DESTROY, Player_Const.PARRY_STIFF);
-		}
+		if (!defenseFlg
+		    && !parryFlg
+		    && !avoidFlg
+		    && !superSkillFlg) {
 
-		//回避
-		if (Input.GetButtonDown ("Avoid")) {
-			float side = rightDirectionFlg ? 1 : -1;
-			if(Input.GetButton("Horizontal")) {
-				side = Input.GetAxisRaw ("Horizontal");
+			//防御
+			if (Input.GetButtonDown ("Defense")) {
+				base.Defense(Player_Const.DEFFENCE_BEFORE);
+			} else 
+
+			//パリィ
+			if (Input.GetButtonDown ("Parry")) {
+				base.Parry(Player_Const.PARRY_DESTROY);
+			} else 
+
+			//回避
+			if (Input.GetButtonDown ("Avoid")) {
+				float side = rightDirectionFlg ? 1 : -1;
+				if(Input.GetButton("Horizontal")) {
+					side = Input.GetAxisRaw ("Horizontal");
+				}
+				this.Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF, side);
+			} else 
+
+			//攻撃
+			//地上攻撃
+			if (onGroundFlg) {
+				if ((Input.GetButtonDown ("Fire4"))
+						&&(skill1Flg
+						|| skill2Flg)) {
+					//必殺攻撃
+					SuperSkill();
+
+				} else if ((Input.GetButtonDown ("Fire3"))
+						&&(neutralFlg
+						|| attack1Flg
+						|| attack2Flg
+						|| attack3Flg
+						|| skill1Flg)) {
+					//技攻撃２
+					Skill1();
+
+				} else if ((Input.GetButtonDown ("Fire2"))
+						&&(neutralFlg
+						|| attack1Flg
+						|| attack2Flg
+						|| attack3Flg
+				   		|| skill2Flg)) {
+					//技攻撃１
+					Skill1();
+
+				} else if (Input.GetButtonDown ("Fire1")
+				           && !skill1Flg
+				           && !skill2Flg) {
+					if (parryAttack1Flg) {
+						//パリィ攻撃２
+						ParryAttack2();
+
+					} else if (!parryAttack2Flg && parrySuccessFlg) {
+						//パリィ攻撃１
+						ParryAttack1();
+
+					} else if (attack2Flg) {
+						//通常攻撃３
+						Attack3();
+
+					} else if (attack1Flg) {
+						//通常攻撃２
+						Attack2();
+				
+					} else if (!attack3Flg && !parryAttack2Flg) {
+						//通常攻撃１
+						Attack1();
+					}
+				}
+			} else {
+				//空中攻撃
+				if (Input.GetButtonDown ("Fire1")) {
+					if (jumpAttack1Flg) {
+						//ジャンプ攻撃２
+						JumpAttack2();
+					} else if (!jumpAttack2Flg) {
+						//ジャンプ攻撃１
+						JumpAttack1();
+					}
+
+				}
 			}
-			this.Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF, side);
 		}
-
 		//防御終了
-		if(this.defenseFlg && Input.GetButtonUp ("Defense")) {
+		else if(this.defenseFlg && Input.GetButtonUp ("Defense")) {
 			base.DefenseEnd();
-		}
 
-		//攻撃
-		//地上攻撃
-		if (onGroundFlg) {
-			if ((Input.GetButtonDown ("Fire4"))
-					&&(skill1Flg
-					|| skill2Flg)) {
-				//必殺攻撃
-				SuperSkill();
-
-			} else if ((Input.GetButtonDown ("Fire2"))
-					&&(neutralFlg
-					|| attack1Flg
-					|| attack2Flg
-					|| attack3Flg
-			   		|| skill2Flg)) {
-				//技攻撃１
-				Skill1();
-
-			} else if ((Input.GetButtonDown ("Fire3"))
-					&&(neutralFlg
-					|| attack1Flg
-					|| attack2Flg
-					|| attack3Flg
-					|| skill1Flg)) {
-				//技攻撃２
-				Skill1();
-
-			} else if (Input.GetButtonDown ("Fire1")) {
-				if (parryAttack1Flg) {
-					//パリィ攻撃２
-					ParryAttack2();
-
-				} else if (parrySuccessFlg) {
-					//パリィ攻撃１
-					ParryAttack1();
-
-				} else if (attack2Flg) {
-					//通常攻撃３
-					Attack3();
-
-				} else if (attack1Flg) {
-					//通常攻撃２
-					Attack2();
-			
-				} else if (!attack3Flg && !parryAttack2Flg) {
-					//通常攻撃１
-					Attack1();
-				}
-			}
-		} else {
-			//空中攻撃
-			if (Input.GetButtonDown ("Fire1")) {
-				if (jumpAttack1Flg) {
-					//ジャンプ攻撃２
-					JumpAttack2();
-				} else if (!jumpAttack2Flg) {
-					//ジャンプ攻撃１
-					JumpAttack1();
-				}
-
-			}
 		}
 
 		//左右入力の無い時
@@ -139,18 +148,21 @@ public class Player : Character_Base {
 	// FixedUpdate is called once per frame
 	void FixedUpdate () {
 		base.FixedUpdate ();
+
 		//地上動作
 		if (onGroundFlg) {
+
 			//左右ボタンの入力
 			sideButton = Input.GetAxisRaw ("Horizontal");
 			if (sideButton != 0) {
 				if (sideButton == lastRawKey) {
 					//ダッシュON
+					print ("Dash!");
 					lastRawKey = 0;
 					walkFlg = false;
 					dashFlg = true;
-					print ("Dash!");
 				}
+
 				nowRawKey = sideButton;
 
 				SideMove();
