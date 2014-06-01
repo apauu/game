@@ -456,9 +456,13 @@ public class Character_Base : MonoBehaviour {
 		foreach (Transform item in transform) {
 			Destroy(item.gameObject);
 		}
-//		if(this.attackObj != null) {
-//			Destroy(this.attackObj);
-//		}
+	}
+	
+	/// <summary>
+	/// 攻撃終了
+	/// </summary>
+	protected void InitBeforeMotion() {
+		AttackEnd ();
 	}
 
 	/// <summary>
