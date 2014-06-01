@@ -34,6 +34,8 @@ public class Character_Base : MonoBehaviour {
 	protected bool parryAttack2Flg = false;
 	//回避フラグ
 	protected bool avoidFlg = false;
+	//空中回避フラグ
+	protected bool jumpAvoidFlg = false;
 	//技１フラグ
 	protected bool skill1Flg = false;
 	//技２フラグ
@@ -202,6 +204,7 @@ public class Character_Base : MonoBehaviour {
 				vi = 0;
 				jmpFlg = true;
 				doubleJmpFlg = true;
+				jumpAvoidFlg = false;
 				if(!onGroundFlg) {
 				animator.SetBool("onGroundFlg", true );
 				onGroundFlg = true;
@@ -353,13 +356,18 @@ public class Character_Base : MonoBehaviour {
 	protected void Avoid (float avoidTime, float stiffTime, float side) {
 
 		//回避できる場合
-		if(!(stiffFlg || avoidFlg || skill1Flg || skill2Flg || superSkillFlg)) {
-		print ("Avoid!!");
+		if(!(stiffFlg || jumpAvoidFlg || parryFlg ||defenseFlg || avoidFlg || skill1Flg || skill2Flg || superSkillFlg)) {
+			print ("Avoid!!");
 
-		animator.SetBool("avoidFlg", true );
-		avoidFlg = true;
-		mutekiFlg = true;
-		avoidSpeed = 4f;
+			animator.SetBool("avoidFlg", true );
+			avoidFlg = true;
+			mutekiFlg = true;
+
+			//空中の場合
+			if(!onGroundFlg) {
+				jumpAvoidFlg = true;
+			}
+			avoidSpeed = 4f;
 		}
 	}
 
@@ -455,7 +463,29 @@ public class Character_Base : MonoBehaviour {
 			Destroy(item.gameObject);
 		}
 	}
-	
+
+	/// <summary>
+	/// スキル１
+	/// </summary>
+	protected virtual void Skill1Exe() {
+
+	}
+
+	/// <summary>
+	/// スキル２
+	/// </summary>
+	protected virtual void Skill2Exe() {
+		
+	}
+
+	/// <summary>
+	/// スーパースキル
+	/// </summary>
+	protected virtual void SuperSkillExe() {
+		
+	}
+
+
 	/// <summary>
 	/// 攻撃終了
 	/// </summary>
@@ -562,7 +592,7 @@ public class Character_Base : MonoBehaviour {
 	protected bool CheckAttackAwake() {
 		return !(stiffFlg || defenseFlg ||
 		         parryFlg || avoidFlg || skill1Flg || skill2Flg || superSkillFlg);
-	} 
+	}
 
 	//フラグを全て初期化する(空中以外)
 	protected void InitAllFlg () {
@@ -687,26 +717,32 @@ public class Character_Base : MonoBehaviour {
 
 	//スキル1
 	protected void Skill1 () {
-		print ("Skill");
-		InitAllFlg();
-		skill1Flg = true;
-		animator.SetBool("skill1Flg", true );
+		if (!stiffFlg) {
+			print ("Skill");
+			InitAllFlg();
+			skill1Flg = true;
+			animator.SetBool("skill1Flg", true );
+		}
 	}
 
 	//スキル2
 	protected void Skill2 () {
-		print ("Skill2");
-		InitAllFlg();
-		skill1Flg = true;
-		animator.SetBool("skill2Flg", true );
+		if (!stiffFlg) {
+			print ("Skill2");
+			InitAllFlg();
+			skill1Flg = true;
+			animator.SetBool("skill2Flg", true );
+		}
 	}
 	
 	//スーパースキル
 	protected void SuperSkill () {
-		print ("SuperSkill");
-		InitAllFlg();
-		superSkillFlg = true;
-		animator.SetBool("superSkillFlg", true );
+		if (skill1Flg || skill2Flg) {
+			print ("SuperSkill");
+			InitAllFlg();
+			superSkillFlg = true;
+			animator.SetBool("superSkillFlg", true );
+		}
 	}
 
 //	/// <summary>

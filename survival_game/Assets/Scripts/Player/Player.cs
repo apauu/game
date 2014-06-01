@@ -42,7 +42,11 @@ public class Player : Character_Base {
 		//防御
 		if (Input.GetButtonDown ("Defense")) {
 			base.Defense(Player_Const.DEFFENCE_BEFORE);
-		} else 
+		} else
+
+		if (Input.GetButtonUp ("Defense")) {
+			base.DefenseEnd();
+		} else
 
 		//パリィ
 		if (Input.GetButtonDown ("Parry")) {
