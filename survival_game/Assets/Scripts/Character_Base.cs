@@ -460,6 +460,7 @@ public class Character_Base : MonoBehaviour {
 	/// 攻撃終了
 	/// </summary>
 	protected void InitBeforeMotion() {
+		print ("InitBeforeMotion!!");
 		AttackEnd ();
 	}
 

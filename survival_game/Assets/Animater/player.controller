@@ -3184,7 +3184,7 @@ StateMachine:
   m_OrderedTransitions: {}
   m_MotionSetCount: 4
   m_AnyStatePosition: {x: 50, y: 20, z: 0}
-  m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
+  m_ParentStateMachinePosition: {x: 804, y: 24, z: 0}
 --- !u!1107 &110708581
 StateMachine:
   serializedVersion: 2
@@ -3281,7 +3281,7 @@ StateMachine:
   m_OrderedTransitions: {}
   m_MotionSetCount: 7
   m_AnyStatePosition: {x: 50, y: 20, z: 0}
-  m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
+  m_ParentStateMachinePosition: {x: 804, y: 24, z: 0}
 --- !u!1107 &110738382
 StateMachine:
   serializedVersion: 2

@@ -61,50 +61,48 @@ public class Player : Character_Base {
 		//攻撃
 		//地上攻撃
 		if (onGroundFlg) {
-			if ((Input.GetButtonDown ("Fire4"))
-					&&(skill1Flg
-					|| skill2Flg)) {
+			if (Input.GetButtonDown ("Fire4")
+			    && animator.GetBool("skill1Flg")) {
 				//必殺攻撃
 				base.SuperSkill();
 
 			} else if ((Input.GetButtonDown ("Fire3"))
-					&&(neutralFlg
-					|| attack1Flg
-					|| attack2Flg
-					|| attack3Flg
-					|| skill1Flg)) {
+						&&(neutralFlg
+						|| animator.GetBool("attack1Flg")
+						|| animator.GetBool("attack2Flg")
+						|| animator.GetBool("attack3Flg")
+						|| animator.GetBool("skill1Flg"))) {
 				//技攻撃２
 				base.Skill2();
 
 			} else if ((Input.GetButtonDown ("Fire2"))
-					&&(neutralFlg
-					|| attack1Flg
-					|| attack2Flg
-					|| attack3Flg
-			   		|| skill2Flg)) {
+						&&(neutralFlg
+						|| animator.GetBool("attack1Flg")
+						|| animator.GetBool("attack2Flg")
+						|| animator.GetBool("attack3Flg")
+						|| animator.GetBool("skill1Flg"))) {
 				//技攻撃１
 				base.Skill1();
 
 			} else if (Input.GetButtonDown ("Fire1")
-			           && !skill1Flg
-			           && !skill2Flg) {
-				if (parryAttack1Flg) {
+			           && !animator.GetBool("skill1Flg")) {
+				if (animator.GetBool("parryAttack1Flg")) {
 					//パリィ攻撃２
 					base.ParryAttack2();
 
-				} else if (!parryAttack2Flg && parrySuccessFlg) {
+				} else if (!animator.GetBool("parryAttack1Flg") && parrySuccessFlg) {
 					//パリィ攻撃１
 					base.ParryAttack1();
 
-				} else if (attack2Flg) {
+				} else if (animator.GetBool("attack2Flg")) {
 					//通常攻撃３
 					base.Attack3();
 
-				} else if (attack1Flg) {
+				} else if (animator.GetBool("attack1Flg")) {
 					//通常攻撃２
 					base.Attack2();
 			
-				} else if (!attack3Flg && !parryAttack2Flg) {
+				} else if (!animator.GetBool("attack3Flg") && !animator.GetBool("parryAttack2Flg")) {
 					//通常攻撃１
 					base.Attack1();
 				}
@@ -112,10 +110,10 @@ public class Player : Character_Base {
 		} else {
 			//空中攻撃
 			if (Input.GetButtonDown ("Fire1")) {
-				if (jumpAttack1Flg) {
+				if (animator.GetBool("jumpAttack1Flg")) {
 					//ジャンプ攻撃２
 					base.JumpAttack2();
-				} else if (!jumpAttack2Flg) {
+				} else if (!animator.GetBool("jumpAttack2Flg")) {
 					//ジャンプ攻撃１
 					base.JumpAttack1();
 				}
