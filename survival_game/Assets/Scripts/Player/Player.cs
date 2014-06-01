@@ -39,99 +39,88 @@ public class Player : Character_Base {
 	void Update () {
 		base.Update ();
 
-		if (!defenseFlg
-		    && !parryFlg
-		    && !avoidFlg
-		    && !superSkillFlg) {
+		//防御
+		if (Input.GetButtonDown ("Defense")) {
+			base.Defense(Player_Const.DEFFENCE_BEFORE);
+		} else 
 
-			//防御
-			if (Input.GetButtonDown ("Defense")) {
-				base.Defense(Player_Const.DEFFENCE_BEFORE);
-			} else 
+		//パリィ
+		if (Input.GetButtonDown ("Parry")) {
+			base.Parry(Player_Const.PARRY_DESTROY);
+		} else 
 
-			//パリィ
-			if (Input.GetButtonDown ("Parry")) {
-				base.Parry(Player_Const.PARRY_DESTROY);
-			} else 
+		//回避
+		if (Input.GetButtonDown ("Avoid")) {
+			float side = rightDirectionFlg ? 1 : -1;
+			if(Input.GetButton("Horizontal")) {
+				side = Input.GetAxisRaw ("Horizontal");
+			}
+			this.Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF, side);
+		} else 
 
-			//回避
-			if (Input.GetButtonDown ("Avoid")) {
-				float side = rightDirectionFlg ? 1 : -1;
-				if(Input.GetButton("Horizontal")) {
-					side = Input.GetAxisRaw ("Horizontal");
-				}
-				this.Avoid(Player_Const.AVOID_TIME, Player_Const.AVOID_STIFF, side);
-			} else 
+		//攻撃
+		//地上攻撃
+		if (onGroundFlg) {
+			if ((Input.GetButtonDown ("Fire4"))
+					&&(skill1Flg
+					|| skill2Flg)) {
+				//必殺攻撃
+				base.SuperSkill();
 
-			//攻撃
-			//地上攻撃
-			if (onGroundFlg) {
-				if ((Input.GetButtonDown ("Fire4"))
-						&&(skill1Flg
-						|| skill2Flg)) {
-					//必殺攻撃
-					SuperSkill();
+			} else if ((Input.GetButtonDown ("Fire3"))
+					&&(neutralFlg
+					|| attack1Flg
+					|| attack2Flg
+					|| attack3Flg
+					|| skill1Flg)) {
+				//技攻撃２
+				base.Skill2();
 
-				} else if ((Input.GetButtonDown ("Fire3"))
-						&&(neutralFlg
-						|| attack1Flg
-						|| attack2Flg
-						|| attack3Flg
-						|| skill1Flg)) {
-					//技攻撃２
-					Skill1();
+			} else if ((Input.GetButtonDown ("Fire2"))
+					&&(neutralFlg
+					|| attack1Flg
+					|| attack2Flg
+					|| attack3Flg
+			   		|| skill2Flg)) {
+				//技攻撃１
+				base.Skill1();
 
-				} else if ((Input.GetButtonDown ("Fire2"))
-						&&(neutralFlg
-						|| attack1Flg
-						|| attack2Flg
-						|| attack3Flg
-				   		|| skill2Flg)) {
-					//技攻撃１
-					Skill1();
+			} else if (Input.GetButtonDown ("Fire1")
+			           && !skill1Flg
+			           && !skill2Flg) {
+				if (parryAttack1Flg) {
+					//パリィ攻撃２
+					base.ParryAttack2();
 
-				} else if (Input.GetButtonDown ("Fire1")
-				           && !skill1Flg
-				           && !skill2Flg) {
-					if (parryAttack1Flg) {
-						//パリィ攻撃２
-						ParryAttack2();
+				} else if (!parryAttack2Flg && parrySuccessFlg) {
+					//パリィ攻撃１
+					base.ParryAttack1();
 
-					} else if (!parryAttack2Flg && parrySuccessFlg) {
-						//パリィ攻撃１
-						ParryAttack1();
+				} else if (attack2Flg) {
+					//通常攻撃３
+					base.Attack3();
 
-					} else if (attack2Flg) {
-						//通常攻撃３
-						Attack3();
-
-					} else if (attack1Flg) {
-						//通常攻撃２
-						Attack2();
-				
-					} else if (!attack3Flg && !parryAttack2Flg) {
-						//通常攻撃１
-						Attack1();
-					}
-				}
-			} else {
-				//空中攻撃
-				if (Input.GetButtonDown ("Fire1")) {
-					if (jumpAttack1Flg) {
-						//ジャンプ攻撃２
-						JumpAttack2();
-					} else if (!jumpAttack2Flg) {
-						//ジャンプ攻撃１
-						JumpAttack1();
-					}
-
+				} else if (attack1Flg) {
+					//通常攻撃２
+					base.Attack2();
+			
+				} else if (!attack3Flg && !parryAttack2Flg) {
+					//通常攻撃１
+					base.Attack1();
 				}
 			}
-		}
-		//防御終了
-		else if(this.defenseFlg && Input.GetButtonUp ("Defense")) {
-			base.DefenseEnd();
+		} else {
+			//空中攻撃
+			if (Input.GetButtonDown ("Fire1")) {
+				if (jumpAttack1Flg) {
+					//ジャンプ攻撃２
+					base.JumpAttack2();
+				} else if (!jumpAttack2Flg) {
+					//ジャンプ攻撃１
+					base.JumpAttack1();
+				}
 
+			}
 		}
 
 		//左右入力の無い時
@@ -210,78 +199,6 @@ public class Player : Character_Base {
 				}
 			}
 		}
-	}
-	
-	//攻撃１
-	private void Attack1 () {
-		print ("Player Attack1");
-		InitAllFlg();
-		attack1Flg = true;
-		animator.SetBool("attack1Flg", true );
-	}
-
-	//攻撃２
-	private void Attack2 () {
-		print ("Player Attack2");
-		InitAllFlg();
-		attack2Flg = true;
-		animator.SetBool("attack2Flg", true );
-	}
-
-	//攻撃３
-	private void Attack3 () {
-		print ("Player Attack3");
-		InitAllFlg();
-		attack3Flg = true;
-		animator.SetBool("attack3Flg", true );
-	}
-	
-	//パリィ攻撃１
-	private void ParryAttack1 () {
-		print ("Player ParryAttack1");
-		InitAllFlg();
-		parryAttack1Flg = true;
-		animator.SetBool("parryAttack1Flg", true );
-	}
-	
-	//パリィ攻撃２
-	private void ParryAttack2 () {
-		print ("Player ParryAttack2");
-		InitAllFlg();
-		parryAttack2Flg = true;
-		animator.SetBool("parryAttack2Flg", true );
-	}
-	
-	//空中攻撃１
-	private void JumpAttack1 () {
-		print ("Player JumpAttack1");
-		InitAllFlg();
-		jumpAttack1Flg = true;
-		animator.SetBool("jumpAttack1Flg", true );
-	}
-	
-	//空中攻撃２
-	private void JumpAttack2 () {
-		print ("Player JumpAttack2");
-		InitAllFlg();
-		jumpAttack2Flg = true;
-		animator.SetBool("jumpAttack2Flg", true );
-	}
-	
-	//スキル１
-	private void Skill1 () {
-		print ("Player Skill");
-		InitAllFlg();
-		skill1Flg = true;
-		animator.SetBool("skill1Flg", true );
-	}
-	
-	//スーパースキル
-	private void SuperSkill () {
-		print ("Player SuperSkill");
-		InitAllFlg();
-		superSkillFlg = true;
-		animator.SetBool("superSkillFlg", true );
 	}
 
 	//横移動

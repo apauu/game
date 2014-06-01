@@ -352,14 +352,15 @@ public class Character_Base : MonoBehaviour {
 	/// <param name="stiffTime">硬直時間</param>
 	protected void Avoid (float avoidTime, float stiffTime, float side) {
 
-		//TODO:フラグで行動をとれるかの判定を追加
-
+		//回避できる場合
+		if(!(stiffFlg || avoidFlg || skill1Flg || skill2Flg || superSkillFlg)) {
 		print ("Avoid!!");
 
 		animator.SetBool("avoidFlg", true );
 		avoidFlg = true;
 		mutekiFlg = true;
 		avoidSpeed = 4f;
+		}
 	}
 
 	
@@ -420,10 +421,7 @@ public class Character_Base : MonoBehaviour {
 	/// <param name="stiffTime">硬直時間</param>
 	protected void Attack (GameObject prefab) {
 
-		//TODO:フラグで行動をとれるかの判定を追加
-
 		print ("Attack!!");
-		attack1Flg = true;
 		float h = 0;
 		
 		if (rightDirectionFlg) {
@@ -490,7 +488,7 @@ public class Character_Base : MonoBehaviour {
 	protected void SideMove(float speed,bool direction){
 
 		//動ける場合
-		if(CheckEventAwake()) {
+		if(CheckWalkAwake()) {
 			float deltaX = speed * t *(direction ? 1 : -1);
 			
 			if(deltaX >= 0) {
@@ -539,12 +537,28 @@ public class Character_Base : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// プレイヤーが動けるかどうかチェックする
+	/// 動けるかどうかチェックする
 	/// </summary>
 	protected bool CheckEventAwake() {
 		return !(stiffFlg || attack1Flg || attack2Flg || attack3Flg || jumpAttack1Flg || jumpAttack2Flg || defenseFlg ||
 		         parryFlg || parryAttack1Flg || parryAttack2Flg || avoidFlg || skill1Flg || skill2Flg || superSkillFlg);
 	}
+
+	/// <summary>
+	/// 歩けるかどうかチェックする
+	/// </summary>
+	protected bool CheckWalkAwake() {
+		return !(stiffFlg || attack1Flg || attack2Flg || attack3Flg || defenseFlg ||
+		         parryFlg || parryAttack1Flg || parryAttack2Flg || avoidFlg || skill1Flg || skill2Flg || superSkillFlg);
+	}
+
+	/// <summary>
+	/// 攻撃できるかどうかチェックする
+	/// </summary>
+	protected bool CheckAttackAwake() {
+		return !(stiffFlg || defenseFlg ||
+		         parryFlg || avoidFlg || skill1Flg || skill2Flg || superSkillFlg);
+	} 
 
 	//フラグを全て初期化する(空中以外)
 	protected void InitAllFlg () {
@@ -597,6 +611,100 @@ public class Character_Base : MonoBehaviour {
 		}
 	}
 
+	//攻撃１
+	protected void Attack1 () {
+		if(CheckAttackAwake()) {
+			print ("Attack1");
+			InitAllFlg();
+			attack1Flg = true;
+			animator.SetBool("attack1Flg", true );
+		}
+	}
+	
+	//攻撃２
+	protected void Attack2 () {
+		if(CheckAttackAwake()) {
+			print ("Attack2");
+			InitAllFlg();
+			attack2Flg = true;
+			animator.SetBool("attack2Flg", true );
+		}
+	}
+	
+	//攻撃３
+	protected void Attack3 () {
+		if(CheckAttackAwake()) {
+			print ("Attack3");
+			InitAllFlg();
+			attack3Flg = true;
+			animator.SetBool("attack3Flg", true );
+		}
+	}
+	
+	//パリィ攻撃１
+	protected void ParryAttack1 () {
+		if(CheckAttackAwake()) {
+			print ("ParryAttack1");
+			InitAllFlg();
+			parryAttack1Flg = true;
+			animator.SetBool("parryAttack1Flg", true );
+		}
+	}
+	
+	//パリィ攻撃２
+	protected void ParryAttack2 () {
+		if(CheckAttackAwake()) {
+			print ("ParryAttack2");
+			InitAllFlg();
+			parryAttack2Flg = true;
+			animator.SetBool("parryAttack2Flg", true );
+		}
+	}
+	
+	//空中攻撃１
+	protected void JumpAttack1 () {
+		if(CheckAttackAwake()) {
+			print ("JumpAttack1");
+			InitAllFlg();
+			jumpAttack1Flg = true;
+			animator.SetBool("jumpAttack1Flg", true );
+		}
+	}
+	
+	//空中攻撃２
+	protected void JumpAttack2 () {
+		if(CheckAttackAwake()) {
+			print ("JumpAttack2");
+			InitAllFlg();
+			jumpAttack2Flg = true;
+			animator.SetBool("jumpAttack2Flg", true );
+		}
+	}
+
+	//スキル1
+	protected void Skill1 () {
+		print ("Skill");
+		InitAllFlg();
+		skill1Flg = true;
+		animator.SetBool("skill1Flg", true );
+	}
+
+	//スキル2
+	protected void Skill2 () {
+		print ("Skill2");
+		InitAllFlg();
+		skill1Flg = true;
+		animator.SetBool("skill2Flg", true );
+	}
+	
+	//スーパースキル
+	protected void SuperSkill () {
+		print ("SuperSkill");
+		InitAllFlg();
+		superSkillFlg = true;
+		animator.SetBool("superSkillFlg", true );
+	}
+
 //	/// <summary>
 //	/// アニメーションコントローラー用メソッド
 //	/// </summary>
@@ -637,12 +745,13 @@ public class Character_Base : MonoBehaviour {
 //		animator.SetBool("defenseFlg", false );
 //	}
 //
-//	/// <summary>
-//	/// アニメーションコントローラー用メソッド
-//	/// </summary>
-//	private void SetMutekiFlgFalse() {
-//		mutekiFlg = false;
-//	}
+
+	/// <summary>
+	/// アニメーションコントローラー用メソッド
+	/// </summary>
+	private void SetMutekiFlgFalse() {
+		mutekiFlg = false;
+	}
 //
 //	/// <summary>
 //	/// アニメーションコントローラー用メソッド
