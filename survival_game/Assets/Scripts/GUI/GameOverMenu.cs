@@ -2,83 +2,56 @@
 using System.Collections;
 
 public class GameOverMenu : MonoBehaviour {
-	
-	public GameObject[] itemList;
-	public float incX = 3;
-	public float incY = 3;
-	
-	private int selected = 0;
-	private float key;
-	private bool selectableFlg = true;
+
+	private string message;
+	private float f = 0f;
+	private int maxLL = 36;
 	
 	// Use this for initialization
 	void Start () {
-		SelectItem();
+		//TODO 死亡区分を受け取り該当メッセージをセット
+		message = "「ここにメッセージを表示します。死亡区分ごとにメッセージが異なります。36文字を超える場合このようになります。\n改行する場合は”\\n”を設定して下さい。最大文字数は画面サイズを考慮して指定して下さい」";
+		if (maxLL <= message.Length) {
+			int i = 0;
+			string checkStr = null;
+			for (int j = 0 ; j < message.Length; j++) {
+				checkStr = message.Substring(j, 1);
+				print(checkStr);
+				if (checkStr.Equals("\n")) {
+					i = 0;
+				} else {
+					i++;
+				}
+				if (i > maxLL) {
+					message = message.Insert(j , "\n");
+					i = 0;
+				}
+			}
+		}
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		key = Input.GetAxisRaw ("Horizontal");
-		if (selectableFlg && key < 0) {
-			UnSelectItem();
-			PlusSelected(1);
-			SelectItem();
-			selectableFlg = false;
-			
-		} else if (selectableFlg && key > 0) {
-			UnSelectItem();
-			PlusSelected(-1);
-			SelectItem();
-			selectableFlg = false;
-			
-		} else if (selectableFlg && Input.GetButtonDown("Fire1")) {
-			EnterItem();
-			
-		} else if (key == 0) {
-			selectableFlg = true;
-			
-		}
-	}
-	
-	void PlusSelected (int cnt) {
-		selected += cnt;
-		if (selected > itemList.Length - 1) {
-			selected = 0;
-		} else if (selected < 0) {
-			selected = itemList.Length - 1;
-		}
-	}
-	
-	void SelectItem () {
-		Rect tmp = itemList[selected].guiTexture.pixelInset;
-		tmp.x -= incX;
-		tmp.y += incY;
-		itemList[selected].guiTexture.pixelInset = tmp;
-	}
-	
-	void UnSelectItem () {
-		Rect tmp = itemList[selected].guiTexture.pixelInset;
-		tmp.x += incX;
-		tmp.y -= incY;
-		itemList[selected].guiTexture.pixelInset = tmp;
-	}
-	
-	void EnterItem () {
-		Rect tmp = itemList[selected].guiTexture.pixelInset;
-		tmp.x += incX * 2;
-		tmp.y -= incY * 2;
-		itemList[selected].guiTexture.pixelInset = tmp;
-		
-		//　Yes
-		if (selected == 0) {
-			Debug.Log("Continue");
+		//　1/0.2フレームで一文字表示
+		f += 0.2f;
+
+		// 全て表示済みの状態でボタンを押すとシーン破棄
+		if (f >= message.Length && Input.GetButtonDown ("Fire1")) {
+			//TODO 親シーンの初期化を行う
 			Destroy(this.gameObject);
-
-			//　no
-		} else if (selected == 1) {
-			Application.LoadLevel("Menu");
-			Debug.Log("Now scene is " + Application.loadedLevelName);
-
 		}
+
+		// 攻撃ボタンが押された場合全部表示
+		else if (Input.GetButtonDown ("Fire1")) {
+			f = message.Length;
+		}
+
+		int i = (int) f;
+		if (i <= message.Length) {
+			gameObject.guiText.text = message.Substring (0, i);
+		}
+//		if (f >= message.Length) {
+//			//TODO ステージへ戻るボタン（メッセージ）を表示？
+//		}
 	}
 }
