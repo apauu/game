@@ -195,7 +195,7 @@ public class Character_Base : MonoBehaviour {
 	/// <param name="collision">接触オブジェクト</param>
 	protected void SetFlgOnGround() {
 		RaycastHit2D hit = new RaycastHit2D();
-		LayerMask mask = -1 - 1 << gameObject.layer;
+		LayerMask mask = (1 << LayerMask.NameToLayer("Background"));
 
 		if(this.CircleCollider != null) {
 			hit = Physics2D.Raycast (new Vector2(transform.position.x,transform.position.y),-Vector2.up,this.CircleCollider.radius+0.01f,mask);
