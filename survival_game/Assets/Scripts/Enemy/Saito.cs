@@ -40,46 +40,48 @@ public class Saito : Enemy_Base {
 	/// </summary>
 	protected override void enemyAI ()
 	{
-		//プレイヤーとの距離が遠すぎるときは近づく
-		if (Mathf.Abs(this.nowDistanceX) > approachDistance) {
-			this.SideMove(Enemy_Const.ENEMY_SIDE_SPEED * this.enemySideSpeedMag, !this.playerDirectionFlg);
-		}
-		//ある程度近づいたら３択　無意味に近づく、無意味に遠ざかる、攻撃する
-		else {
-			//フラグが立ってる場合はこっち
-			if(getAttackFlg) {
-				this.GetAttack();
+		if(!stiffFlg) {
+			//プレイヤーとの距離が遠すぎるときは近づく
+			if (Mathf.Abs(this.nowDistanceX) > approachDistance) {
+				this.SideMove(Enemy_Const.ENEMY_SIDE_SPEED * this.enemySideSpeedMag, !this.playerDirectionFlg);
 			}
-			else if(getNearFlg) {
-				this.GetNear();
-			}
-			else if(getAwayFlg) {
-				this.GetAway();
-			} 
-			else { 
-				//1~10のランダム値を作る
-				System.Random random = new System.Random();
-				float a = Mathf.Round(((float)(random.NextDouble() * 10)));
-				//無意味に近づく
-				if(a <= 1) {
-					getNearFlg = true;
-					this.GetNear();
-				}
-				//何もしない
-				else if(7 <= a) {
-					//硬直時間
-					StopCoroutine("WaitForStiffTime");
-					StartCoroutine(WaitForStiffTime (0.5f));
-				}
-				//爆発する
-				else if(3 <= a) {
-					getAttackFlg = true;
+			//ある程度近づいたら３択　無意味に近づく、無意味に遠ざかる、攻撃する
+			else {
+				//フラグが立ってる場合はこっち
+				if(getAttackFlg) {
 					this.GetAttack();
 				}
-				//無意味に遠ざかる
-				else {
-					getAwayFlg = true;
+				else if(getNearFlg) {
+					this.GetNear();
+				}
+				else if(getAwayFlg) {
 					this.GetAway();
+				} 
+				else { 
+					//1~10のランダム値を作る
+					System.Random random = new System.Random();
+					float a = Mathf.Round(((float)(random.NextDouble() * 10)));
+					//無意味に近づく
+					if(a <= 1) {
+						getNearFlg = true;
+						this.GetNear();
+					}
+					//何もしない
+					else if(7 <= a) {
+						//硬直時間
+						StopCoroutine("WaitForStiffTime");
+						StartCoroutine(WaitForStiffTime (0.5f));
+					}
+					//爆発する
+					else if(3 <= a) {
+						getAttackFlg = true;
+						this.GetAttack();
+					}
+					//無意味に遠ざかる
+					else {
+						getAwayFlg = true;
+						this.GetAway();
+					}
 				}
 			}
 		}
@@ -128,10 +130,10 @@ public class Saito : Enemy_Base {
 	{
 		mutekiFlg = true;
 		//爆発オブジェクト生成
+		if(true) {
+
 		this.skill1Obj = Instantiate(this.skill1Prefab, new Vector2(transform.position.x, transform.position.y)
 		                         , Quaternion.identity) as GameObject;
-		//親を設定
-		skill1Obj.transform.parent = this.transform;
 		//あたり判定を取得
 		skillScale = skill1Obj.collider2D.transform.localScale;
 
@@ -139,6 +141,7 @@ public class Saito : Enemy_Base {
 		StopCoroutine("WaitForStiffTime");
 		StartCoroutine(WaitForStiffTime (2f));
 		skill1End ();
+		}
 	}
 
 	/// <summary>
@@ -149,6 +152,9 @@ public class Saito : Enemy_Base {
 	}
 
 	protected void skill1FinalEnd() {
+		if(this.skill1Obj == null) {
+			Destroy(this.skill1Obj);
+		}
 		this.mutekiFlg = false;
 		base.OnDamage (1000,0);
 	}
