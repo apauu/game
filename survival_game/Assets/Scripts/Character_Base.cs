@@ -465,28 +465,6 @@ public class Character_Base : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// スキル１
-	/// </summary>
-	protected virtual void Skill1Exe() {
-
-	}
-
-	/// <summary>
-	/// スキル２
-	/// </summary>
-	protected virtual void Skill2Exe() {
-		
-	}
-
-	/// <summary>
-	/// スーパースキル
-	/// </summary>
-	protected virtual void SuperSkillExe() {
-		
-	}
-
-
-	/// <summary>
 	/// 攻撃終了
 	/// </summary>
 	protected void InitBeforeMotion() {
