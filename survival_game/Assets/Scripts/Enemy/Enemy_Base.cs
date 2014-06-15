@@ -39,6 +39,10 @@ public class Enemy_Base : Character_Base {
 	protected float noticeDistanceYMag;
 	//キャラクターの移動速度倍率　キャラ固有　baseは１
 	protected float enemySideSpeedMag;
+	//キャラクターの停止距離　キャラ固有　baseは１
+	protected float approachDistance;
+	//キャラクターの攻撃開始距離　キャラ固有　baseは１
+	protected float attackDistance;
 	/*------------------------キャラクター固有設定----------------------------*/
 
 	// Use this for initialization
@@ -111,41 +115,40 @@ public class Enemy_Base : Character_Base {
 	//物理演算利用系のUpdate処理はこちらへ
 	protected void FixedUpdate () {
 		base.FixedUpdate ();
-
-		//停止しないとき　メイン処理
-		if (!this.stopFlg) { 
-			//プレイヤーに気付いているとき
-			if (this.noticeFlg) {
-				if(!this.stiffFlg) {
-					//障害物がある場合はジャンプする
-					//右向きなら右にGroundオブジェクトまでの距離を取得
-					if(rightDirectionFlg) {
-						//右にあるものの距離を取得
-						float rightDirection = RayCastDistance(Vector2.right);
-						if(!float.IsNegativeInfinity(rightDirection) && 1f >= rightDirection) {
-							this.JumpMove(Enemy_Const.ENEMY_JUMP_SPEED);
+		
+		if (!stiffFlg) {
+			//停止しないとき　メイン処理
+			if (!this.stopFlg) { 
+					//プレイヤーに気付いているとき
+					if (this.noticeFlg) {
+						//障害物がある場合はジャンプする
+						//右向きなら右にGroundオブジェクトまでの距離を取得
+						if (rightDirectionFlg) {
+								//右にあるものの距離を取得
+								float rightDirection = RayCastDistance (Vector2.right);
+								if (!float.IsNegativeInfinity (rightDirection) && 1f >= rightDirection) {
+										this.JumpMove (Enemy_Const.ENEMY_JUMP_SPEED);
+								}
+						} else {
+								//左にあるものの距離を取得
+								float leftDirection = RayCastDistance (-Vector2.right);
+								if (!float.IsNegativeInfinity (leftDirection) && 1f >= leftDirection) {
+										this.JumpMove (Enemy_Const.ENEMY_JUMP_SPEED);
+								}
 						}
-					}
-					else {
-						//左にあるものの距離を取得
-						float leftDirection = RayCastDistance(-Vector2.right);
-						if(!float.IsNegativeInfinity(leftDirection) && 1f >= leftDirection) {
-							this.JumpMove(Enemy_Const.ENEMY_JUMP_SPEED);
-						}
-					}
 
-					//AI起動
-					enemyAI();
-				}
-			}
-		//停止させるとき　初期ポジションに戻す
-		} else {
-			float distance = this.transform.position.x - firstPosition.x;
-			if(Mathf.Abs(distance) > 0.1) {
-				this.transform.localScale = new Vector3(((distance <= 0) ? -1 : 1), 1, 1);
-				//rightDirectionFlg更新
-				this.rightDirectionFlg = ((distance <= 0) ? true : false);
-				this.SideMove(Enemy_Const.ENEMY_SIDE_SPEED * this.enemySideSpeedMag, rightDirectionFlg);
+						//AI起動
+						enemyAI ();
+					}
+					//停止させるとき　初期ポジションに戻す
+			} else {
+					float distance = this.transform.position.x - firstPosition.x;
+					if (Mathf.Abs (distance) > 0.1) {
+							this.transform.localScale = new Vector3 (((distance <= 0) ? -1 : 1), 1, 1);
+							//rightDirectionFlg更新
+							this.rightDirectionFlg = ((distance <= 0) ? true : false);
+							this.SideMove (Enemy_Const.ENEMY_SIDE_SPEED * this.enemySideSpeedMag, rightDirectionFlg);
+					}
 			}
 		}
 	}

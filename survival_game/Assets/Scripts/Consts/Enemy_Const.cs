@@ -84,7 +84,7 @@ public class Enemy_Const{
 	/// </summary>
 	public const float YUKARI_NOTICE_DISTANCE_MAG = 3f;
 	/// <summary>
-	/// SAITO定数
+	/// YUKARI定数
 	/// 速度倍率
 	/// </summary>
 	public const float YUKARI_SPEED_MAG = 2f;
@@ -120,4 +120,49 @@ public class Enemy_Const{
 	public const float YUKARI_SUMMON_STIFF = 2.0f;
 	
 	/*------------- Yukari Const -----------------*/
+
+	/*------------- Lulu Const -----------------*/
+	/// <summary>
+	/// LULU定数
+	/// HP
+	/// </summary>
+	public const float LULU_HP = 1f;
+	/// <summary>
+	/// LULU定数
+	/// 発見倍率
+	/// </summary>
+	public const float LULU_NOTICE_DISTANCE_MAG = 1f;
+	/// <summary>
+	/// LULU定数
+	/// 速度倍率
+	/// </summary>
+	public const float LULU_SPEED_MAG = 1f;
+	/// <summary>
+	/// LULU定数
+	/// 近づく距離
+	/// </summary>
+	public const float LULU_APPROACH_DISTANCE = 5f;
+	/// <summary>
+	/// LULU定数
+	/// 攻撃する距離
+	/// </summary>
+	public const float LULU_ATTACK_DISTANCE = 5f;
+	/// <summary>
+	/// LULU定数
+	/// 攻撃１前硬直時間
+	/// </summary>
+	public const float LULU_ATTACK1_BEFORE = 0.1f;
+	/// <summary>
+	/// LULU定数
+	/// 攻撃１硬直時間
+	/// </summary>
+	public const float LULU_ATTACK1_STIFF = 1.5f;
+	/// <summary>
+	/// LULU定数
+	/// 攻撃１判定時間
+	/// </summary>
+	public const float LULU_ATTACK1_DESTROY = 0.2f;
+	
+	/*------------- Lulu Const -----------------*/
+
 }
