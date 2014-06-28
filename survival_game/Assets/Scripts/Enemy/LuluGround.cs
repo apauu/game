@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// 1面：近距離攻撃MOB
 /// </summary>
-public class Yoda : Enemy_Base {
+public class LuluGround : Enemy_Base {
 	
 	/*----------AI用フラグ---------*/
 	protected bool getAttackFlg = false;
@@ -30,7 +30,7 @@ public class Yoda : Enemy_Base {
 	void Update () {
 		base.Update ();
 	}
-
+	
 	/// <summary>
 	/// プレイヤーに気付いたあとの処理はここ
 	/// </summary>
@@ -69,7 +69,7 @@ public class Yoda : Enemy_Base {
 						StopCoroutine("WaitForStiffTime");
 						StartCoroutine(WaitForStiffTime (0.5f));
 					}
-					//爆発する
+					//攻撃する
 					else if(3 <= a) {
 						getAttackFlg = true;
 						this.GetAttack();
@@ -85,7 +85,7 @@ public class Yoda : Enemy_Base {
 	}
 	
 	protected void GetAway() {
-		print ("YodaGetAway!!");
+		print ("LuluGetAway!!");
 		if(Mathf.Abs(nowDistanceX) < this.randomAwayDistance) {
 			this.SideMove(Enemy_Const.ENEMY_SIDE_SPEED * this.enemySideSpeedMag, this.playerDirectionFlg);
 		}
@@ -95,7 +95,7 @@ public class Yoda : Enemy_Base {
 	}
 	
 	protected void GetNear() {
-		print ("YodaGetNear!!");
+		print ("LuluGetNear!!");
 		if(Mathf.Abs(nowDistanceX) > this.randomNearDistance) {
 			this.SideMove(Enemy_Const.ENEMY_SIDE_SPEED * this.enemySideSpeedMag, !this.playerDirectionFlg);
 		}
@@ -105,7 +105,7 @@ public class Yoda : Enemy_Base {
 	}
 	
 	protected virtual void GetAttack() {
-		print ("YodaGetAttack!!");
+		print ("LuluGetAttack!!");
 		if(Mathf.Abs(nowDistanceX) < attackDistance) {
 			this.getAttackFlg = false;
 			base.Attack1();
@@ -119,11 +119,11 @@ public class Yoda : Enemy_Base {
 	/// キャラクター固有のステータスを初期化する
 	/// </summary>
 	protected override void setCharacteristic() {
-		this.approachDistance = Enemy_Const.YODA_APPROACH_DISTANCE;
-		this.attackDistance = Enemy_Const.YODA_ATTACK_DISTANCE;
-		this.noticeDistanceXMag = Enemy_Const.YODA_NOTICE_DISTANCE_MAG;
-		this.noticeDistanceYMag = Enemy_Const.YODA_NOTICE_DISTANCE_MAG;
-		this.enemySideSpeedMag = Enemy_Const.YODA_SPEED_MAG;;
-		this.hitPoint = Enemy_Const.YODA_HP;
+		this.approachDistance = Enemy_Const.LULU_APPROACH_DISTANCE;
+		this.attackDistance = Enemy_Const.LULU_ATTACK_DISTANCE;
+		this.noticeDistanceXMag = Enemy_Const.LULU_NOTICE_DISTANCE_MAG;
+		this.noticeDistanceYMag = Enemy_Const.LULU_NOTICE_DISTANCE_MAG;
+		this.enemySideSpeedMag = Enemy_Const.LULU_SPEED_MAG;;
+		this.hitPoint = Enemy_Const.LULU_HP;
 	}
 }

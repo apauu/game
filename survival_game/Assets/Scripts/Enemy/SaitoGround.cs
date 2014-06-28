@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Saito : Enemy_Base {
-
+public class SaitoGround : Enemy_Base {
+	
+	/*----------AI用フラグ---------*/
 	protected bool getAttackFlg = false;
 	protected bool getAwayFlg = false;
 	protected bool getNearFlg = false;
+	/*----------AI用フラグ---------*/
 	protected float randomAwayDistance;
 	protected float randomNearDistance;
 	//スキル１プレハブ
@@ -13,34 +15,36 @@ public class Saito : Enemy_Base {
 	//スキル１オブジェクト
 	protected GameObject skill1Obj;
 	protected Vector3 skillScale;
-
+	
 	// Use this for initialization
 	void Start () {
 		base.Start ();
 		randomAwayDistance = Random.Range(3,4);
 		randomNearDistance = Random.Range(1,2);
 	}
-
+	
 	// Update is called once per frame
 	void Update () {
 		base.Update ();
 	}
-
+	
 	protected void FixedUpdate () {
 		base.FixedUpdate ();
-
+		
 		if(skill1Obj != null) {
+			//爆発あたり判定を徐々に大きく
 			skill1Obj.collider2D.transform.localScale = new Vector3(skillScale.x + 0.3f, skillScale.y + 0.3f, skillScale.z);
 		}
-
+		
 	}
-
+	
 	/// <summary>
 	/// プレイヤーに気付いたあとの処理はここ
 	/// </summary>
 	protected override void enemyAI ()
 	{
-		if(!stiffFlg) {
+		//動けるかどうか
+		if(this.CheckEventAwake()) {
 			//プレイヤーとの距離が遠すぎるときは近づく
 			if (Mathf.Abs(this.nowDistanceX) > approachDistance) {
 				this.SideMove(Enemy_Const.ENEMY_SIDE_SPEED * this.enemySideSpeedMag, !this.playerDirectionFlg);
@@ -86,9 +90,9 @@ public class Saito : Enemy_Base {
 			}
 		}
 	}
-
+	
 	protected void GetAway() {
-		print ("EnemyGetAway!!");
+		print ("SaitoGetAway!!");
 		if(Mathf.Abs(nowDistanceX) < this.randomAwayDistance) {
 			this.SideMove(Enemy_Const.ENEMY_SIDE_SPEED * this.enemySideSpeedMag, this.playerDirectionFlg);
 		}
@@ -96,9 +100,9 @@ public class Saito : Enemy_Base {
 			this.getAwayFlg = false;
 		}
 	}
-
+	
 	protected void GetNear() {
-		print ("EnemyGetNear!!");
+		print ("SaitoGetNear!!");
 		if(Mathf.Abs(nowDistanceX) > this.randomNearDistance) {
 			this.SideMove(Enemy_Const.ENEMY_SIDE_SPEED * this.enemySideSpeedMag, !this.playerDirectionFlg);
 		}
@@ -106,55 +110,35 @@ public class Saito : Enemy_Base {
 			this.getNearFlg = false;
 		}
 	}
-
-
-
-	protected void GetAttack() {
-		print ("EnemyGetAttack!!");
+	
+	private void GetAttack() {
+		print ("SaitoGetAttack!!");
 		if(Mathf.Abs(nowDistanceX) < attackDistance) {
+			this.stiffFlg = true;
 			base.Skill1();
-			skill1Exe();
-			this.getAttackFlg = false;
-//			base.Attack (attack1Prefab, Enemy_Const.SAITO_ATTACK1_DESTROY, Enemy_Const.SAITO_ATTACK1_BEFORE, Enemy_Const.SAITO_ATTACK1_STIFF);
-
 		} 
 		else {
 			this.SideMove(Enemy_Const.ENEMY_SIDE_SPEED * this.enemySideSpeedMag, !this.playerDirectionFlg);
 		}
 	}
-
+	
 	/// <summary>
 	/// スキル１　爆発する
 	/// </summary>
-	protected void skill1Exe ()
+	protected virtual void skill1Exe ()
 	{
 		mutekiFlg = true;
 		//爆発オブジェクト生成
 		if(true) {
-
-		this.skill1Obj = Instantiate(this.skill1Prefab, new Vector2(transform.position.x, transform.position.y)
-		                         , Quaternion.identity) as GameObject;
-		//あたり判定を取得
-		skillScale = skill1Obj.collider2D.transform.localScale;
-
-		//硬直時間
-		StopCoroutine("WaitForStiffTime");
-		StartCoroutine(WaitForStiffTime (2f));
+			this.skill1Obj = Instantiate(this.skill1Prefab, new Vector2(transform.position.x, transform.position.y)
+			                             , Quaternion.identity) as GameObject;
+			//あたり判定を取得
+			skillScale = skill1Obj.collider2D.transform.localScale;
+		}
 		skill1End ();
-		}
 	}
-
-	/// <summary>
-	/// スキル1終了
-	/// </summary>
+	
 	protected void skill1End() {
-		skill1Obj.GetComponent<BoxCollider2D>().enabled = false;
-	}
-
-	protected void skill1FinalEnd() {
-		if(this.skill1Obj == null) {
-			Destroy(this.skill1Obj);
-		}
 		this.mutekiFlg = false;
 		base.OnDamage (1000,0);
 	}

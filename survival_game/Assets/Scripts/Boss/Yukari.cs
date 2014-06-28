@@ -146,9 +146,6 @@ public class Yukari : Enemy_Base {
 	}
 	private void GetSummon() {
 		print ("YukariGetSummon!!");
-		//硬直時間
-		StopCoroutine("WaitForStiffTime");
-		StartCoroutine(WaitForStiffTime (Enemy_Const.YUKARI_SUMMON_STIFF));
 
 		//召喚生成
 		zakoObj = Instantiate(zakoPrefab, new Vector2(transform.position.x + 1 * (this.rightDirectionFlg ? -1 : 1) , transform.position.y)
