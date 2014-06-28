@@ -158,7 +158,7 @@ public class Saito_Base : Enemy_Base {
 			Destroy(this.skill1Obj);
 		}
 		this.mutekiFlg = false;
-		base.OnDamage (1000,0);
+		base.OnDamage (1000);
 	}
 
 	/// <summary>
