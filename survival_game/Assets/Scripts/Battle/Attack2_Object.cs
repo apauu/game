@@ -6,7 +6,7 @@ public class Attack2_Object : MonoBehaviour {
 	public bool is_right_local = true;
 	public float spd = 0.000000001f;
 	public float destroyTime = 1f;
-	public float damagePoint = 1f;
+	public int damagePoint = 1;
 	private float initialTime = 3f;
 	private Vector3 direction = new Vector3(1 ,1 ,0);
 	private float randomRangeX = 10f;
@@ -62,21 +62,21 @@ public class Attack2_Object : MonoBehaviour {
 	
 	void OnTriggerEnter2D (Collider2D collider) {
 		//プレイヤー
-		if (this.gameObject.tag==Tag_Const.PLAYER_ATTACK) {
-			if(collider.gameObject.tag == Tag_Const.ENEMY){
+		if (this.gameObject.tag.Equals(Tag_Const.PLAYER_ATTACK)) {
+			if (collider.gameObject.tag == Tag_Const.ENEMY) {
 				print ("Hit!!");
 				//ダメージメソッド呼び出し
-				collider.gameObject.SendMessage("OnDamage", damagePoint);
+//				collider.gameObject.SendMessage ("OnDamage",  new Damage_Info(damagePoint, this.transform.parent.name));
+				collider.gameObject.SendMessage ("OnDamage", new Damage_Info(damagePoint, ""));
 				Destroy(this.gameObject);
 			}
-			
-			
-			//エネミー
-		} else if (this.gameObject.tag==Tag_Const.ENEMY_ATTACK) {
-			if(collider.gameObject.tag == Tag_Const.PLAYER){
+		} else if (this.gameObject.tag.Equals(Tag_Const.ENEMY_ATTACK)) {
+			if (collider.gameObject.tag.Equals(Tag_Const.PLAYER)) {
 				print ("Hit!!");
+				
 				//ダメージメソッド呼び出し
-				collider.gameObject.SendMessage("OnDamage", damagePoint);
+//				collider.gameObject.SendMessage ("OnDamage",  new Damage_Info(damagePoint, this.transform.parent.name));
+				collider.gameObject.SendMessage ("OnDamage", new Damage_Info(damagePoint, ""));
 				Destroy(this.gameObject);
 			}
 		}

@@ -236,15 +236,12 @@ public class Character_Base : MonoBehaviour {
 	}
 	
 	/// <summary>
-	/// 被ダメージ判定
+	/// 被ダメージ判定。硬直時間無し
+	/// 攻撃スクリプトからメッセージ呼び出し
 	/// </summary>
-	/// <param name="collision">接触オブジェクト</param>
 	/// <param name="damagePoint">ダメージ値</param>
-	/// <param name="stiffTime">被弾硬直時間</param>
-	public void OnAttaked(Collision2D collision, float damagePoint, float stiffTime) {
-		if (collision.gameObject.tag == attackedTag) {
-			OnDamage(damagePoint);
-		}
+	protected void OnDamage(int dmgPoint) {
+		this.OnDamage (new Damage_Info(dmgPoint, ""));
 	}
 
 	/// <summary>
@@ -252,8 +249,9 @@ public class Character_Base : MonoBehaviour {
 	/// 攻撃スクリプトからメッセージ呼び出し
 	/// </summary>
 	/// <param name="damagePoint">ダメージ値</param>
-	protected void OnDamage(float damagePoint) {
+	protected void OnDamage(Damage_Info dmgInfo) {
 		if (!mutekiFlg) {
+			int damagePoint = dmgInfo.getDmgPoint();
 			print ("Get " + damagePoint + " Damage!!");
 			hitPoint -= damagePoint;
 
@@ -266,36 +264,20 @@ public class Character_Base : MonoBehaviour {
 				/* Destroyで削除すると他からオブジェクト参照している場合エラー発生するので活動停止で画面から消す　*/
 				/* Update関数なども呼ばれなくなる　オブジェクト検索もできなくなる模様 */
 				gameObject.SetActiveRecursively(false);
-			} else {
-				//無敵時間
-				StartCoroutine(WaitForStiffTime (mutekiTime));
-			}
-		}
-	}
+				
+				//プレイヤーが死亡した場合死亡メッセージシーンへ遷移
+				if (this.gameObject.tag.Equals(Tag_Const.PLAYER)) {
+					try {
+						string deadTag = dmgInfo.getEnemyName();
+						GameObject gobj = GameObject.Find("GameController");
+						GameController gcon = gobj.GetComponent<GameController>();
+						gcon.SetDeadTag(deadTag);
+					} finally {
+						Application.LoadLevel(GUI_Const.GAMEOVER);
+					}
+				}
 
-	/// <summary>
-	/// 被ダメージ判定。硬直時間有
-	/// 攻撃スクリプトからメッセージ呼び出し
-	/// </summary>
-	/// <param name="damagePoint">ダメージ値</param>
-	/// <param name="stiffTime">被弾硬直時間</param>
-	protected void OnDamage(float damagePoint, float stiffTime) {
-		if (!mutekiFlg) {
-			print ("Get " + damagePoint + " Damage!!");
-			hitPoint -= damagePoint;
-			
-			GameObject gui = GameObject.FindGameObjectWithTag ("GUIText");
-			if (gui != null) gui.SendMessage("ShowMessage", damagePoint.ToString () + "!");
-			
-			//HPが0以下ならキャラクターを破壊
-			if (hitPoint <= 0) {
-				print ("You Dead");
-				/* Destroyで削除すると他からオブジェクト参照している場合エラー発生するので活動停止で画面から消す　*/
-				/* Update関数なども呼ばれなくなる　オブジェクト検索もできなくなる模様 */
-				gameObject.SetActiveRecursively(false);
 			} else {
-				//硬直時間
-				StartCoroutine(WaitForStiffTime (stiffTime));
 				//無敵時間
 				StartCoroutine(WaitForStiffTime (mutekiTime));
 			}

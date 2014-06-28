@@ -8,7 +8,7 @@ public class Attack1_Object : MonoBehaviour {
 	// 進行スピード
 	public float spd = 0.01f;
 	// 威力
-	public float damagePoint = 1f;
+	public int damagePoint = 1;
 
 	// Use this for initialization
 	void Start () {
@@ -26,19 +26,21 @@ public class Attack1_Object : MonoBehaviour {
 
 	// HIT時処理
 	void OnTriggerEnter2D (Collider2D collider) {
-		if (this.gameObject.tag == Tag_Const.PLAYER_ATTACK) {
+		if (this.gameObject.tag.Equals(Tag_Const.PLAYER_ATTACK)) {
 			if (collider.gameObject.tag == Tag_Const.ENEMY) {
 				print ("Hit!!");
 				//ダメージメソッド呼び出し
-				collider.gameObject.SendMessage ("OnDamage", damagePoint);
+//				collider.gameObject.SendMessage ("OnDamage", new Damage_Info(damagePoint, this.transform.parent.name));
+				collider.gameObject.SendMessage ("OnDamage", new Damage_Info(damagePoint, ""));
 				Destroy(this.gameObject);
 			}
-		} else {
-			if (collider.gameObject.tag == Tag_Const.PLAYER) {
+		} else if (this.gameObject.tag.Equals(Tag_Const.ENEMY_ATTACK)) {
+			if (collider.gameObject.tag.Equals(Tag_Const.PLAYER)) {
 				print ("Hit!!");
 				
 				//ダメージメソッド呼び出し
-				collider.gameObject.SendMessage ("OnDamage", damagePoint);
+//				collider.gameObject.SendMessage ("OnDamage",  new Damage_Info(damagePoint, this.transform.parent.name));
+				collider.gameObject.SendMessage ("OnDamage", new Damage_Info(damagePoint, ""));
 				Destroy(this.gameObject);
 			}
 		}
