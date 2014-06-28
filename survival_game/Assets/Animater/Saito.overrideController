@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Saito
+  m_Controller: {fileID: 9100000, guid: aa08984072f4a1248aa94a7c40b75aea, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 9839b355bfd9ac1409cc7d12bd4dc101, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 5eb17a8bf37c2bb449d19e1d3fce9228, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 7f81a611bff73a34bbe335a02198a17d, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 033a2f69e1061f04d9e421a689727d50, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: bc4c55ede8b985e43b955715fbcdf2b1, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 9570aa0a9737ae14ba0e2ba14a8a5c84, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 10a8774efaaaa6641a8e28a13d9405d5, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 8e9bc5c9871b7fa4fafbf3ae718d687b, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: b58aa617984d39b4cac7c62ac5244732, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 6ae2f6eef10f28c428672c4185ac7356, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 8b8671032a174d74ebd12e0a90369272, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 5c3a49d09dae7394da3f457679d0c4b9, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 9a8e648510bae4345976401204b1594c, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: f6b2a1bc3ff51fd48872227f37039c52, type: 2}
